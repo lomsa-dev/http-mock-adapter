@@ -4,4 +4,4 @@
 /// define mock data, invoke HTTP client and evaluate the result.
 library http_mock_adapter;
 
-export 'src/dio_adapter.dart';
+export 'src/adapters/dio_adapter.dart';
