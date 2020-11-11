@@ -44,19 +44,19 @@ enum RequestMethod {
   /// The [DELETE] method deletes the specified resource.
   DELETE,
 
-  /// The CONNECT method establishes a tunnel to the server
+  /// The [CONNECT] method establishes a tunnel to the server
   /// identified by the target resource.
   CONNECT,
 
-  /// The OPTIONS method is used to describe the communication options
+  /// The [OPTIONS] method is used to describe the communication options
   /// for the target resource.
   OPTIONS,
 
-  /// The TRACE method performs a message loop-back test
+  /// The [TRACE] method performs a message loop-back test
   /// along the path to the target resource.
   TRACE,
 
-  /// The PATCH method is used to apply partial modifications to a resource.
+  /// The [PATCH] method is used to apply partial modifications to a resource.
   PATCH,
 }
 
