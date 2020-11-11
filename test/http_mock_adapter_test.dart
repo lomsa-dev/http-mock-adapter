@@ -1,13 +1,22 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
-    expect(() => calculator.addOne(null), throwsNoSuchMethodError);
+  test('initial test', () async {
+    final dio = Dio();
+    final dioAdapter = DioAdapter();
+
+    dioAdapter
+        .onRoute('https://example.com')
+        .reply(200, {'message': 'Success!'});
+
+    dio.httpClientAdapter = dioAdapter;
+
+    final response = await dio.get('https://example.com');
+
+    expect(jsonEncode({'message': 'Success!'}).toString(), response.data);
   });
 }
