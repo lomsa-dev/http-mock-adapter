@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -16,7 +15,7 @@ class MockHandler {
   Future<ResponseBody> createMock(String fullPath, dynamic data) async {
     await File(fullPath)
         .create(recursive: true)
-        .then((File file) => file.writeAsString(jsonEncode(data)));
+        .then((File file) => file.writeAsString(data));
 
     return readMock(fullPath);
   }

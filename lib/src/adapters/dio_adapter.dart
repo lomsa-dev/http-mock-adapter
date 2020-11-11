@@ -8,6 +8,7 @@ import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/utils.dart';
 
 import '../history.dart';
+import '../request.dart';
 
 /// [HttpClientAdapter] extension with data mocking and tracking functionality.
 class DioAdapter extends HttpClientAdapter with Tracking {
