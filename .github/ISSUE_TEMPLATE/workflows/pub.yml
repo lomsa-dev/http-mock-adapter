@@ -34,5 +34,3 @@ jobs:
         run: pub publish --dry-run
       - name: Publish Package
         run: pub publish -f
-
-
