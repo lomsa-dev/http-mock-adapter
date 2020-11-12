@@ -1,6 +1,6 @@
 name: Publish to Pub.dev
 # develop branch will be changed to master once it's made.
-on: 
+on:
   pull_request:
     branches:
       - Master
@@ -14,7 +14,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: '1.9.1+hotfix.6'
+          flutter-version: "1.9.1+hotfix.6"
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
@@ -34,5 +34,3 @@ jobs:
         run: pub publish --dry-run
       - name: Publish Package
         run: pub publish -f
-
-        
