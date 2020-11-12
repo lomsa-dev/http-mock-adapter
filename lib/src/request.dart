@@ -1,7 +1,7 @@
 /// [Request] class contains members to hold network request information.
 class Request {
-  /// An HTTP method such as [RequestMethod.GET] or [RequestMethod.POST].
-  final RequestMethod method;
+  /// An HTTP method such as [RequestMethods.GET] or [RequestMethods.POST].
+  final RequestMethods method;
 
   /// The payload.
   final dynamic data;
@@ -9,11 +9,11 @@ class Request {
   /// Headers to encompass content-types.
   final dynamic headers;
 
-  const Request({this.method = RequestMethod.GET, this.data, this.headers});
+  const Request({this.method = RequestMethods.GET, this.data, this.headers});
 }
 
 /// HTTP methods.
-enum RequestMethod {
+enum RequestMethods {
   /// The [GET] method requests a representation of the specified resource.
   /// Requests using [GET] should only retrieve data.
   GET,
