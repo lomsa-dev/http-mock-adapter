@@ -19,10 +19,10 @@ class DioAdapter extends HttpClientAdapter with Tracking {
   /// client requests.
   final _mockHandler = MockHandler();
 
-  /// Map of <[RequestMethod], <(String) [RequestMethod], [RequestHandler]>>.
-  Map<RequestMethod, Map<String, RequestHandler>> _requestHandlers =
+  /// Map of <[RequestMethods], <(String) [RequestMethods], [RequestHandler]>>.
+  Map<RequestMethods, Map<String, RequestHandler>> _requestHandlers =
       Map.fromIterable(
-    RequestMethod.values,
+    RequestMethods.values,
     key: (element) => element,
     value: (element) => {},
   );
