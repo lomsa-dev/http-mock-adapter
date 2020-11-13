@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 /// This handler ensures that mock data is saved and retrieved from the disk.
+///
+/// **NOTE**: [MockHandler] is currently, temporarily [Deprecated].
+@deprecated
 class MockHandler {
   /// Reads mock data file content located in [fullPath]
   /// as a string and returns [Future<ResponseBody>].
