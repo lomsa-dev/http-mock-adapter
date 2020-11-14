@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/utils.dart';
+import 'package:mockito/mockito.dart';
 
 const path = 'https://example.com';
 
 void main() {
   group('DioAdapter', () {
     DioAdapter dioAdapter;
+    DioAdapterMockito dioAdapterMockito;
 
     int statusCode = 200;
     final data = {'message': 'Test!'};
@@ -61,6 +65,64 @@ void main() {
 
       test('mocks requests via onPatch() as intended',
           () => dioAdapter.onPatch(path).reply(statusCode, data));
+    });
+
+    group('Dio adapter mock get', () {
+      test('method can used to get reponse from any url', () async {
+        final dio = Dio();
+
+        dioAdapterMockito = DioAdapterMockito();
+
+        Response<dynamic> response;
+
+        dio.httpClientAdapter = dioAdapterMockito;
+
+        final responsepayload = jsonEncode({"response_code": "200"});
+        final httpResponse = ResponseBody.fromString(
+          responsepayload,
+          200,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        );
+
+        final expected = {"response_code": "200"};
+
+        when(dioAdapterMockito.fetch(any, any, any))
+            .thenAnswer((_) async => httpResponse);
+
+        response = await dio.get("/any url");
+        expect(response.data, expected);
+      });
+    });
+
+    group('Dio adapter mock post ', () {
+      test('method used to get responses for any requests', () async {
+        final dio = Dio();
+
+        dioAdapterMockito = DioAdapterMockito();
+
+        Response<dynamic> response;
+
+        dio.httpClientAdapter = dioAdapterMockito;
+
+        final responsepayload = jsonEncode({"response_code": "404"});
+        final httpResponse = ResponseBody.fromString(
+          responsepayload,
+          200,
+          headers: {
+            Headers.contentTypeHeader: [Headers.jsonContentType],
+          },
+        );
+
+        final expected = {"response_code": "404"};
+        when(dioAdapterMockito.fetch(any, any, any))
+            .thenAnswer((_) async => httpResponse);
+
+        response = await dio.post('/route');
+
+        expect(response.data, expected);
+      });
     });
 
     test('mocks multiple requests sequantially as intended', () async {

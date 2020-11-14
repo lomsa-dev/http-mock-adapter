@@ -5,4 +5,5 @@
 library http_mock_adapter;
 
 export 'src/adapters/dio_adapter.dart';
+export 'src/adapters/dio_adapter_mockito.dart';
 export 'src/request.dart';
