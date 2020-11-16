@@ -6,35 +6,29 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/utils.dart';
 import 'package:mockito/mockito.dart';
 
-const path = 'https://example.com';
-
 void main() {
   group('DioAdapter', () {
-    DioAdapter dioAdapter;
-    DioAdapterMockito dioAdapterMockito;
-
-    int statusCode = 200;
-    final data = {'message': 'Test!'};
-
-    void _testDioAdapter(
-      DioAdapter dioAdapter, {
-      dynamic actual,
-    }) async {
-      final dio = Dio();
-
-      dio.httpClientAdapter = dioAdapter;
-
-      final response = await dio.get(path);
-
-      expect(actual, response.data);
-    }
+    final dio = new Dio();
+    DioAdapter dioAdapter = new DioAdapter();
+    DioAdapterMockito dioAdapterMockito = new DioAdapterMockito();
+    Response<dynamic> response;
+    dio.httpClientAdapter = dioAdapter;
+    dio.options.baseUrl = 'https://example.com';
 
     group('RequestRouted', () {
-      setUp(() {
-        dioAdapter = DioAdapter();
-      });
+      const path = '/example-path';
+      const data = {'message': 'Test!'};
+      const statusCode = 200;
 
-      tearDown(() => _testDioAdapter(dioAdapter, actual: data.toString()));
+      tearDown(() async {
+        final dio = Dio();
+
+        dio.httpClientAdapter = dioAdapter;
+
+        final response = await dio.get(dio.options.baseUrl);
+
+        expect(data.toString(), response.data);
+      });
 
       test('mocks requests via onRoute() as intended',
           () => dioAdapter.onRoute(path).reply(statusCode, data));
@@ -96,44 +90,7 @@ void main() {
       });
     });
 
-    group('Dio adapter mock post ', () {
-      test('method used to get responses for any requests', () async {
-        final dio = Dio();
-
-        dioAdapterMockito = DioAdapterMockito();
-
-        Response<dynamic> response;
-
-        dio.httpClientAdapter = dioAdapterMockito;
-
-        final responsepayload = jsonEncode({"response_code": "404"});
-        final httpResponse = ResponseBody.fromString(
-          responsepayload,
-          200,
-          headers: {
-            Headers.contentTypeHeader: [Headers.jsonContentType],
-          },
-        );
-
-        final expected = {"response_code": "404"};
-        when(dioAdapterMockito.fetch(any, any, any))
-            .thenAnswer((_) async => httpResponse);
-
-        response = await dio.post('/route');
-
-        expect(response.data, expected);
-      });
-    });
-
     test('mocks multiple requests sequantially as intended', () async {
-      final dio = Dio();
-
-      dioAdapter = DioAdapter();
-
-      Response<dynamic> response;
-
-      dio.httpClientAdapter = dioAdapter;
-
       dioAdapter.onPost('/route', data: {'post': '201'}).reply(201, {
         'message': 'Post!',
       });
@@ -160,14 +117,6 @@ void main() {
     });
 
     test('mocks multiple requests by chaining methods as intended', () async {
-      final dio = Dio();
-
-      dioAdapter = DioAdapter();
-
-      Response<dynamic> response;
-
-      dio.httpClientAdapter = dioAdapter;
-
       dioAdapter
           .onGet('/route')
           .reply(201, {'message': 'Unbreakable...'})
