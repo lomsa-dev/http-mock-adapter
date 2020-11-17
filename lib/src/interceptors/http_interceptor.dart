@@ -1,85 +1,56 @@
-import 'dart:convert';
-import 'dart:async';
-import 'package:http/src/base_request.dart';
-import 'package:http/src/client.dart';
-import 'package:http/src/base_client.dart';
-import 'package:http/src/streamed_response.dart';
-import 'package:http_mock_adapter/src/Exceptions.dart';
-import 'package:http_mock_adapter/src/interceptors/http_response.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/history.dart';
+import 'package:http_mock_adapter/src/request.dart';
+import 'package:http_mock_adapter/src/adapter_interface.dart';
 
-class ClientAdapter extends BaseClient {
-  List<Map<String, dynamic>> responseMap = [{}];
+class MainInterceptor extends Interceptor
+    with Tracked, RequestRouted
+    implements AdapterInterface {
+  /// [MainInterceptor]'s singleton instance
+  static MainInterceptor _interceptor = MainInterceptor._construct();
 
-  ClientAdapter(this.responseMap) {
-    //assertion
-    this.assertDuplicatedRoutes();
+  /// [MainInterceptor]'s private constructor method
+  MainInterceptor._construct();
+
+  /// Factory method of [MainInterceptor] utilized to return [_interceptor]
+  /// singleton instance each time it is called;
+  factory MainInterceptor() {
+    return _interceptor;
   }
-  Stream<List<int>> response = Stream.value(utf8.encode("asf"));
 
+  /// Dio [Interceptor]`s [onRequest] configuration intended to catch and return
+  /// mocked request and data respectively
   @override
-  Future<StreamedResponse> send(BaseRequest request) {
-    StreamedResponse mockedResponse = searchResponse(request);
-    return Future.value(mockedResponse);
+  Future<Response> onRequest(req) async {
+    return Response(data: history.response, statusCode: HttpStatus.ok);
   }
 
-  StreamedResponse searchResponse(BaseRequest request) {
-    String route = request.url.toString();
-    for (Map<String, dynamic> response in responseMap) {
-      if (response["route"] == route) {
-        if (response["response"].onMethod == request.method) {
-          return response["response"].buildResponse();
-        }
-      }
-    }
-  }
+  /// Takes in route, request, sets corresponding [RequestHandler],
+  /// adds an instance of [RequestMatcher] in [History.data].
+  @override
+  RequestHandler onRoute(String route, {Request request = const Request()}) {
+    final requestHandler = RequestHandler<MainInterceptor>();
+    history.data.add(RequestMatcher(route, request, requestHandler));
 
-  bool assertDuplicatedRoutes() {
-    this.responseMap.forEach((element) {
-      int duplicationCoutner = 0;
-      int index = this.responseMap.indexOf(element);
-      for (Map<String, dynamic> response in this.responseMap) {
-        print(response);
-        if (this.responseMap[index]["route"] == response["route"] &&
-            this.responseMap[index]["response"].onMethod ==
-                response["response"].onMethod) {
-          duplicationCoutner += 1;
-
-          if (duplicationCoutner == 2) {
-            return throw new DuplicatedException(
-                "You have duplicated routes inside the responseMap");
-          }
-        }
-      }
-    });
-    return true;
+    return requestHandler;
   }
 }
 
-void main(List<String> args) async {
-  final adapter = ClientAdapter([
-    {
-      "route": "/route",
-      "response": PureHttpResponse(200, "hello world babe", "GET",
-          headers: {"user-agent": "google-chrome"}),
-    },
-    {
-      "route": "/route",
-      "response": PureHttpResponse(200, "hello world babe", "GET",
-          headers: {"user-agent": "google-chrome"}),
-    },
-    {
-      "route": "/route3",
-      "response": PureHttpResponse(200, "hello world babe", "GET",
-          headers: {"user-agent": "google-chrome"}),
-    },
-  ]);
+// void main(List<String> args) async {
+//   MainInterceptor inercept = MainInterceptor();
+//   Dio dio = Dio();
 
-  Client client = Client();
+//   inercept
+//       .onGet("https://example.com")
+//       .reply(200, 'PLS')
+//       .onGet("https://example.com/ok")
+//       .reply(200, 'dis');
 
-  client = adapter;
-  // adapter.assertDuplicatedRoutes();
-  var val = await client.get("/route");
-  print(val.headers);
-
-  // adapter.searchResponse();
-}
+//   dio.interceptors.add(inercept);
+//   Response resp = await dio.get("https://example.com");
+//   Response resp2 = await dio.get("https://example.com/ok");
+//   print(resp);
+//   print(resp2);
+// }

@@ -1,11 +1,84 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/interceptors/http_interceptor.dart';
 import 'package:http_mock_adapter/src/utils.dart';
 
 const path = 'https://example.com';
 
 void main() {
+  group("Interceptor", () {
+    MainInterceptor dioInterceptor;
+    setUp(() {
+      dioInterceptor = MainInterceptor();
+    });
+    int statusCode = 200;
+    final data = {'message': 'Test!'};
+
+    group("RequestRouted test for dioInterceptor", () {
+      test("Mocks requests via onRoute() as intended",
+          () => dioInterceptor.onRoute(path).reply(statusCode, data));
+      test('Mocks requests via onGet() as intended',
+          () => dioInterceptor.onGet(path).reply(statusCode, data));
+
+      test('Mocks requests via onHead() as intended',
+          () => dioInterceptor.onHead(path).reply(statusCode, data));
+
+      test('Mocks requests via onPost() as intended',
+          () => dioInterceptor.onPost(path).reply(statusCode, data));
+
+      test('Mocks requests via onPut() as intended',
+          () => dioInterceptor.onPut(path).reply(statusCode, data));
+
+      test('Mocks requests via onDelete() as intended',
+          () => dioInterceptor.onDelete(path).reply(statusCode, data));
+
+      test('Mocks requests via onConnect() as intended',
+          () => dioInterceptor.onConnect(path).reply(statusCode, data));
+
+      test('Mocks requests via onOptions() as intended',
+          () => dioInterceptor.onOptions(path).reply(statusCode, data));
+
+      test('Mocks requests via onTrace() as intended',
+          () => dioInterceptor.onTrace(path).reply(statusCode, data));
+
+      test('Mocks requests via onPatch() as intended',
+          () => dioInterceptor.onPatch(path).reply(statusCode, data));
+    });
+
+    test("Mocks multiple requests sequantially by chaning", () async {
+      // Initial dio object
+      Dio dio = Dio();
+
+      // Initial interceptor
+      MainInterceptor interceptor = MainInterceptor();
+
+      // Chained interceptor
+      interceptor
+          .onGet(path)
+          .reply(statusCode, data)
+          .onPost(path)
+          .reply(statusCode, data)
+          .onPatch(path)
+          .reply(statusCode, data);
+
+      // Adding interceptor to dio object
+      dio.interceptors.add(interceptor);
+
+      // Testing GET request
+      dynamic response = await dio.get(path);
+      expect(response.data, data.toString());
+
+      // Testing POST request
+      response = await dio.post(path);
+      expect(response.data, data.toString());
+
+      // Testing POST request
+      response = await dio.patch(path);
+      expect(response.data, data.toString());
+    });
+  });
+
   group('DioAdapter', () {
     DioAdapter dioAdapter;
 
