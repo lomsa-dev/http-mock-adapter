@@ -1,34 +1,42 @@
+import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 
 import 'request.dart';
 
 /// Intended to keep track of request history.
 class History {
-  /// The count of request invocations.
-  int _requestInvocationCount = 0;
+  /// The index of request invocations.
+  int _requestInvocationIndex;
+
+  RequestMatcher requestMatcher;
 
   /// The history content containing [RequestMatcher] objects.
   List<RequestMatcher> data = [];
 
   /// Gets current [RequestMatcher].
-  RequestMatcher get current => data[_requestInvocationCount];
+  RequestMatcher get current => data[_requestInvocationIndex];
 
   /// Getter for the current request invocation's intended [response].
-  dynamic get response => () {
-        current.response = requestHandler.requestMap[requestHandler.statusCode];
+  ResponseBody Function(String route, String method) get response =>
+      (route, method) {
+        final signature = '$route/$method';
 
-        final response = current.response.toString();
+        data.forEach((element) {
+          if (signature == '${element.route}/${element.request.method.value}') {
+            _requestInvocationIndex = data.indexOf(element);
 
-        _advance();
+            current.response =
+                requestHandler.requestMap[requestHandler.statusCode];
+          }
+        });
+
+        final response = current.response;
 
         return response;
-      }();
+      };
 
   /// Getter for the current request invocation's [RequestHandler].
   RequestHandler get requestHandler => current.requestHandler;
-
-  /// Advances the request history by incrementing request invocation count.
-  void _advance() => _requestInvocationCount++;
 }
 
 /// An ability that lets a construct to have a [History] instance.

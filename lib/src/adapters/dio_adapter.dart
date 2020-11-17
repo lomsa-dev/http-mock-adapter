@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
@@ -36,13 +34,17 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.
+  /// Returns a [Future<ResponseBody>] from [History] based on [RequestOptions].
   @override
   Future<ResponseBody> fetch(
     RequestOptions options,
     Stream<List<int>> requestStream,
     Future cancelFuture,
   ) async =>
-      ResponseBody.fromString(history.response, HttpStatus.ok);
+      history.response(
+        options.path,
+        options.method,
+      );
 
   /// Closes the [DioAdapter] by force.
   @override

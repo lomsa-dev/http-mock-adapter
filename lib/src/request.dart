@@ -59,20 +59,15 @@ enum RequestMethods {
   /// The [DELETE] method deletes the specified resource.
   DELETE,
 
-  /// The [CONNECT] method establishes a tunnel to the server
-  /// identified by the target resource.
-  CONNECT,
-
-  /// The [OPTIONS] method is used to describe the communication options
-  /// for the target resource.
-  OPTIONS,
-
-  /// The [TRACE] method performs a message loop-back test
-  /// along the path to the target resource.
-  TRACE,
-
   /// The [PATCH] method is used to apply partial modifications to a resource.
   PATCH,
+}
+
+/// [ValueToString] extension method grants [RequestMethods] enumeration
+/// the ability to obtain [String] type depictions of enumeration's values.
+extension ValueToString on RequestMethods {
+  /// Gets the [String] depiction of the current value.
+  String get value => this.toString().split('.').last;
 }
 
 /// [RequestRouted] exposes developer-friendly methods which take in [route],
@@ -141,45 +136,6 @@ mixin RequestRouted {
       route,
       request: Request(
         method: RequestMethods.DELETE,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.CONNECT],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onConnect(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.CONNECT,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.OPTIONS],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onOptions(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.OPTIONS,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.TRACE],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onTrace(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.TRACE,
         data: data,
         headers: headers,
       ),
