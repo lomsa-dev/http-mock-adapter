@@ -7,16 +7,17 @@ import 'package:http_mock_adapter/src/utils.dart';
 import 'package:mockito/mockito.dart';
 
 void main() {
+  final dio = Dio();
+
+  Response<dynamic> response;
+
   group('DioAdapter', () {
-    final dio = new Dio();
-    DioAdapter dioAdapter = new DioAdapter();
-    DioAdapterMockito dioAdapterMockito = new DioAdapterMockito();
-    Response<dynamic> response;
+    final dioAdapter = DioAdapter();
+
     dio.httpClientAdapter = dioAdapter;
-    dio.options.baseUrl = 'https://example.com';
 
     group('RequestRouted', () {
-      const path = '/example-path';
+      const path = 'https://example.com';
       const data = {'message': 'Test!'};
       const statusCode = 200;
 
@@ -25,7 +26,7 @@ void main() {
 
         dio.httpClientAdapter = dioAdapter;
 
-        final response = await dio.get(dio.options.baseUrl);
+        final response = await dio.get(path);
 
         expect(data.toString(), response.data);
       });
@@ -59,35 +60,6 @@ void main() {
 
       test('mocks requests via onPatch() as intended',
           () => dioAdapter.onPatch(path).reply(statusCode, data));
-    });
-
-    group('Dio adapter mock get', () {
-      test('method can used to get reponse from any url', () async {
-        final dio = Dio();
-
-        dioAdapterMockito = DioAdapterMockito();
-
-        Response<dynamic> response;
-
-        dio.httpClientAdapter = dioAdapterMockito;
-
-        final responsepayload = jsonEncode({"response_code": "200"});
-        final httpResponse = ResponseBody.fromString(
-          responsepayload,
-          200,
-          headers: {
-            Headers.contentTypeHeader: [Headers.jsonContentType],
-          },
-        );
-
-        final expected = {"response_code": "200"};
-
-        when(dioAdapterMockito.fetch(any, any, any))
-            .thenAnswer((_) async => httpResponse);
-
-        response = await dio.get("/any url");
-        expect(response.data, expected);
-      });
     });
 
     test('mocks multiple requests sequantially as intended', () async {
@@ -153,5 +125,34 @@ void main() {
     expect(actual, getMockFileName('www.example/route.com'));
     expect(actual, getMockFileName('http://example/route.com'));
     expect(actual, getMockFileName('https://example/route.com'));
+  });
+
+  group('DioAdapterMockito', () {
+    final dioAdapterMockito = DioAdapterMockito();
+
+    test('mocks any request/response via fetch method', () async {
+      Response<dynamic> response;
+
+      dio.httpClientAdapter = dioAdapterMockito;
+
+      final responsePayload = jsonEncode({'response_code': '200'});
+
+      final responseBody = ResponseBody.fromString(
+        responsePayload,
+        200,
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
+      );
+
+      final expected = {'response_code': '200'};
+
+      when(dioAdapterMockito.fetch(any, any, any))
+          .thenAnswer((_) async => responseBody);
+
+      response = await dio.get('/route');
+
+      expect(expected, response.data);
+    });
   });
 }
