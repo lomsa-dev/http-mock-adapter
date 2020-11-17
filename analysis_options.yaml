@@ -1,0 +1,18 @@
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  exclude: [build/**]
+  strong-mode:
+    implicit-casts: true # false
+    implicit-dynamic: true # false
+
+linter:
+  rules:
+    - annotate_overrides
+    - await_only_futures
+    - camel_case_types
+    - cancel_subscriptions
+    - close_sinks
+    - comment_references
+    - control_flow_in_finally
+    - empty_statements
