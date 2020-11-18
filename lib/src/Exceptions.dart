@@ -6,7 +6,7 @@ class RequestHandlerException implements Exception {
 
   RequestHandlerException(
       [this.message =
-          "Request handler should have genric type DioAdapter or MainInterceptor"]);
+          "Request handler should have generic type DioAdapter or MainInterceptor"]);
 
   String toString() {
     if (message == null) return "Provide the message inside the exception";
