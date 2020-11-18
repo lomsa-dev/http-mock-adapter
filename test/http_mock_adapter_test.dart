@@ -8,42 +8,104 @@ const path = 'https://example.com';
 
 void main() {
   group("Interceptor", () {
-    MainInterceptor dioInterceptor;
+    Dio mainDio;
+    DioInterceptor dioInterceptor;
     setUp(() {
-      dioInterceptor = MainInterceptor();
+      mainDio = Dio();
+      dioInterceptor = DioInterceptor();
     });
     int statusCode = 200;
     final data = {'message': 'Test!'};
 
     group("RequestRouted test for dioInterceptor", () {
-      test("Mocks requests via onRoute() as intended",
-          () => dioInterceptor.onRoute(path).reply(statusCode, data));
-      test('Mocks requests via onGet() as intended',
-          () => dioInterceptor.onGet(path).reply(statusCode, data));
+      test("Mocks requests via onRoute() as intended", () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onRoute(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
+      test('Mocks requests via onGet() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onGet(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onHead() as intended',
-          () => dioInterceptor.onHead(path).reply(statusCode, data));
+      test('Mocks requests via onHead() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onHead(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onPost() as intended',
-          () => dioInterceptor.onPost(path).reply(statusCode, data));
+      test('Mocks requests via onPost() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onPost(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onPut() as intended',
-          () => dioInterceptor.onPut(path).reply(statusCode, data));
+      test('Mocks requests via onPut() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onPut(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onDelete() as intended',
-          () => dioInterceptor.onDelete(path).reply(statusCode, data));
+      test('Mocks requests via onDelete() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onDelete(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onConnect() as intended',
-          () => dioInterceptor.onConnect(path).reply(statusCode, data));
+      test('Mocks requests via onConnect() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onConnect(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onOptions() as intended',
-          () => dioInterceptor.onOptions(path).reply(statusCode, data));
+      test('Mocks requests via onOptions() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onOptions(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onTrace() as intended',
-          () => dioInterceptor.onTrace(path).reply(statusCode, data));
+      test('Mocks requests via onTrace() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onTrace(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
 
-      test('Mocks requests via onPatch() as intended',
-          () => dioInterceptor.onPatch(path).reply(statusCode, data));
+      test('Mocks requests via onPatch() as intended', () async {
+        mainDio.interceptors.clear();
+        dioInterceptor = DioInterceptor();
+        dioInterceptor.onPatch(path).reply(statusCode, data);
+        mainDio.interceptors.add(dioInterceptor);
+        dynamic response = await mainDio.patch(path);
+        expect(response.data, data.toString());
+      });
     });
 
     test("Mocks multiple requests sequantially by chaning", () async {
@@ -51,7 +113,7 @@ void main() {
       Dio dio = Dio();
 
       // Initial interceptor
-      MainInterceptor interceptor = MainInterceptor();
+      DioInterceptor interceptor = DioInterceptor();
 
       // Chained interceptor
       interceptor

@@ -62,20 +62,3 @@ class DioInterceptor extends Interceptor
     return requestHandler;
   }
 }
-
-// void main(List<String> args) async {
-//   DioInterceptor inercept = DioInterceptor();
-//   Dio dio = Dio();
-
-//   inercept
-//       .onGet("https://example.com")
-//       .reply(200, 'PLS')
-//       .onGet("https://example.com/ok")
-//       .reply(200, 'dis');
-
-//   dio.interceptors.add(inercept);
-//   Response resp = await dio.get("https://example.com");
-//   Response resp2 = await dio.get("https://example.com/ok");
-//   print(resp);
-//   print(resp2);
-// }

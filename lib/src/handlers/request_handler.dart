@@ -19,7 +19,7 @@ class RequestHandler<T> {
 
   /// Stores [response.data] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
-  reply(int statusCode, dynamic data) {
+  AdapterInterface reply(int statusCode, dynamic data) {
     this.statusCode = statusCode;
 
     requestMap[this.statusCode] = data;
