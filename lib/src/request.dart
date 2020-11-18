@@ -75,7 +75,7 @@ enum RequestMethods {
   PATCH,
 }
 
-/// [RequestRouted] exposes developer-friendly methods which take in [route],
+/// [RequestRouted] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
 mixin RequestRouted {
   /// Takes in route, request, and sets corresponding [RequestHandler].
@@ -85,7 +85,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
   RequestHandler onGet(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.GET,
@@ -98,7 +98,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
   RequestHandler onHead(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.HEAD,
@@ -111,7 +111,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPost(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.POST,
@@ -124,7 +124,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPut(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.PUT,
@@ -137,7 +137,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
   RequestHandler onDelete(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.DELETE,
@@ -150,7 +150,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.CONNECT],
   /// and sets corresponding [RequestHandler].
   RequestHandler onConnect(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.CONNECT,
@@ -163,7 +163,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.OPTIONS],
   /// and sets corresponding [RequestHandler].
   RequestHandler onOptions(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.OPTIONS,
@@ -176,7 +176,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.TRACE],
   /// and sets corresponding [RequestHandler].
   RequestHandler onTrace(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.TRACE,
@@ -189,7 +189,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPatch(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.PATCH,

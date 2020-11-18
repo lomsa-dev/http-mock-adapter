@@ -1,5 +1,5 @@
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:http_mock_adapter/src/Exceptions.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
 import 'package:http_mock_adapter/src/interceptors/http_interceptor.dart';
 
@@ -10,14 +10,15 @@ class RequestHandler<T> {
   RequestHandler() {
     /// If type parameter of the class is neither [DioAdapter] nor [DioInterceptor]
     /// throws [RequestHandlerException]
-    if (T.runtimeType != DioAdapter || T.runtimeType != DioInterceptor)
+    if (T.runtimeType != DioAdapter || T.runtimeType != DioInterceptor) {
       RequestHandlerException();
+    }
   }
 
-  /// Map of <[statusCode], [data]>.
+  /// Map of <[int] statusCode, [dynamic] data>.
   final Map<int, dynamic> requestMap = {};
 
-  /// Stores [response.data] in [requestMap] and returns [DioAdapter]
+  /// Stores response.data in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
   AdapterInterface reply(int statusCode, dynamic data) {
     this.statusCode = statusCode;

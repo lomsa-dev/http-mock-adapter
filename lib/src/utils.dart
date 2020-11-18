@@ -26,6 +26,7 @@ String _parsePathToMockFileName(String path) {
   final domainMatcher = RegExp(r'.+\/\/|www.|\..+');
 
   /// Function that empties all of the [domainMatcher] matches.
+  // ignore: omit_local_variable_types
   PathParser parse = ((String path) => path.replaceAll(domainMatcher, ''));
 
   /// Parses the path into a mock file name. If the length is greater than 2,
