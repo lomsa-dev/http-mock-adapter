@@ -7,8 +7,8 @@ import 'package:http_mock_adapter/src/request.dart';
 /// This Interface is use for 2 reqsons:
 /// 1. To maintain the nice and best practice orinted way of architecture
 /// 2.  Because of the reason that [RequestHandler] is returning different
-/// class instances form [reply()] method, depending on its generic type
-/// parameters by using [dynamic] type for [reply()] was removing
+/// class instances form reply method, depending on its generic type
+/// parameters by using [dynamic] type for reply was removing
 /// autocomplition ability, that's why both Adapters implement this interface
 /// to provide good developer experience.
 abstract class AdapterInterface {
