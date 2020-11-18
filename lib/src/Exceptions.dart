@@ -1,14 +1,6 @@
-class DuplicatedException implements Exception {
-  final dynamic message;
-
-  DuplicatedException([this.message]);
-
-  String toString() {
-    if (message == null) return "Provide the message inside the exception";
-    return "DuplicatedRouteException: $message";
-  }
-}
-
+/// [RequestHandlerException] is thrown when, Request Handler method
+/// is called with genreic type paramter.
+/// available types are: [DioInterceptor] and [DioAdapter]
 class RequestHandlerException implements Exception {
   final dynamic message;
 
@@ -18,6 +10,6 @@ class RequestHandlerException implements Exception {
 
   String toString() {
     if (message == null) return "Provide the message inside the exception";
-    return "DuplicatedRouteException: $message";
+    return "RequestHandlerException: $message";
   }
 }

@@ -7,11 +7,10 @@ import 'package:http_mock_adapter/src/interceptors/http_interceptor.dart';
 class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
-  AdapterInterface _returnObject;
   RequestHandler() {
     /// If type parameter of the class is neither [DioAdapter] nor [MainInterceptor]
     /// throws [RequestHandlerException]
-    if (T.runtimeType != DioAdapter || T.runtimeType != MainInterceptor)
+    if (T.runtimeType != DioAdapter || T.runtimeType != DioInterceptor)
       RequestHandlerException();
   }
 
@@ -20,7 +19,7 @@ class RequestHandler<T> {
 
   /// Stores [response.data] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
-  AdapterInterface reply(int statusCode, dynamic data) {
+  reply(int statusCode, dynamic data) {
     this.statusCode = statusCode;
 
     requestMap[this.statusCode] = data;
@@ -28,16 +27,15 @@ class RequestHandler<T> {
     // Checking the type of the `type parameter`
     // and returning the relevant Class Instance
     switch (T) {
-      case MainInterceptor:
-        _returnObject = MainInterceptor();
+      case DioInterceptor:
+        return DioInterceptor();
         break;
       case DioAdapter:
-        _returnObject = DioAdapter();
+        return DioAdapter();
         break;
       default:
-        _returnObject = DioAdapter();
+        return DioAdapter();
         break;
     }
-    return _returnObject;
   }
 }

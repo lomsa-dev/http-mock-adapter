@@ -5,18 +5,43 @@ import 'package:http_mock_adapter/src/history.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
 
-class MainInterceptor extends Interceptor
+/// [DioInterceptor] is a class for mocking the [Dio] requests with interceptors.
+///
+/// This means you can mock any request of [Dio] by adding the
+/// instance of [DioInterceptor] inside the original [Dio]'s interceptors' list.
+///
+/// Usage:
+/// ```dart
+/// // Create Dio instance
+/// Dio dio = Dio()
+/// // Create instance of our([DioInterceptor]) Interceptor
+/// DioInterceptor interceptor = DioInterceptor()
+/// // Adding routes and their mocked responses as chains
+/// interceptor
+/// .onGet("/route-1")
+/// .reply("response for route 1")
+/// .onPost("/route-2")
+/// .reply("response for route 2")
+/// .onPatch("/route-3")
+/// .reply("response for route 3")
+/// // adding intercetor inside the [Dio]'s interceptors
+/// dio.interceptors.add(interceptor);
+/// ```
+/// If you now make request like this `dio.get("/route-1");`
+/// Your response will be `Response(data:"response for route 1",........)`
+
+class DioInterceptor extends Interceptor
     with Tracked, RequestRouted
     implements AdapterInterface {
   /// [MainInterceptor]'s singleton instance
-  static MainInterceptor _interceptor = MainInterceptor._construct();
+  static DioInterceptor _interceptor = DioInterceptor._construct();
 
   /// [MainInterceptor]'s private constructor method
-  MainInterceptor._construct();
+  DioInterceptor._construct();
 
   /// Factory method of [MainInterceptor] utilized to return [_interceptor]
   /// singleton instance each time it is called;
-  factory MainInterceptor() {
+  factory DioInterceptor() {
     return _interceptor;
   }
 
@@ -31,7 +56,7 @@ class MainInterceptor extends Interceptor
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
   RequestHandler onRoute(String route, {Request request = const Request()}) {
-    final requestHandler = RequestHandler<MainInterceptor>();
+    final requestHandler = RequestHandler<DioInterceptor>();
     history.data.add(RequestMatcher(route, request, requestHandler));
 
     return requestHandler;
@@ -39,7 +64,7 @@ class MainInterceptor extends Interceptor
 }
 
 // void main(List<String> args) async {
-//   MainInterceptor inercept = MainInterceptor();
+//   DioInterceptor inercept = DioInterceptor();
 //   Dio dio = Dio();
 
 //   inercept
