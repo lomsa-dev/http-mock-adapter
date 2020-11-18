@@ -2,7 +2,7 @@ import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/request.dart';
 
 /// Top level interface of all the adapters.
-/// It is implemented by [MainInterceptor] and [DioAdapter].
+/// It is implemented by [DioInterceptor] and [DioAdapter].
 ///
 /// This Interface is use for 2 reqsons:
 /// 1. To maintain the nice and best practice orinted way of architecture

@@ -8,7 +8,7 @@ class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
   RequestHandler() {
-    /// If type parameter of the class is neither [DioAdapter] nor [MainInterceptor]
+    /// If type parameter of the class is neither [DioAdapter] nor [DioInterceptor]
     /// throws [RequestHandlerException]
     if (T.runtimeType != DioAdapter || T.runtimeType != DioInterceptor)
       RequestHandlerException();

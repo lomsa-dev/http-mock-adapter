@@ -33,13 +33,13 @@ import 'package:http_mock_adapter/src/adapter_interface.dart';
 class DioInterceptor extends Interceptor
     with Tracked, RequestRouted
     implements AdapterInterface {
-  /// [MainInterceptor]'s singleton instance
+  /// [DioInterceptor]'s singleton instance
   static DioInterceptor _interceptor = DioInterceptor._construct();
 
-  /// [MainInterceptor]'s private constructor method
+  /// [DioInterceptor]'s private constructor method
   DioInterceptor._construct();
 
-  /// Factory method of [MainInterceptor] utilized to return [_interceptor]
+  /// Factory method of [DioInterceptor] utilized to return [_interceptor]
   /// singleton instance each time it is called;
   factory DioInterceptor() {
     return _interceptor;
