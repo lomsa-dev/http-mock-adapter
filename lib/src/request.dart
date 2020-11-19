@@ -1,26 +1,48 @@
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
+  /// This is the route specified by the client.
+  final String route;
+
   /// An HTTP method such as [RequestMethods.GET] or [RequestMethods.POST].
   final RequestMethods method;
 
   /// The payload.
   final dynamic data;
 
-  /// Headers to encompass content-types.
-  final dynamic headers;
+  /// Query parameters to encompass additional parameters to the query.
+  final Map<String, dynamic> queryParameters;
 
-  const Request({this.method = RequestMethods.GET, this.data, this.headers});
+  /// Headers to encompass content-types.
+  final Map<String, dynamic> headers;
+
+  const Request({
+    this.route,
+    this.method = RequestMethods.GET,
+    this.data,
+    this.queryParameters = const {},
+    this.headers = const {},
+  });
+
+  /// [signature] is the [String] representation of the [Request]'s body.
+  String get signature =>
+      '${this.route}/${this.method.value}/${this.data}/${this.queryParameters}/${this.headers}';
+}
+
+/// [Signature] extension method adds [signature] getter to [RequestOptions]
+/// in order to easily retrieve [Request]'s body representation as [String].
+extension Signature on RequestOptions {
+  /// [signature] is the [String] representation of the [RequestOptions]'s body.
+  String get signature =>
+      '${this.path}/${this.method}/${this.data}/${this.queryParameters}/${this.headers}';
 }
 
 /// Matcher of [Request] and [response] based on [route] and [RequestHandler].
 class RequestMatcher {
-  /// This is the route specified by the client.
-  final String route;
-
   /// This is a request sent by the the client.
   final Request request;
 
@@ -31,7 +53,6 @@ class RequestMatcher {
   dynamic response;
 
   RequestMatcher(
-    this.route,
     this.request,
     this.requestHandler, {
     this.response,

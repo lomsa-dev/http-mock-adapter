@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
-
 import 'request.dart';
 
 /// Intended to keep track of request history.
@@ -17,12 +16,9 @@ class History {
   RequestMatcher get current => data[_requestInvocationIndex];
 
   /// Getter for the current request invocation's intended [response].
-  ResponseBody Function(String route, String method) get response =>
-      (route, method) {
-        final signature = '$route/$method';
-
+  ResponseBody Function(RequestOptions options) get response => (options) {
         data.forEach((element) {
-          if (signature == '${element.route}/${element.request.method.value}') {
+          if (options.signature == element.request.signature) {
             _requestInvocationIndex = data.indexOf(element);
 
             current.response =

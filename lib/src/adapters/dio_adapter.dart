@@ -28,7 +28,15 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   RequestHandler onRoute(String route, {Request request = const Request()}) {
     final requestHandler = RequestHandler();
 
-    history.data.add(RequestMatcher(route, request, requestHandler));
+    history.data.add(
+      RequestMatcher(
+        Request(
+          route: route,
+          method: request.method,
+        ),
+        requestHandler,
+      ),
+    );
 
     return requestHandler;
   }
@@ -41,10 +49,7 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
     Stream<List<int>> requestStream,
     Future cancelFuture,
   ) async =>
-      history.response(
-        options.path,
-        options.method,
-      );
+      history.response(options);
 
   /// Closes the [DioAdapter] by force.
   @override

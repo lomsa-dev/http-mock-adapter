@@ -106,6 +106,8 @@ void main() {
           .reply(200, {'message': 'First!'})
           .onGet('/second-route')
           .reply(200, {'message': 'Second!'})
+          .onPost('/second-route')
+          .reply(200, {'message': 'Second again!'})
           .onGet('/third-route')
           .reply(200, {'message': 'Third!'});
 
@@ -120,6 +122,10 @@ void main() {
       response = await dio.get('/first-route');
 
       expect(jsonEncode({'message': 'First!'}), response.data);
+
+      response = await dio.post('/second-route');
+
+      expect(jsonEncode({'message': 'Second again!'}), response.data);
     });
 
     test('mocks multiple requests by chaining methods as intended', () async {
