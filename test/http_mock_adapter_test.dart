@@ -8,20 +8,22 @@ import 'package:http_mock_adapter/src/utils.dart';
 import 'package:mockito/mockito.dart';
 
 void main() {
-  Dio dio = Dio();
-  String path = "https://example.com";
-  group("Interceptor", () {
+  final dio = Dio();
+  const path = 'https://example.com';
+
+  group('Interceptor', () {
     Dio mainDio;
     DioInterceptor dioInterceptor;
     setUp(() {
       mainDio = Dio();
       dioInterceptor = DioInterceptor();
     });
-    int statusCode = 200;
+
+    final statusCode = 200;
     final data = {'message': 'Test!'};
 
-    group("RequestRouted test for dioInterceptor", () {
-      test("Mocks requests via onRoute() as intended", () async {
+    group('RequestRouted test for dioInterceptor', () {
+      test('Mocks requests via onRoute() as intended', () async {
         mainDio.interceptors.clear();
         dioInterceptor = DioInterceptor();
         dioInterceptor.onRoute(path).reply(statusCode, data);
@@ -111,12 +113,12 @@ void main() {
       });
     });
 
-    test("Mocks multiple requests sequantially by chaning", () async {
+    test('Mocks multiple requests sequantially by chaning', () async {
       // Initial dio object
-      Dio dio = Dio();
+      final dio = Dio();
 
       // Initial interceptor
-      DioInterceptor interceptor = DioInterceptor();
+      final interceptor = DioInterceptor();
 
       // Chained interceptor
       interceptor
@@ -240,7 +242,7 @@ void main() {
   });
 
   test('paths are parsed into mock filenames as intended', () {
-    String actual = '-example';
+    var actual = '-example';
 
     expect(actual, getMockFileName('example'));
     expect(actual, getMockFileName('/example'));

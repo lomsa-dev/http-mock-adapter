@@ -34,7 +34,7 @@ class DioInterceptor extends Interceptor
     with Tracked, RequestRouted
     implements AdapterInterface {
   /// [DioInterceptor]'s singleton instance
-  static DioInterceptor _interceptor = DioInterceptor._construct();
+  static final DioInterceptor _interceptor = DioInterceptor._construct();
 
   /// [DioInterceptor]'s private constructor method
   DioInterceptor._construct();
