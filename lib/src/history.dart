@@ -15,8 +15,12 @@ class History {
   /// Gets current [RequestMatcher].
   RequestMatcher get current => data[_requestInvocationIndex];
 
-  /// Getter for the current request invocation's intended [response].
-  ResponseBody Function(RequestOptions options) get response => (options) {
+  /// Getter for the current request invocation's intended [responseBody].
+  ResponseBody Function(RequestOptions options) get responseBody => (options) {
+        options.headers = {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        };
+
         data.forEach((element) {
           if (options.signature == element.request.signature) {
             _requestInvocationIndex = data.indexOf(element);
@@ -26,9 +30,9 @@ class History {
           }
         });
 
-        final response = current.response;
+        final responseBody = current.response;
 
-        return response;
+        return responseBody;
       };
 
   /// Getter for the current request invocation's [RequestHandler].

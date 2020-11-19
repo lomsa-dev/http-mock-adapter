@@ -1,12 +1,15 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/adapter_interface.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 
 import '../history.dart';
 import '../request.dart';
 
 /// [HttpClientAdapter] extension with data mocking and tracking functionality.
-class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
+class DioAdapter extends HttpClientAdapter
+    with RequestRouted, Tracked
+    implements AdapterInterface {
   /// [Dio]`s default HTTP client adapter implementation.
   final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
 
@@ -49,7 +52,7 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
     Stream<List<int>> requestStream,
     Future cancelFuture,
   ) async =>
-      history.response(options);
+      history.responseBody(options);
 
   /// Closes the [DioAdapter] by force.
   @override

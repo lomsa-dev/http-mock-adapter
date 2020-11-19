@@ -18,19 +18,21 @@ class Request {
   final Map<String, dynamic> queryParameters;
 
   /// Headers to encompass content-types.
-  final Map<String, dynamic> headers;
+  final Map<String, List<String>> headers;
 
   const Request({
     this.route,
     this.method = RequestMethods.GET,
     this.data,
     this.queryParameters = const {},
-    this.headers = const {},
+    this.headers = const {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
   });
 
   /// [signature] is the [String] representation of the [Request]'s body.
   String get signature =>
-      '${this.route}/${this.method.value}/${this.data}/${this.queryParameters}/${this.headers}';
+      '${route}/${method.value}/${data}/${queryParameters}/${headers}';
 }
 
 /// [Signature] extension method adds [signature] getter to [RequestOptions]
@@ -38,10 +40,10 @@ class Request {
 extension Signature on RequestOptions {
   /// [signature] is the [String] representation of the [RequestOptions]'s body.
   String get signature =>
-      '${this.path}/${this.method}/${this.data}/${this.queryParameters}/${this.headers}';
+      '${path}/${method}/${data}/${queryParameters}/${headers}';
 }
 
-/// Matcher of [Request] and [response] based on [route] and [RequestHandler].
+/// Matcher of [Request] and [response] based on route and [RequestHandler].
 class RequestMatcher {
   /// This is a request sent by the the client.
   final Request request;
@@ -50,7 +52,7 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response to the request.
-  dynamic response;
+  ResponseBody response;
 
   RequestMatcher(
     this.request,
@@ -88,10 +90,10 @@ enum RequestMethods {
 /// the ability to obtain [String] type depictions of enumeration's values.
 extension ValueToString on RequestMethods {
   /// Gets the [String] depiction of the current value.
-  String get value => this.toString().split('.').last;
+  String get value => toString().split('.').last;
 }
 
-/// [RequestRouted] exposes developer-friendly methods which take in [route],
+/// [RequestRouted] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
 mixin RequestRouted {
   /// Takes in route, request, and sets corresponding [RequestHandler].
@@ -101,7 +103,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
   RequestHandler onGet(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.GET,
@@ -114,7 +116,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
   RequestHandler onHead(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.HEAD,
@@ -127,7 +129,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPost(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.POST,
@@ -140,7 +142,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPut(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.PUT,
@@ -153,7 +155,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
   RequestHandler onDelete(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.DELETE,
@@ -166,7 +168,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
   RequestHandler onPatch(String route, {dynamic data, dynamic headers}) {
-    return this.onRoute(
+    return onRoute(
       route,
       request: Request(
         method: RequestMethods.PATCH,
