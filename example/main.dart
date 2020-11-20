@@ -24,9 +24,9 @@ void main() async {
               {'message': 'Successfully mocked GET!'}) // only use double quotes
           .onPost(path)
           .reply(200, {'message': 'Successfully mocked POST!'});
-      final getResponse = await dio.get(path);
 
       // Making dio.get request on the path an expecting mocked response
+      final getResponse = await dio.get(path);
       expect(jsonEncode({'message': 'Successfully mocked GET!'}),
           getResponse.data);
 
