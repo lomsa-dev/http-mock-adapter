@@ -9,7 +9,7 @@ Minor versions will be bundled with more important versions.
 - **Added**
   - History mixin to keep track of request history
   - HTTP methods
-  - RequestRouted - exposes developer-friendly methods which take in route
+  - RequestRouted - exposes developer-friendly methods which take in routes
   - RequestHandler - The handler of requests sent by clients
   - DioAdapter without mockito
   - Mocked version of DioAdapter
