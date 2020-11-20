@@ -14,7 +14,7 @@ void main() {
   const path = 'https://example.com';
 
   Response<dynamic> response;
-  final statusCode = 200;
+  const statusCode = 200;
 
   group('DioInterceptor', () {
     DioInterceptor dioInterceptor;

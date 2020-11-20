@@ -68,11 +68,9 @@ class DioInterceptor extends Interceptor
   @override
   Future<Response<dynamic>> onRequest(options) async {
     final responseBody = history.responseBody(options);
-
     responseBody.headers = responseBody.headers ?? {};
 
     final headers = Headers.fromMap(responseBody.headers ?? {});
-
     headers.set(Headers.contentTypeHeader, [Headers.jsonContentType]);
 
     return Response(
