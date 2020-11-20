@@ -14,6 +14,7 @@ Minor versions will be bundled with more important versions.
   - DioAdapter without mockito
   - Mocked version of DioAdapter
   - Tast cases
+  - Non-sequential responding
 
 - **Removed**
   - MockHandler - ensures that mock data is saved and retrieved from the disk.
