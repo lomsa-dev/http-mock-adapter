@@ -18,8 +18,5 @@ abstract class AdapterInterface {
   RequestHandler onPost(String route, {dynamic data, dynamic headers});
   RequestHandler onPut(String route, {dynamic data, dynamic headers});
   RequestHandler onDelete(String route, {dynamic data, dynamic headers});
-  RequestHandler onConnect(String route, {dynamic data, dynamic headers});
-  RequestHandler onOptions(String route, {dynamic data, dynamic headers});
-  RequestHandler onTrace(String route, {dynamic data, dynamic headers});
   RequestHandler onPatch(String route, {dynamic data, dynamic headers});
 }

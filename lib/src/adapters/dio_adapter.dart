@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
@@ -33,19 +31,28 @@ class DioAdapter extends HttpClientAdapter
   RequestHandler onRoute(String route, {Request request = const Request()}) {
     final requestHandler = RequestHandler();
 
-    history.data.add(RequestMatcher(route, request, requestHandler));
+    history.data.add(
+      RequestMatcher(
+        Request(
+          route: route,
+          method: request.method,
+        ),
+        requestHandler,
+      ),
+    );
 
     return requestHandler;
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.
+  /// Returns a [Future<ResponseBody>] from [History] based on [RequestOptions].
   @override
   Future<ResponseBody> fetch(
     RequestOptions options,
     Stream<List<int>> requestStream,
     Future cancelFuture,
   ) async =>
-      ResponseBody.fromString(history.response, HttpStatus.ok);
+      history.responseBody(options);
 
   /// Closes the [DioAdapter] by force.
   @override

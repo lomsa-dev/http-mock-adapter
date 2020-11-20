@@ -1,26 +1,50 @@
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
+  /// This is the route specified by the client.
+  final String route;
+
   /// An HTTP method such as [RequestMethods.GET] or [RequestMethods.POST].
   final RequestMethods method;
 
   /// The payload.
   final dynamic data;
 
-  /// Headers to encompass content-types.
-  final dynamic headers;
+  /// Query parameters to encompass additional parameters to the query.
+  final Map<String, dynamic> queryParameters;
 
-  const Request({this.method = RequestMethods.GET, this.data, this.headers});
+  /// Headers to encompass content-types.
+  final Map<String, List<String>> headers;
+
+  const Request({
+    this.route,
+    this.method = RequestMethods.GET,
+    this.data,
+    this.queryParameters = const {},
+    this.headers = const {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
+  });
+
+  /// [signature] is the [String] representation of the [Request]'s body.
+  String get signature =>
+      '${route}/${method.value}/${data}/${queryParameters}/${headers}';
 }
 
-/// Matcher of [Request] and [response] based on [route] and [RequestHandler].
-class RequestMatcher {
-  /// This is the route specified by the client.
-  final String route;
+/// [Signature] extension method adds [signature] getter to [RequestOptions]
+/// in order to easily retrieve [Request]'s body representation as [String].
+extension Signature on RequestOptions {
+  /// [signature] is the [String] representation of the [RequestOptions]'s body.
+  String get signature =>
+      '${path}/${method}/${data}/${queryParameters}/${headers}';
+}
 
+/// Matcher of [Request] and [response] based on route and [RequestHandler].
+class RequestMatcher {
   /// This is a request sent by the the client.
   final Request request;
 
@@ -28,10 +52,9 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response to the request.
-  dynamic response;
+  ResponseBody response;
 
   RequestMatcher(
-    this.route,
     this.request,
     this.requestHandler, {
     this.response,
@@ -59,20 +82,15 @@ enum RequestMethods {
   /// The [DELETE] method deletes the specified resource.
   DELETE,
 
-  /// The [CONNECT] method establishes a tunnel to the server
-  /// identified by the target resource.
-  CONNECT,
-
-  /// The [OPTIONS] method is used to describe the communication options
-  /// for the target resource.
-  OPTIONS,
-
-  /// The [TRACE] method performs a message loop-back test
-  /// along the path to the target resource.
-  TRACE,
-
   /// The [PATCH] method is used to apply partial modifications to a resource.
   PATCH,
+}
+
+/// [ValueToString] extension method grants [RequestMethods] enumeration
+/// the ability to obtain [String] type depictions of enumeration's values.
+extension ValueToString on RequestMethods {
+  /// Gets the [String] depiction of the current value.
+  String get value => toString().split('.').last;
 }
 
 /// [RequestRouted] exposes developer-friendly methods which take in route,
@@ -141,45 +159,6 @@ mixin RequestRouted {
       route,
       request: Request(
         method: RequestMethods.DELETE,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.CONNECT],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onConnect(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.CONNECT,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.OPTIONS],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onOptions(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.OPTIONS,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
-
-  /// Takes in a route, requests with [RequestMethods.TRACE],
-  /// and sets corresponding [RequestHandler].
-  RequestHandler onTrace(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.TRACE,
         data: data,
         headers: headers,
       ),

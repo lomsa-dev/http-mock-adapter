@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
-import 'package:http_mock_adapter/src/interceptors/http_interceptor.dart';
+import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 
 /// The handler of requests sent by clients.
 class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
+
   RequestHandler() {
     /// If type parameter of the class is neither [DioAdapter] nor [DioInterceptor]
     /// throws [RequestHandlerException]
@@ -15,15 +20,27 @@ class RequestHandler<T> {
     }
   }
 
-  /// Map of <[int] statusCode, [dynamic] data>.
-  final Map<int, dynamic> requestMap = {};
+  /// Map of <[statusCode], [ResponseBody]>.
+  final Map<int, ResponseBody> requestMap = {};
 
-  /// Stores response.data in [requestMap] and returns [DioAdapter]
+  /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
-  AdapterInterface reply(int statusCode, dynamic data) {
+  AdapterInterface reply(
+    int statusCode,
+    dynamic data, {
+    Map<String, List<String>> headers,
+    String statusMessage,
+    bool isRedirect,
+  }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = data;
+    requestMap[this.statusCode] = ResponseBody.fromString(
+      jsonEncode(data),
+      HttpStatus.ok,
+      headers: headers,
+      statusMessage: statusMessage,
+      isRedirect: isRedirect,
+    );
 
     // Checking the type of the `type parameter`
     // and returning the relevant Class Instance

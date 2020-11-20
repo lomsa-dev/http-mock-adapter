@@ -3,125 +3,91 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:http_mock_adapter/src/interceptors/http_interceptor.dart';
+import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/utils.dart';
 import 'package:mockito/mockito.dart';
 
 void main() {
-  final dio = Dio();
+  Dio dio;
+
+  Map<String, dynamic> data;
   const path = 'https://example.com';
 
-  group('Interceptor', () {
-    Dio mainDio;
+  Response<dynamic> response;
+  const statusCode = 200;
+
+  group('DioInterceptor', () {
     DioInterceptor dioInterceptor;
-    setUp(() {
-      mainDio = Dio();
+
+    data = {'message': 'Test!'};
+
+    setUpAll(() {
+      dio = Dio();
+
       dioInterceptor = DioInterceptor();
+
+      dio.interceptors.add(dioInterceptor);
     });
 
-    final statusCode = 200;
-    final data = {'message': 'Test!'};
+    Future<void> _testDioInterceptor<T>(
+      Future<Response<T>> Function() request,
+      actual,
+    ) async {
+      response = await request();
 
-    group('RequestRouted test for dioInterceptor', () {
-      test('Mocks requests via onRoute() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      expect(jsonEncode(actual), response.data);
+    }
+
+    group('RequestRouted', () {
+      test('mocks requests via onRoute() as intended', () async {
         dioInterceptor.onRoute(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.get(path), data);
       });
-      test('Mocks requests via onGet() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+
+      test('mocks requests via onGet() as intended', () async {
         dioInterceptor.onGet(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.get(path), data);
       });
 
-      test('Mocks requests via onHead() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      test('mocks requests via onHead() as intended', () async {
         dioInterceptor.onHead(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.head(path), data);
       });
 
-      test('Mocks requests via onPost() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      test('mocks requests via onPost() as intended', () async {
         dioInterceptor.onPost(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.post(path), data);
       });
 
-      test('Mocks requests via onPut() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      test('mocks requests via onPut() as intended', () async {
         dioInterceptor.onPut(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.put(path), data);
       });
 
-      test('Mocks requests via onDelete() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      test('mocks requests via onDelete() as intended', () async {
         dioInterceptor.onDelete(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.delete(path), data);
       });
 
-      test('Mocks requests via onConnect() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
-        dioInterceptor.onConnect(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
-      });
-
-      test('Mocks requests via onOptions() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
-        dioInterceptor.onOptions(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
-      });
-
-      test('Mocks requests via onTrace() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
-        dioInterceptor.onTrace(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
-      });
-
-      test('Mocks requests via onPatch() as intended', () async {
-        mainDio.interceptors.clear();
-        dioInterceptor = DioInterceptor();
+      test('mocks requests via onPatch() as intended', () async {
         dioInterceptor.onPatch(path).reply(statusCode, data);
-        mainDio.interceptors.add(dioInterceptor);
-        dynamic response = await mainDio.patch(path);
-        expect(response.data, data.toString());
+
+        await _testDioInterceptor(() => dio.patch(path), data);
       });
     });
 
-    test('Mocks multiple requests sequantially by chaning', () async {
-      // Initial dio object
+    test('mocks multiple requests sequantially by method chaining', () async {
       final dio = Dio();
 
-      // Initial interceptor
-      final interceptor = DioInterceptor();
+      final dioInterceptor = DioInterceptor();
 
-      // Chained interceptor
-      interceptor
+      dioInterceptor
           .onGet(path)
           .reply(statusCode, data)
           .onPost(path)
@@ -129,115 +95,159 @@ void main() {
           .onPatch(path)
           .reply(statusCode, data);
 
-      // Adding interceptor to dio object
-      dio.interceptors.add(interceptor);
+      dio.interceptors.add(dioInterceptor);
 
-      // Testing GET request
-      dynamic response = await dio.get(path);
-      expect(response.data, data.toString());
+      response = await dio.get(path);
+      expect(response.data, jsonEncode(data));
 
-      // Testing POST request
       response = await dio.post(path);
-      expect(response.data, data.toString());
+      expect(response.data, jsonEncode(data));
 
-      // Testing POST request
       response = await dio.patch(path);
-      expect(response.data, data.toString());
+      expect(response.data, jsonEncode(data));
     });
   });
 
   group('DioAdapter', () {
-    Response<dynamic> response;
-    final dioAdapter = DioAdapter();
+    DioAdapter dioAdapter;
 
-    dio.httpClientAdapter = dioAdapter;
+    data = {'message': 'Test!'};
+
+    setUpAll(() {
+      dio = Dio();
+
+      dioAdapter = DioAdapter();
+
+      dio.httpClientAdapter = dioAdapter;
+    });
 
     group('RequestRouted', () {
-      const path = 'https://example.com';
-      const data = {'message': 'Test!'};
-      const statusCode = 200;
+      Future<void> _testDioAdapter<T>(
+        Future<Response<T>> Function() request,
+        actual,
+      ) async {
+        response = await request();
 
-      tearDown(() async {
-        final dio = Dio();
+        expect(jsonEncode(actual), response.data);
+      }
+
+      test('mocks requests via onRoute() as intended', () async {
+        dioAdapter.onRoute(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.get(path), data);
+      });
+
+      test('mocks requests via onGet() as intended', () async {
+        dioAdapter.onGet(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.get(path), data);
+      });
+
+      test('mocks requests via onHead() as intended', () async {
+        dioAdapter.onHead(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.head(path), data);
+      });
+
+      test('mocks requests via onPost() as intended', () async {
+        dioAdapter.onPost(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.post(path), data);
+      });
+
+      test('mocks requests via onPut() as intended', () async {
+        dioAdapter.onPut(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.put(path), data);
+      });
+
+      test('mocks requests via onDelete() as intended', () async {
+        dioAdapter.onDelete(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.delete(path), data);
+      });
+
+      test('mocks requests via onPatch() as intended', () async {
+        dioAdapter.onPatch(path).reply(statusCode, data);
+
+        await _testDioAdapter(() => dio.patch(path), data);
+      });
+
+      test('mocks multiple requests sequantially as intended', () async {
+        dioAdapter = DioAdapter();
 
         dio.httpClientAdapter = dioAdapter;
 
-        final response = await dio.get(path);
+        dioAdapter.onPost('/route', data: {'post': '201'}).reply(201, {
+          'message': 'Post!',
+        });
 
-        expect(data.toString(), response.data);
+        response = await dio.post('/route');
+
+        expect(jsonEncode({'message': 'Post!'}), response.data);
+
+        dioAdapter.onPatch('/route', data: {'patch': '404'}).reply(404, {
+          'message': 'Patch!',
+        });
+
+        response = await dio.patch('/route');
+
+        expect(jsonEncode({'message': 'Patch!'}), response.data);
+
+        dioAdapter.onGet('/api', data: {'get': '200'}).reply(200, {
+          'message': 'Get!',
+        });
+
+        response = await dio.get('/api');
+
+        expect(jsonEncode({'message': 'Get!'}), response.data);
       });
 
-      test('mocks requests via onRoute() as intended',
-          () => dioAdapter.onRoute(path).reply(statusCode, data));
+      test('mocks multiple requests non-sequantially as intended', () async {
+        dioAdapter = DioAdapter();
 
-      test('mocks requests via onGet() as intended',
-          () => dioAdapter.onGet(path).reply(statusCode, data));
+        dio.httpClientAdapter = dioAdapter;
 
-      test('mocks requests via onHead() as intended',
-          () => dioAdapter.onHead(path).reply(statusCode, data));
+        dioAdapter
+            .onGet('/first-route')
+            .reply(200, {'message': 'First!'})
+            .onGet('/second-route')
+            .reply(200, {'message': 'Second!'})
+            .onPost('/second-route')
+            .reply(200, {'message': 'Second again!'})
+            .onGet('/third-route')
+            .reply(200, {'message': 'Third!'});
 
-      test('mocks requests via onPost() as intended',
-          () => dioAdapter.onPost(path).reply(statusCode, data));
+        response = await dio.get('/second-route');
+        expect(jsonEncode({'message': 'Second!'}), response.data);
 
-      test('mocks requests via onPut() as intended',
-          () => dioAdapter.onPut(path).reply(statusCode, data));
+        response = await dio.get('/third-route');
+        expect(jsonEncode({'message': 'Third!'}), response.data);
 
-      test('mocks requests via onDelete() as intended',
-          () => dioAdapter.onDelete(path).reply(statusCode, data));
+        response = await dio.get('/first-route');
+        expect(jsonEncode({'message': 'First!'}), response.data);
 
-      test('mocks requests via onConnect() as intended',
-          () => dioAdapter.onConnect(path).reply(statusCode, data));
-
-      test('mocks requests via onOptions() as intended',
-          () => dioAdapter.onOptions(path).reply(statusCode, data));
-
-      test('mocks requests via onTrace() as intended',
-          () => dioAdapter.onTrace(path).reply(statusCode, data));
-
-      test('mocks requests via onPatch() as intended',
-          () => dioAdapter.onPatch(path).reply(statusCode, data));
-    });
-
-    test('mocks multiple requests sequantially as intended', () async {
-      dioAdapter.onPost('/route', data: {'post': '201'}).reply(201, {
-        'message': 'Post!',
+        response = await dio.post('/second-route');
+        expect(jsonEncode({'message': 'Second again!'}), response.data);
       });
 
-      response = await dio.post('/route');
+      test('mocks multiple requests by chaining methods as intended', () async {
+        dioAdapter = DioAdapter();
 
-      expect({'message': 'Post!'}.toString(), response.data);
+        dio.httpClientAdapter = dioAdapter;
 
-      dioAdapter.onPatch('/route', data: {'patch': '404'}).reply(404, {
-        'message': 'Patch!',
+        dioAdapter
+            .onGet('/route')
+            .reply(201, {'message': 'Unbreakable...'})
+            .onGet('/api')
+            .reply(200, {'message': 'Chain!'});
+
+        response = await dio.get('/route');
+        expect(jsonEncode({'message': 'Unbreakable...'}), response.data);
+
+        response = await dio.get('/api');
+        expect(jsonEncode({'message': 'Chain!'}), response.data);
       });
-
-      response = await dio.patch('/route');
-
-      expect({'message': 'Patch!'}.toString(), response.data);
-
-      dioAdapter.onGet('/api', data: {'get': '200'}).reply(200, {
-        'message': 'Get!',
-      });
-
-      response = await dio.get('/api');
-
-      expect({'message': 'Get!'}.toString(), response.data);
-    });
-
-    test('mocks multiple requests by chaining methods as intended', () async {
-      dioAdapter
-          .onGet('/route')
-          .reply(201, {'message': 'Unbreakable...'})
-          .onGet('/api')
-          .reply(200, {'message': 'Chain!'});
-
-      response = await dio.get('/route');
-
-      expect({'message': 'Unbreakable...'}.toString(), response.data);
-
-      response = await dio.get('/api');
-
-      expect({'message': 'Chain!'}.toString(), response.data);
     });
   });
 
@@ -264,13 +274,17 @@ void main() {
   });
 
   group('DioAdapterMockito', () {
-    final dioAdapterMockito = DioAdapterMockito();
+    DioAdapterMockito dioAdapterMockito;
 
-    test('mocks any request/response via fetch method', () async {
-      Response<dynamic> response;
+    setUpAll(() {
+      dio = Dio();
+
+      dioAdapterMockito = DioAdapterMockito();
 
       dio.httpClientAdapter = dioAdapterMockito;
+    });
 
+    test('mocks any request/response via fetch method', () async {
       final responsePayload = jsonEncode({'response_code': '200'});
 
       final responseBody = ResponseBody.fromString(
