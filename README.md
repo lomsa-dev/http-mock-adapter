@@ -5,7 +5,7 @@
 
 ## Description
 
-HTTP mock adapter for Dart/Flutter (Compatible with Dio and Mockito).
+HTTP mock adapter for Dart/Flutter (compatible with Dio and Mockito).
 
 ---
 
@@ -50,7 +50,7 @@ void main() async {
 Add this to your package's `pubspec.yaml` file:
 
 ```yaml
-dependencies:
+dev_dependencies:
   http_mock_adapter: ^0.0.1
 ```
 
