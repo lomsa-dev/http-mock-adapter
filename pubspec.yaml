@@ -1,6 +1,6 @@
 name: http_mock_adapter
 description: Http mock adapter for Dio & Mockito.
-version: 0.0.1
+version: 0.1.0
 homepage: https://lomsa.com/
 
 environment:
