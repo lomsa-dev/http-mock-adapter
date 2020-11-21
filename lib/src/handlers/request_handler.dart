@@ -12,14 +12,6 @@ class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
 
-  RequestHandler() {
-    /// If type parameter of the class is neither [DioAdapter] nor [DioInterceptor]
-    /// throws [RequestHandlerException]
-    if (T.runtimeType != DioAdapter || T.runtimeType != DioInterceptor) {
-      RequestHandlerException();
-    }
-  }
-
   /// Map of <[statusCode], [ResponseBody]>.
   final Map<int, ResponseBody> requestMap = {};
 
@@ -44,6 +36,8 @@ class RequestHandler<T> {
 
     // Checking the type of the `type parameter`
     // and returning the relevant Class Instance
+    /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [Type],
+    /// throws [RequestHandlerException]
     switch (T) {
       case DioInterceptor:
         return DioInterceptor();
@@ -51,8 +45,11 @@ class RequestHandler<T> {
       case DioAdapter:
         return DioAdapter();
         break;
-      default:
+      case dynamic:
         return DioAdapter();
+        break;
+      default:
+        return throw RequestHandlerException();
         break;
     }
   }
