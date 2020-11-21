@@ -32,15 +32,14 @@ class Request {
 
   /// [signature] is the [String] representation of the [Request]'s body.
   String get signature =>
-      '${route}/${method.value}/${data}/${queryParameters}/${headers}';
+      '$route/${method.value}/$data/$queryParameters/$headers';
 }
 
 /// [Signature] extension method adds [signature] getter to [RequestOptions]
 /// in order to easily retrieve [Request]'s body representation as [String].
 extension Signature on RequestOptions {
   /// [signature] is the [String] representation of the [RequestOptions]'s body.
-  String get signature =>
-      '${path}/${method}/${data}/${queryParameters}/${headers}';
+  String get signature => '$path/$method/$data/$queryParameters/$headers';
 }
 
 /// Matcher of [Request] and [response] based on route and [RequestHandler].
