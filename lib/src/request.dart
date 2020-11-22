@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
+import 'adapter_interface.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
@@ -101,79 +102,82 @@ mixin RequestRouted {
 
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onGet(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.GET,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+
+  AdapterRequest get onGet => (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.GET,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onHead(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.HEAD,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+  AdapterRequest get onHead => (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.HEAD,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onPost(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.POST,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+  AdapterRequest get onPost => (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.POST,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onPut(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.PUT,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+  AdapterRequest get onPut => (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.PUT,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onDelete(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.DELETE,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+  AdapterRequest get onDelete =>
+      (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.DELETE,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
-  RequestHandler onPatch(String route, {dynamic data, dynamic headers}) {
-    return onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.PATCH,
-        data: data,
-        headers: headers,
-      ),
-    );
-  }
+  AdapterRequest get onPatch =>
+      (String route, {dynamic data, dynamic headers}) {
+        return onRoute(
+          route,
+          request: Request(
+            method: RequestMethods.PATCH,
+            data: data,
+            headers: headers,
+          ),
+        );
+      };
 }

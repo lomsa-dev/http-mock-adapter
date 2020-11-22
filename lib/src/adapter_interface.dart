@@ -11,12 +11,18 @@ import 'package:http_mock_adapter/src/request.dart';
 /// parameters by using [dynamic] type for reply was removing
 /// autocomplition ability, that's why both Adapters implement this interface
 /// to provide good developer experience.
+typedef AdapterRequest = RequestHandler Function(
+  String route, {
+  dynamic data,
+  dynamic headers,
+});
+
 abstract class AdapterInterface {
-  RequestHandler onGet(String route, {dynamic data, dynamic headers});
+  AdapterRequest get onGet;
   RequestHandler onRoute(String route, {Request request = const Request()});
-  RequestHandler onHead(String route, {dynamic data, dynamic headers});
-  RequestHandler onPost(String route, {dynamic data, dynamic headers});
-  RequestHandler onPut(String route, {dynamic data, dynamic headers});
-  RequestHandler onDelete(String route, {dynamic data, dynamic headers});
-  RequestHandler onPatch(String route, {dynamic data, dynamic headers});
+  AdapterRequest get onHead;
+  AdapterRequest get onPost;
+  AdapterRequest get onPut;
+  AdapterRequest get onDelete;
+  AdapterRequest get onPatch;
 }
