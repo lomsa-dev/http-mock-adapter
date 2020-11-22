@@ -1,5 +1,5 @@
 name: http_mock_adapter
-description: Http mock adapter for Dio & Mockito.
+description: Http mock adapter for Dio & Mockito. Testing classes which are dependent on Dio requests. By simply defining requests with their methods and responses by using chains of our DioAdapter you will be able to mock basically any request that Dio can support.
 version: 0.1.0
 homepage: https://lomsa.com/
 
