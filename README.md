@@ -85,26 +85,28 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 ## Changelog
 
-All notable changes to this project will be documented in the [CHANGELOG.md](https://github.com/lomsa-dev/http-mock-adapter/blob/master/CHANGELOG.md "Project's CHANGELOG.md file") file.
+All notable changes to this project will be documented in the [CHANGELOG.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CHANGELOG.md "Project's CHANGELOG.md file") file.
 
 ---
 
 ## Authors
 
+See the [AUTHORS](https://github.com/lomsa-dev/http-mock-adapter/blob/main/AUTHORS "Project's AUTHORS file") file for information regarding the authors of the project.
+
 **NOTICE**: The file doesn't exist for now.
 
 See the
-[ACKNOWLEDGEMENTS.md](https://github.com/lomsa-dev/http-mock-adapter/blob/master/ACKNOWLEDGEMENTS.md "Project's ACKNOWLEDGEMENTS.md file") file for information regarding the
+[ACKNOWLEDGEMENTS.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/ACKNOWLEDGEMENTS.md "Project's ACKNOWLEDGEMENTS.md file") file for information regarding the
 tools/resources used while developing the project.
 
 ---
 
 ## License
 
-http-mock-adapter is licensed under the permissive MIT License ([LICENSE](https://github.com/lomsa-dev/http-mock-adapter/blob/master/LICENSE "Copy of the MIT license")).
+http-mock-adapter is licensed under the permissive MIT License ([LICENSE](https://github.com/lomsa-dev/http-mock-adapter/blob/main/LICENSE "Copy of the MIT license")).
 
 ---
 
 ## Contribution
 
-For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/master/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file.
+For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file.
