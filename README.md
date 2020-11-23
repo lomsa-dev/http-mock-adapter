@@ -93,10 +93,6 @@ All notable changes to this project will be documented in the [CHANGELOG.md](htt
 
 See the [AUTHORS](https://github.com/lomsa-dev/http-mock-adapter/blob/main/AUTHORS "Project's AUTHORS file") file for information regarding the authors of the project.
 
-See the
-[ACKNOWLEDGEMENTS.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/ACKNOWLEDGEMENTS.md "Project's ACKNOWLEDGEMENTS.md file") file for information regarding the
-tools/resources used while developing the project.
-
 ---
 
 ## License
