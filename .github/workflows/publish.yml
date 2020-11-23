@@ -2,6 +2,7 @@ name: Publish to Pub.dev
 # develop branch will be changed to master once it's made.
 on:
   release:
+    types: [published]
     branches:
       - main
 
