@@ -9,7 +9,7 @@ import 'package:http_mock_adapter/src/request.dart';
 /// 2.  Because of the reason that [RequestHandler] is returning different
 /// class instances form reply method, depending on its generic type
 /// parameters by using [dynamic] type for reply was removing
-/// autocomplition ability that's why both Adapters implement this interface
+/// autocomplition ability, that's why both Adapters implement this interface
 /// to provide good developer experience.
 typedef AdapterRequest = RequestHandler Function(
   String route, {
