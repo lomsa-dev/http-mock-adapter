@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 
 void main() async {
   // How to mock with DioAdapter
@@ -10,14 +10,14 @@ void main() async {
     // Creating dio instance for mocking.
     // For instance: you can use your own instance from injection and replace
     // dio.httpClientAdapter with mocker DioAdapter
-    final dio = Dio();
-    final dioAdapter = DioAdapter();
-
-    dio.httpClientAdapter = dioAdapter;
 
     const path = 'https://example.com';
 
     test('Expects Dioadapter to mock the data', () async {
+      final dio = Dio();
+      final dioAdapter = DioAdapter();
+
+      dio.httpClientAdapter = dioAdapter;
       dioAdapter
           .onGet(path)
           .reply(200,
@@ -35,9 +35,34 @@ void main() async {
       expect(jsonEncode({'message': 'Successfully mocked POST!'}),
           postResposne.data);
     });
+
+    // Alternatively you can use onRoute chain to pass custom requests
+    test('Expects Dioadapter to mock the data with onRoute', () async {
+      final dio = Dio();
+      final dioAdapter = DioAdapter();
+
+      dio.httpClientAdapter = dioAdapter;
+      dioAdapter
+          .onRoute(path, request: Request(method: RequestMethods.PATCH))
+          .reply(200, {
+            'message': 'Successfully mocked PATCH!'
+          }) // only use double quotes
+          .onRoute(path, request: Request(method: RequestMethods.DELETE))
+          .reply(200, {'message': 'Successfully mocked DELETE!'});
+
+      // Making dio.get request on the path an expecting mocked response
+      final patchResponse = await dio.patch(path);
+      expect(jsonEncode({'message': 'Successfully mocked PATCH!'}),
+          patchResponse.data);
+
+      // Making dio.post request on the path an expecting mocked response
+      final deleteResposne = await dio.delete(path);
+      expect(jsonEncode({'message': 'Successfully mocked DELETE!'}),
+          deleteResposne.data);
+    });
   });
 
-  // Alternatively, for mocking requests, you can use dio Interceptor
+  // Also, for mocking requests, you can use dio Interceptor
   group('DioAdapter usage', () {
     // Creating dio instance for mocking.
     // For instance: you can use your own instance from injection and add
