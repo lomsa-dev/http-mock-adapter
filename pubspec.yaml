@@ -15,5 +15,5 @@ dependencies:
 
 dev_dependencies:
   pedantic: ^1.9.0
-  http: ^0.12.2
   test: any
+  http: ^0.12.2
