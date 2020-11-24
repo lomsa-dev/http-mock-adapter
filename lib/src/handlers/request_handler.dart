@@ -34,11 +34,25 @@ class RequestHandler<T> {
       isRedirect: isRedirect,
     );
 
-    // Checking the type of the `type parameter`
-    // and returning the relevant Class Instance
-    /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [Type],
-    /// throws [RequestHandlerException]
-    switch (T) {
+    return createChain();
+  }
+
+  // TODO implement doThrow method
+  AdapterInterface doThrow() => createChain();
+  // TODO take requestMap out of the function to maintain DRY principle
+
+  // TODO somehow catch the request in here, to generate solid DioError instance
+
+  /// Saving type of the typed parter T in the getter
+  /// for [createChain] Function
+  Type get chainType => chainType.runtimeType;
+
+  /// Checking the type of the `type parameter`
+  /// and returning the relevant Class Instance
+  /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [dynamic],
+  /// throws [RequestHandlerException]
+  AdapterInterface createChain() {
+    switch (chainType) {
       case DioInterceptor:
         return DioInterceptor();
         break;
