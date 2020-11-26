@@ -18,8 +18,8 @@ jobs:
         run: flutter doctor
       - name: change chunnel
         run: flutter channel beta
-      - name: change chunnel
-        run: rm ~.pub-cache/*
+      - name: remove cache
+        run: rm ~/.pub-cache/*
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
