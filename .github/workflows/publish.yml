@@ -14,6 +14,12 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.20.0'
+      - name: upgrade flutter
+        run: flutter upgrade
+      - name: doctorize flutter
+        run: flutter doctor
+      - name: change chunnel
+        run: flutter channel beta
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
