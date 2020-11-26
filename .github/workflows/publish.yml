@@ -11,6 +11,8 @@ jobs:
       image:  google/dart:latest
     steps:
     - uses: actions/checkout@v1
+    - name: curl
+      uses: wei/curl@v1
     - name: Install dependencies
       run: pub get
     - name: Run tests
