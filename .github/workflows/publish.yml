@@ -7,33 +7,26 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    container:
+      image:  google/dart:latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Install Flutter
-        uses: subosito/flutter-action@v1.4.0
-        with:
-          flutter-version: '1.22.0'
-      - name: doctorize flutter
-        run: flutter doctor
-      - name: change chunnel
-        run: flutter channel beta
-      - name: Install dependencies
-        run: pub get
-      - name: Analyze
-        run: flutter analyze
-      - name: Run tests
-        run: dart test
-      - name: Setup Pub Credentials
-        shell: bash
-        env:
-          PUB_DEV_PUBLISH_ACCESS_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}
-          PUB_DEV_PUBLISH_REFRESH_TOKEN: ${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}
-          PUB_DEV_PUBLISH_TOKEN_ENDPOINT: ${{ secrets.PUB_DEV_PUBLISH_TOKEN_ENDPOINT }}
-          PUB_DEV_PUBLISH_EXPIRATION: ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
-        run: |
-          sh ./pub_login.sh
-      - name: Check Publish Warnings
-        run: flutter pub publish --dry-run
-      - name: Publish Package
-        run: flutter pub publish -fv
+    - uses: actions/checkout@v1
+    - name: Setup credentials
+    - name: Install dependencies
+      run: pub get
+    - name: Run tests
+      run: pub run test
+      run: | 
+        mkdir -p ~/.pub-cache 
+        cat <<EOF > ~/.pub-cache/credentials.json
+        {
+          "accessToken":"${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}",
+          "refreshToken":"${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}",
+          "tokenEndpoint":"https://accounts.google.com/o/oauth2/token",
+          "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
+          "expiration": ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
+        }
+        EOF
+    - name: Publish package
+      run: pub publish -f
+
