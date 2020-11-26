@@ -19,7 +19,7 @@ jobs:
       - name: change chunnel
         run: flutter channel beta
       - name: Install dependencies
-        run: flutter pub get
+        run: pub get
       - name: Analyze
         run: flutter analyze
       - name: Run tests
