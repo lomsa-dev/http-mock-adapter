@@ -4,7 +4,7 @@ on:
   push:
     branches: main
 
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +14,9 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: '1.9.1+hotfix.6'
+          flutter-version: '1.23.0-18.1.pre'
+      - name: change channel to bet
+        run: channel beta
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
