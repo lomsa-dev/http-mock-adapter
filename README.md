@@ -103,4 +103,4 @@ http-mock-adapter is licensed under the permissive MIT License ([LICENSE](https:
 
 ## Contribution
 
-For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file.
+For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file
