@@ -11,15 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v1.4.0
         with:
-          flutter-version: '1.20.0'
-      - name: upgrade flutter
-        run: flutter upgrade
+          flutter-version: '1.22.0'
       - name: doctorize flutter
         run: flutter doctor
       - name: change chunnel
         run: flutter channel beta
+      - name: change chunnel
+        run: rm ~.pub-cache/*
       - name: Install dependencies
         run: flutter pub get
       - name: Analyze
@@ -36,6 +36,6 @@ jobs:
         run: |
           sh ./pub_login.sh
       - name: Check Publish Warnings
-        run: pub publish --dry-run
+        run: flutter pub publish --dry-run
       - name: Publish Package
-        run: pub publish -fv
+        run: flutter pub publish -fv
