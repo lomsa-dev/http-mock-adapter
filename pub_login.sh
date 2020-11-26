@@ -24,12 +24,11 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
 fi
 
 # Create credentials.json file.
-cat <<EOF > ~/.pub-cache/credentials.json
+echo  '
 {
   "accessToken":"${PUB_DEV_PUBLISH_ACCESS_TOKEN}",
   "refreshToken":"${PUB_DEV_PUBLISH_REFRESH_TOKEN}",
   "tokenEndpoint":"${PUB_DEV_PUBLISH_TOKEN_ENDPOINT}",
   "scopes":["https://www.googleapis.com/auth/userinfo.email","openid"],
   "expiration":${PUB_DEV_PUBLISH_EXPIRATION}
-}
-EOF
+}' >  ~/.pub-cache/credentials.json
