@@ -11,6 +11,8 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.1.2] (2020-11-26)
+
 
 ## [v0.1.0] (2020-11-20)
 
