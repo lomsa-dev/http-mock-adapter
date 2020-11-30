@@ -11,8 +11,25 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+
 ## [v0.1.2] (2020-11-26)
 
+- **Updated**
+  - Improved GitHub Actions workflow upon each version update on each push made to `main` branch
+
+---
+
+## [v0.1.1] (2020-11-23)
+
+- **Added**
+  - Author metadata
+  - Automatic publishing on <https://pub.dev> through GitHub Actions
+
+- **Updated**
+  - Routing logic
+  - Package ocumentation
+
+---
 
 ## [v0.1.0] (2020-11-20)
 
@@ -36,5 +53,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License
 
-[v0.1.0]: https://github.com/lomsa-dev/http-mock-adapter/commit/25e45986b585c225c2fd6e795d0bc83325050506
-[v0.0.1]: https://github.com/lomsa-dev/http-mock-adapter/commit/447829b2969300e0ff7e9d6a7c6697cd5744b632
+[v0.1.2]: https://github.com/lomsa-dev/http-mock-adapter/compare/87c41f1758660b94efc1538de39fb04bb12c0b95...c0ab40ed59d3898ebf03d706b25ca8b91c2d065d
+[v0.1.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/c3da8b18fb583cac0500f9899c4901f40fdf18e5...87c41f1758660b94efc1538de39fb04bb12c0b95
+[v0.1.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/7d3ffbf4f85ae69327b1736f9268df24607d7ccb...c3da8b18fb583cac0500f9899c4901f40fdf18e5
+[v0.0.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/447829b2969300e0ff7e9d6a7c6697cd5744b632...7d3ffbf4f85ae69327b1736f9268df24607d7ccb
