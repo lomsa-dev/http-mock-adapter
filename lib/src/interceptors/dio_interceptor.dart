@@ -55,6 +55,12 @@ class DioInterceptor extends Interceptor
         Request(
           route: route,
           method: request.method,
+          data: request.data,
+          queryParameters: request.queryParameters ?? const {},
+          headers: request.headers ??
+              const {
+                Headers.contentTypeHeader: Headers.jsonContentType,
+              },
         ),
         requestHandler,
       ),
@@ -71,7 +77,7 @@ class DioInterceptor extends Interceptor
     responseBody.headers = responseBody.headers ?? {};
 
     final headers = Headers.fromMap(responseBody.headers ?? {});
-    headers.set(Headers.contentTypeHeader, [Headers.jsonContentType]);
+    headers.set(Headers.contentTypeHeader, Headers.jsonContentType);
 
     return Response(
       data: await DefaultTransformer().transformResponse(options, responseBody),
@@ -79,7 +85,7 @@ class DioInterceptor extends Interceptor
         responseBody.headers ??
             const {
               Headers.contentTypeHeader,
-              [Headers.jsonContentType],
+              Headers.jsonContentType,
             },
       ),
       isRedirect: responseBody.isRedirect,

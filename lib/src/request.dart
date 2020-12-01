@@ -19,7 +19,7 @@ class Request {
   final Map<String, dynamic> queryParameters;
 
   /// Headers to encompass content-types.
-  final Map<String, List<String>> headers;
+  final Map<String, dynamic> headers;
 
   const Request({
     this.route,
@@ -27,7 +27,7 @@ class Request {
     this.data,
     this.queryParameters = const {},
     this.headers = const {
-      Headers.contentTypeHeader: [Headers.jsonContentType],
+      Headers.contentTypeHeader: Headers.jsonContentType,
     },
   });
 
@@ -43,7 +43,7 @@ extension Signature on RequestOptions {
   String get signature => '$path/$method/$data/$queryParameters/$headers';
 }
 
-/// Matcher of [Request] and [response] based on route and [RequestHandler].
+/// Matcher of [Request] and [responseBody] based on route and [RequestHandler].
 class RequestMatcher {
   /// This is a request sent by the the client.
   final Request request;
@@ -51,13 +51,13 @@ class RequestMatcher {
   /// This is a request handler that processes requests.
   final RequestHandler requestHandler;
 
-  /// This is an artificial response to the request.
-  ResponseBody response;
+  /// This is an artificial response body to the request.
+  ResponseBody responseBody;
 
   RequestMatcher(
     this.request,
     this.requestHandler, {
-    this.response,
+    this.responseBody,
   });
 }
 
@@ -102,82 +102,97 @@ mixin RequestRouted {
 
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
-
-  AdapterRequest get onGet => (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.GET,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onGet => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.GET,
+              data: data,
+              headers: headers,
+            ),
+          );
 
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onHead => (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.HEAD,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onHead => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.HEAD,
+              data: data,
+              headers: headers,
+            ),
+          );
 
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPost => (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.POST,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onPost => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.POST,
+              data: data,
+              headers: headers,
+            ),
+          );
 
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPut => (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.PUT,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onPut => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.PUT,
+              data: data,
+              headers: headers,
+            ),
+          );
 
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onDelete =>
-      (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.DELETE,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onDelete => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.DELETE,
+              data: data,
+              headers: headers,
+            ),
+          );
 
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPatch =>
-      (String route, {dynamic data, dynamic headers}) {
-        return onRoute(
-          route,
-          request: Request(
-            method: RequestMethods.PATCH,
-            data: data,
-            headers: headers,
-          ),
-        );
-      };
+  AdapterRequest get onPatch => (
+        String route, {
+        dynamic data,
+        dynamic headers,
+      }) =>
+          onRoute(
+            route,
+            request: Request(
+              method: RequestMethods.PATCH,
+              data: data,
+              headers: headers,
+            ),
+          );
 }

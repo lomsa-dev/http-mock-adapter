@@ -178,23 +178,39 @@ void main() {
 
         dio.httpClientAdapter = dioAdapter;
 
-        dioAdapter.onPost('/route', data: {'post': '201'}).reply(201, {
+        dioAdapter.onPost(
+          '/route',
+          data: {'post': '201'},
+          headers: {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+            Headers.contentLengthHeader:
+                jsonEncode({'post': '201'}).toString().length.toString()
+          },
+        ).reply(201, {
           'message': 'Post!',
         });
 
-        response = await dio.post('/route');
+        response = await dio.post('/route', data: {'post': '201'});
 
         expect(jsonEncode({'message': 'Post!'}), response.data);
 
-        dioAdapter.onPatch('/route', data: {'patch': '404'}).reply(404, {
+        dioAdapter.onPatch(
+          '/route',
+          data: {'patch': '404'},
+          headers: {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+            Headers.contentLengthHeader:
+                jsonEncode({'patch': '404'}).toString().length.toString()
+          },
+        ).reply(404, {
           'message': 'Patch!',
         });
 
-        response = await dio.patch('/route');
+        response = await dio.patch('/route', data: {'patch': '404'});
 
         expect(jsonEncode({'message': 'Patch!'}), response.data);
 
-        dioAdapter.onGet('/api', data: {'get': '200'}).reply(200, {
+        dioAdapter.onGet('/api').reply(200, {
           'message': 'Get!',
         });
 
