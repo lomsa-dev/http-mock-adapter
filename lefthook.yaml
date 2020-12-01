@@ -2,12 +2,12 @@ pre-push:
   parallel: true
   commands:
     tests:
-      run: flutter test
+      run: dart test
 
 pre-commit:
   commands:
     pretty:
       glob: "*.dart"
-      run: flutter format {staged_files} && git add {staged_files}
+      run: dart format {staged_files} && git add {staged_files}
     linter:
-      run: flutter analyze
+      run: dart analyze
