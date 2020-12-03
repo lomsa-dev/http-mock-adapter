@@ -17,20 +17,22 @@ class History {
 
   /// Getter for the current request invocation's intended [responseBody].
   ResponseBody Function(RequestOptions options) get responseBody => (options) {
-        options.headers = {
-          Headers.contentTypeHeader: [Headers.jsonContentType],
-        };
+        if (options.headers == null || options.headers.isEmpty) {
+          options.headers = {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          };
+        }
 
         data.forEach((element) {
           if (options.signature == element.request.signature) {
             _requestInvocationIndex = data.indexOf(element);
 
-            current.response =
+            current.responseBody =
                 requestHandler.requestMap[requestHandler.statusCode];
           }
         });
 
-        final responseBody = current.response;
+        final responseBody = current.responseBody;
 
         return responseBody;
       };

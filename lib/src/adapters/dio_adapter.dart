@@ -29,13 +29,19 @@ class DioAdapter extends HttpClientAdapter
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
   RequestHandler onRoute(String route, {Request request = const Request()}) {
-    final requestHandler = RequestHandler();
+    final requestHandler = RequestHandler<DioAdapter>();
 
     history.data.add(
       RequestMatcher(
         Request(
           route: route,
           method: request.method,
+          data: request.data,
+          queryParameters: request.queryParameters ?? const {},
+          headers: request.headers ??
+              {
+                Headers.contentTypeHeader: Headers.jsonContentType,
+              },
         ),
         requestHandler,
       ),
