@@ -12,6 +12,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.1.3] (2020-12-4)
+
+- **Updated**
+  - Update package's documentation
+
+  - Update request handling through headers
+
+---
+
 ## [v0.1.2] (2020-11-26)
 
 - **Updated**
