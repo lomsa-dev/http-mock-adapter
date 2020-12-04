@@ -13,7 +13,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [ResponseBody]>.
-  final Map<int, ResponseBody> requestMap = {};
+  final Map<int, dynamic> requestMap = {};
 
   /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
@@ -34,25 +34,24 @@ class RequestHandler<T> {
       isRedirect: isRedirect,
     );
 
-    return createChain();
+    return _createChain();
   }
 
   // TODO implement doThrow method
-  AdapterInterface doThrow() => createChain();
+  AdapterInterface doThrow(int statusCode, DioError dioError) {
+    requestMap[this.statusCode] = dioError;
+    return _createChain();
+  }
   // TODO take requestMap out of the function to maintain DRY principle
 
   // TODO somehow catch the request in here, to generate solid DioError instance
-
-  /// Saving type of the typed parter T in the getter
-  /// for [createChain] Function
-  Type get chainType => chainType.runtimeType;
 
   /// Checking the type of the `type parameter`
   /// and returning the relevant Class Instance
   /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [dynamic],
   /// throws [RequestHandlerException]
-  AdapterInterface createChain() {
-    switch (chainType) {
+  AdapterInterface _createChain() {
+    switch (T) {
       case DioInterceptor:
         return DioInterceptor();
         break;

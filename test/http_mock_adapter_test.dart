@@ -39,6 +39,17 @@ void main() {
     }
 
     group('RequestRouted', () {
+      test("Test do throw", () async {
+        dioInterceptor.onGet(path).doThrow(
+              500,
+              DioError(
+                type: DioErrorType.RESPONSE,
+                response: Response(statusCode: 500),
+              ),
+            );
+        response = await dio.get(path);
+        print(response);
+      });
       test('mocks requests via onRoute() as intended', () async {
         dioInterceptor.onRoute(path).reply(statusCode, data);
 
