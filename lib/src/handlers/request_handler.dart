@@ -13,7 +13,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [ResponseBody]>.
-  final Map<int, dynamic> requestMap = {};
+  final Map<int, ResponseBody> requestMap = {};
 
   /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
