@@ -3,6 +3,7 @@ import 'package:http_mock_adapter/src/adapter_interface.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
+/// wraper of  [Dio]'s ResponseBody
 class AdapterResponse extends ResponseBody implements Responsable {
   AdapterResponse(
     Stream<Uint8List> stream,
@@ -20,14 +21,14 @@ class AdapterResponse extends ResponseBody implements Responsable {
           redirects: redirects,
         );
 
-  factory AdapterResponse.fromString(
+  static AdapterResponse from(
     String text,
     int statusCode, {
     Map<String, List<String>> headers,
     String statusMessage,
     bool isRedirect,
   }) {
-    Stream<Uint8List> stream = Stream.fromIterable(
+    final stream = Stream.fromIterable(
         utf8.encode(text).map((e) => Uint8List.fromList([e])).toList());
     return AdapterResponse(
       stream,

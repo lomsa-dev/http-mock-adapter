@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
-import 'adapter_interface.dart';
+import 'package:http_mock_adapter/src/types.dart';
+
+import 'package:http_mock_adapter/src/adapter_interface.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
@@ -195,4 +198,10 @@ mixin RequestRouted {
               headers: headers,
             ),
           );
+  dynamic throwError(Responsable response) {
+    if (response.runtimeType == AdapterError) {
+      AdapterError error = response;
+      return throw error;
+    }
+  }
 }

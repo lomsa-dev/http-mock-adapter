@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:test/test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
@@ -39,17 +40,35 @@ void main() {
     }
 
     group('RequestRouted', () {
-      // test("Test do throw", () async {
-      //   dioInterceptor.onGet(path).doThrow(
-      //         500,
-      //         DioError(
-      //           type: DioErrorType.RESPONSE,
-      //           response: Response(statusCode: 500),
-      //         ),
-      //       );
-      //   response = await dio.get(path);
-      //   print(response);
-      // });
+      test('Test that doThrow raises custom exception', () async {
+        final type = DioErrorType.RESPONSE;
+        final response = Response(statusCode: 500);
+        final error = 'Some beautiful error';
+
+        // Building request to throw the DioError exception
+        // on onGet for the specific path
+        dioInterceptor.onGet(path).doThrow(
+              500,
+              DioError(
+                type: type,
+                response: response,
+                error: error,
+              ),
+            );
+        // Checking that exception type can match `AdapterError` type too
+        expect(() async => await dio.get(path),
+            throwsA(TypeMatcher<AdapterError>()));
+
+        // Checking that exception type can match `DioError` type too
+        expect(
+            () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
+
+        // Checking the type and the message of the exception
+        expect(
+            () async => await dio.get(path),
+            throwsA(predicate(
+                (DioError e) => e is DioError && e.message == error)));
+      });
       test('mocks requests via onRoute() as intended', () async {
         dioInterceptor.onRoute(path).reply(statusCode, data);
 
@@ -133,6 +152,35 @@ void main() {
     });
 
     group('RequestRouted', () {
+      test('Test that doThrow raises custom exception', () async {
+        final type = DioErrorType.RESPONSE;
+        final response = Response(statusCode: 500);
+        final error = 'Some beautiful error';
+
+        // Building request to throw the DioError exception
+        // on onGet for the specific path
+        dioAdapter.onGet(path).doThrow(
+              500,
+              DioError(
+                type: type,
+                response: response,
+                error: error,
+              ),
+            );
+        // Checking that exception type can match `AdapterError` type too
+        expect(() async => await dio.get(path),
+            throwsA(TypeMatcher<AdapterError>()));
+
+        // Checking that exception type can match `DioError` type too
+        expect(
+            () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
+
+        // Checking the type and the message of the exception
+        expect(
+            () async => await dio.get(path),
+            throwsA(predicate(
+                (DioError e) => e is DioError && e.message == error)));
+      });
       Future<void> _testDioAdapter<T>(
         Future<Response<T>> Function() request,
         actual,

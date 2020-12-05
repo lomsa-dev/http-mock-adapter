@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
-import 'request.dart';
+import 'package:http_mock_adapter/src/request.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// Intended to keep track of request history.
 class History {
@@ -17,8 +17,7 @@ class History {
   RequestMatcher get current => data[_requestInvocationIndex];
 
   /// Getter for the current request invocation's intended [responseBody].
-  AdapterResponse Function(RequestOptions options) get responseBody =>
-      (options) {
+  AdapterResponseBody get responseBody => (options) {
         if (options.headers == null || options.headers.isEmpty) {
           options.headers = {
             Headers.contentTypeHeader: Headers.jsonContentType,

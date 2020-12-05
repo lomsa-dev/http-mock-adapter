@@ -16,7 +16,7 @@ class RequestHandler<T> {
   /// Map of <[statusCode], [ResponseBody]>.
   final Map<int, Responsable> requestMap = {};
 
-  /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
+  /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
   AdapterInterface reply(
     int statusCode,
@@ -27,7 +27,7 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = AdapterResponse.fromString(
+    requestMap[this.statusCode] = AdapterResponse.from(
       jsonEncode(data),
       HttpStatus.ok,
       headers: headers,
@@ -38,15 +38,17 @@ class RequestHandler<T> {
     return _createChain();
   }
 
-  // TODO implement doThrow method
-  AdapterInterface doThrow(int statusCode, AdapterError dioError) {
+  /// Stores the [DioError] inside the [requestMap] and returns [DioAdapter] or [DioInterceptor]
+  /// the latter which is utilized for method chaining.
+  AdapterInterface doThrow(int statusCode, DioError dioError) {
+    if (dioError.runtimeType != DioError ||
+        dioError.runtimeType != AdapterError) return throw DoThrowException();
+
+    dynamic error = AdapterError.from(dioError);
     this.statusCode = statusCode;
-    requestMap[this.statusCode] = dioError;
+    requestMap[this.statusCode] = error;
     return _createChain();
   }
-  // TODO take requestMap out of the function to maintain DRY principle
-
-  // TODO somehow catch the request in here, to generate solid DioError instance
 
   /// Checking the type of the `type parameter`
   /// and returning the relevant Class Instance

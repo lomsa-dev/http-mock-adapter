@@ -1,5 +1,6 @@
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/request.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// Top level interface of all the adapters.
 /// It is implemented by DioInterceptor and DioAdapter.
@@ -11,11 +12,6 @@ import 'package:http_mock_adapter/src/request.dart';
 /// parameters by using [dynamic] type for reply was removing
 /// autocomplition ability that's why both Adapters implement this interface
 /// to provide good developer experience.
-typedef AdapterRequest = RequestHandler Function(
-  String route, {
-  dynamic data,
-  dynamic headers,
-});
 
 abstract class AdapterInterface {
   AdapterRequest get onGet;
@@ -25,6 +21,12 @@ abstract class AdapterInterface {
   AdapterRequest get onPut;
   AdapterRequest get onDelete;
   AdapterRequest get onPatch;
+  dynamic throwError(Responsable response);
 }
 
-abstract class Responsable {}
+/// Top level interface for [Dio]'s [ResponseBody] amd also [Dio]'s [DioError].
+/// This interface makes sure that we can save [DioError] and [ResponseBody]
+/// inside the same list.
+abstract class Responsable {
+  static dynamic from() {}
+}
