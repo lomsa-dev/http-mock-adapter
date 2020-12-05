@@ -13,6 +13,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 ## [v0.1.2] (2020-11-26)
 
+<<<<<<< HEAD
 
 ## [v0.1.3] (2020-12-4)
 
@@ -41,6 +42,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Package ocumentation
 
 ---
+=======
+>>>>>>> d321f96... Main to develop (#60)
 
 ## [v0.1.0] (2020-11-20)
 
