@@ -6,6 +6,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
+import 'package:http_mock_adapter/src/response.dart';
 
 /// The handler of requests sent by clients.
 class RequestHandler<T> {
@@ -13,7 +14,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [ResponseBody]>.
-  final Map<int, ResponseBody> requestMap = {};
+  final Map<int, Responsable> requestMap = {};
 
   /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
@@ -26,7 +27,7 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = ResponseBody.fromString(
+    requestMap[this.statusCode] = AdapterResponse.fromString(
       jsonEncode(data),
       HttpStatus.ok,
       headers: headers,
@@ -34,10 +35,24 @@ class RequestHandler<T> {
       isRedirect: isRedirect,
     );
 
-    // Checking the type of the `type parameter`
-    // and returning the relevant Class Instance
-    /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [Type],
-    /// throws [RequestHandlerException]
+    return _createChain();
+  }
+
+  // TODO implement doThrow method
+  AdapterInterface doThrow(int statusCode, AdapterError dioError) {
+    this.statusCode = statusCode;
+    requestMap[this.statusCode] = dioError;
+    return _createChain();
+  }
+  // TODO take requestMap out of the function to maintain DRY principle
+
+  // TODO somehow catch the request in here, to generate solid DioError instance
+
+  /// Checking the type of the `type parameter`
+  /// and returning the relevant Class Instance
+  /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [dynamic],
+  /// throws [RequestHandlerException]
+  AdapterInterface _createChain() {
     switch (T) {
       case DioInterceptor:
         return DioInterceptor();

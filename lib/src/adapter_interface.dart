@@ -26,3 +26,5 @@ abstract class AdapterInterface {
   AdapterRequest get onDelete;
   AdapterRequest get onPatch;
 }
+
+abstract class Responsable {}

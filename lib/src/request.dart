@@ -52,7 +52,7 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response body to the request.
-  ResponseBody responseBody;
+  Responsable responseBody;
 
   RequestMatcher(
     this.request,
