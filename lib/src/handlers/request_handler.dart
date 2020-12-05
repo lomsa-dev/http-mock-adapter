@@ -6,6 +6,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/adapter_interface.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
+import 'package:http_mock_adapter/src/response.dart';
 
 /// The handler of requests sent by clients.
 class RequestHandler<T> {
@@ -13,7 +14,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [ResponseBody]>.
-  final Map<int, ResponseBody> requestMap = {};
+  final Map<int, Responsable> requestMap = {};
 
   /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
   /// the latter which is utilized for method chaining.
@@ -26,7 +27,7 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = ResponseBody.fromString(
+    requestMap[this.statusCode] = AdapterResponse.fromString(
       jsonEncode(data),
       HttpStatus.ok,
       headers: headers,
@@ -38,7 +39,8 @@ class RequestHandler<T> {
   }
 
   // TODO implement doThrow method
-  AdapterInterface doThrow(int statusCode, DioError dioError) {
+  AdapterInterface doThrow(int statusCode, AdapterError dioError) {
+    this.statusCode = statusCode;
     requestMap[this.statusCode] = dioError;
     return _createChain();
   }
