@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 

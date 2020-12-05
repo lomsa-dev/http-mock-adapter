@@ -1,6 +1,6 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 

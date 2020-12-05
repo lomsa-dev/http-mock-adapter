@@ -4,7 +4,7 @@ import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/history.dart';
 import 'package:http_mock_adapter/src/request.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
 /// [DioInterceptor] is a class for mocking the [Dio] requests with interceptors.

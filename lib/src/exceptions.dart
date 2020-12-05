@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 
 /// [RequestHandlerException] is thrown when, Request Handler method
 /// is called with genreic type paramter.

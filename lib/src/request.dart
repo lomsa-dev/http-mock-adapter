@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/types.dart';
 
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
