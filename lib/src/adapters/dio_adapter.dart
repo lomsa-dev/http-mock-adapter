@@ -1,6 +1,7 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 
 import '../history.dart';
@@ -57,8 +58,14 @@ class DioAdapter extends HttpClientAdapter
     RequestOptions options,
     Stream<List<int>> requestStream,
     Future cancelFuture,
-  ) async =>
-      history.responseBody(options);
+  ) async {
+    dynamic responseBody = history.responseBody(options);
+
+    // throws error if response type is AdapterError
+    throwError(responseBody);
+
+    return responseBody;
+  }
 
   /// Closes the [DioAdapter] by force.
   @override

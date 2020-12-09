@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
-import 'adapter_interface.dart';
+import 'package:http_mock_adapter/src/types.dart';
+
+import 'package:http_mock_adapter/src/interfaces.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
@@ -52,7 +55,7 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response body to the request.
-  ResponseBody responseBody;
+  Responsable responseBody;
 
   RequestMatcher(
     this.request,
@@ -195,4 +198,10 @@ mixin RequestRouted {
               headers: headers,
             ),
           );
+  dynamic throwError(Responsable response) {
+    if (response.runtimeType == AdapterError) {
+      AdapterError error = response;
+      return throw error;
+    }
+  }
 }

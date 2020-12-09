@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/history.dart';
 import 'package:http_mock_adapter/src/request.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
+import 'package:http_mock_adapter/src/response.dart';
 
 /// [DioInterceptor] is a class for mocking the [Dio] requests with interceptors.
 ///
@@ -73,7 +75,12 @@ class DioInterceptor extends Interceptor
   /// mocked request and data respectively
   @override
   Future<Response<dynamic>> onRequest(options) async {
-    final responseBody = history.responseBody(options);
+    final response = history.responseBody(options);
+
+    // throws error if response type is DioError
+    throwError(response);
+
+    AdapterResponse responseBody = response;
     responseBody.headers = responseBody.headers ?? {};
 
     final headers = Headers.fromMap(responseBody.headers ?? {});

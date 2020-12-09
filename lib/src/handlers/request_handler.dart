@@ -4,18 +4,19 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
-import 'package:http_mock_adapter/src/adapter_interface.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
+import 'package:http_mock_adapter/src/response.dart';
 
 /// The handler of requests sent by clients.
 class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
 
-  /// Map of <[statusCode], [ResponseBody]>.
-  final Map<int, ResponseBody> requestMap = {};
+  /// Map of <[statusCode], [Responsable]>.
+  final Map<int, Responsable> requestMap = {};
 
-  /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter]
+  /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
   AdapterInterface reply(
     int statusCode,
@@ -26,7 +27,7 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = ResponseBody.fromString(
+    requestMap[this.statusCode] = AdapterResponse.from(
       jsonEncode(data),
       HttpStatus.ok,
       headers: headers,
@@ -34,10 +35,26 @@ class RequestHandler<T> {
       isRedirect: isRedirect,
     );
 
-    // Checking the type of the `type parameter`
-    // and returning the relevant Class Instance
-    /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [Type],
-    /// throws [RequestHandlerException]
+    return _createChain();
+  }
+
+  /// Stores the [DioError] inside the [requestMap] and returns [DioAdapter] or [DioInterceptor]
+  /// the latter which is utilized for method chaining.
+  AdapterInterface throws(int statusCode, DioError dioError) {
+    if (dioError.runtimeType != DioError &&
+        dioError.runtimeType != AdapterError) return throw ThrowsException();
+
+    dynamic error = AdapterError.from(dioError);
+    this.statusCode = statusCode;
+    requestMap[this.statusCode] = error;
+    return _createChain();
+  }
+
+  /// Checking the type of the `type parameter`
+  /// and returning the relevant Class Instance
+  /// If type parameter of the class is none of the following [DioAdapter], [DioInterceptor], [dynamic],
+  /// throws [RequestHandlerException]
+  AdapterInterface _createChain() {
     switch (T) {
       case DioInterceptor:
         return DioInterceptor();
