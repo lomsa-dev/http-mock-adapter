@@ -18,18 +18,18 @@ class RequestHandlerException implements Exception {
   }
 }
 
-/// This Exception is thrown when doThrow gets wrong type of argument
+/// This Exception is thrown when throws gets wrong type of argument
 /// in the place of the DioError.
-class DoThrowException implements Exception {
+class throwsException implements Exception {
   final dynamic message;
 
-  DoThrowException(
+  throwsException(
       [this.message = 'Error Should be eithier `DioError` or `AdapterError`']);
 
   @override
   String toString() {
     if (message == null) return 'Provide the message inside the exception';
-    return 'RequestHandlerException: $message';
+    return 'throwsException: $message';
   }
 }
 

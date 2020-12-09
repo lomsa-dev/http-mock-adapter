@@ -40,16 +40,16 @@ void main() {
     }
 
     group('RequestRouted', () {
-      test('Test that doThrow raises custom exception', () async {
+      test('Test that throws raises custom exception', () async {
         final type = DioErrorType.RESPONSE;
         final response = Response(statusCode: 500);
         final error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
         // on onGet for the specific path
-        dioInterceptor.onGet(path).doThrow(
+        dioInterceptor.onGet(path).throws(
               500,
-              DioError(
+              AdapterError(
                 type: type,
                 response: response,
                 error: error,
@@ -152,14 +152,14 @@ void main() {
     });
 
     group('RequestRouted', () {
-      test('Test that doThrow raises custom exception', () async {
+      test('Test that throws raises custom exception', () async {
         final type = DioErrorType.RESPONSE;
         final response = Response(statusCode: 500);
         final error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
         // on onGet for the specific path
-        dioAdapter.onGet(path).doThrow(
+        dioAdapter.onGet(path).throws(
               500,
               DioError(
                 type: type,

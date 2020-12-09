@@ -40,9 +40,9 @@ class RequestHandler<T> {
 
   /// Stores the [DioError] inside the [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
-  AdapterInterface doThrow(int statusCode, DioError dioError) {
-    if (dioError.runtimeType != DioError ||
-        dioError.runtimeType != AdapterError) return throw DoThrowException();
+  AdapterInterface throws(int statusCode, DioError dioError) {
+    if (dioError.runtimeType != DioError &&
+        dioError.runtimeType != AdapterError) return throw throwsException();
 
     dynamic error = AdapterError.from(dioError);
     this.statusCode = statusCode;

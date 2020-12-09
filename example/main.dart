@@ -98,7 +98,7 @@ void main() async {
 
   group('Raising the custrom Error onRequest', () {
     const path = 'https://example.com';
-    test('Test that doThrow raises custom exception', () async {
+    test('Test that throws raises custom exception', () async {
       final dio = Dio();
       final dioAdapter = DioAdapter();
 
@@ -109,7 +109,7 @@ void main() async {
 
       // Building request to throw the DioError exception
       // on onGet for the specific path
-      dioAdapter.onGet(path).doThrow(
+      dioAdapter.onGet(path).throws(
             500,
             DioError(
               type: type,
