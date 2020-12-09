@@ -9,6 +9,6 @@ typedef AdapterRequest = RequestHandler Function(
   dynamic headers,
 });
 
-/// type for historys responsebody, which takes [RequestOptions] as a paramter
-/// and compares it's signature to saved requests and chooses right response
+/// type for historys responsebody, which takes [RequestOptions] as a parameter
+/// and compares its signature to saved request's signature and chooses right response
 typedef AdapterResponseBody = Responsable Function(RequestOptions options);

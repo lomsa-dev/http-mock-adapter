@@ -41,9 +41,9 @@ void main() {
 
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
-        final type = DioErrorType.RESPONSE;
+        const type = DioErrorType.RESPONSE;
         final response = Response(statusCode: 500);
-        final error = 'Some beautiful error';
+        const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
         // on onGet for the specific path
@@ -55,6 +55,7 @@ void main() {
                 error: error,
               ),
             );
+
         // Checking that exception type can match `AdapterError` type too
         expect(() async => await dio.get(path),
             throwsA(TypeMatcher<AdapterError>()));
@@ -69,6 +70,7 @@ void main() {
             throwsA(predicate(
                 (DioError e) => e is DioError && e.message == error)));
       });
+
       test('mocks requests via onRoute() as intended', () async {
         dioInterceptor.onRoute(path).reply(statusCode, data);
 
@@ -153,9 +155,9 @@ void main() {
 
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
-        final type = DioErrorType.RESPONSE;
+        const type = DioErrorType.RESPONSE;
         final response = Response(statusCode: 500);
-        final error = 'Some beautiful error';
+        const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
         // on onGet for the specific path
@@ -167,6 +169,7 @@ void main() {
                 error: error,
               ),
             );
+
         // Checking that exception type can match `AdapterError` type too
         expect(() async => await dio.get(path),
             throwsA(TypeMatcher<AdapterError>()));
@@ -181,6 +184,7 @@ void main() {
             throwsA(predicate(
                 (DioError e) => e is DioError && e.message == error)));
       });
+
       Future<void> _testDioAdapter<T>(
         Future<Response<T>> Function() request,
         actual,

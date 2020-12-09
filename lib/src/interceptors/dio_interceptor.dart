@@ -81,7 +81,6 @@ class DioInterceptor extends Interceptor
     throwError(response);
 
     AdapterResponse responseBody = response;
-
     responseBody.headers = responseBody.headers ?? {};
 
     final headers = Headers.fromMap(responseBody.headers ?? {});

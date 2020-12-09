@@ -24,7 +24,7 @@ abstract class AdapterInterface {
   dynamic throwError(Responsable response);
 }
 
-/// Top level interface for [Dio]'s [ResponseBody] amd also [Dio]'s [DioError].
+/// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioError].
 /// This interface makes sure that we can save [DioError] and [ResponseBody]
 /// inside the same list.
 abstract class Responsable {

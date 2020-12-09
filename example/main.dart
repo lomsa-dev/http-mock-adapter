@@ -31,9 +31,9 @@ void main() async {
           getResponse.data);
 
       // Making dio.post request on the path an expecting mocked response
-      final postResposne = await dio.post(path);
+      final postResponse = await dio.post(path);
       expect(jsonEncode({'message': 'Successfully mocked POST!'}),
-          postResposne.data);
+          postResponse.data);
     });
 
     // Alternatively you can use onRoute chain to pass custom requests
@@ -98,14 +98,15 @@ void main() async {
 
   group('Raising the custrom Error onRequest', () {
     const path = 'https://example.com';
+
     test('Test that throws raises custom exception', () async {
       final dio = Dio();
       final dioAdapter = DioAdapter();
 
       dio.httpClientAdapter = dioAdapter;
-      final type = DioErrorType.RESPONSE;
+      const type = DioErrorType.RESPONSE;
       final response = Response(statusCode: 500);
-      final error = 'Some beautiful error';
+      const error = 'Some beautiful error';
 
       // Building request to throw the DioError exception
       // on onGet for the specific path
@@ -117,6 +118,7 @@ void main() async {
               error: error,
             ),
           );
+
       // Checking that exception type can match `AdapterError` type too
       expect(() async => await dio.get(path),
           throwsA(TypeMatcher<AdapterError>()));

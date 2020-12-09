@@ -20,20 +20,20 @@ class RequestHandlerException implements Exception {
 
 /// This Exception is thrown when throws gets wrong type of argument
 /// in the place of the DioError.
-class throwsException implements Exception {
+class ThrowsException implements Exception {
   final dynamic message;
 
-  throwsException(
+  ThrowsException(
       [this.message = 'Error Should be eithier `DioError` or `AdapterError`']);
 
   @override
   String toString() {
     if (message == null) return 'Provide the message inside the exception';
-    return 'throwsException: $message';
+    return 'throws()-Exception: $message';
   }
 }
 
-/// wraper of  [Dio]'s [DioError] Exception
+/// wrapper of [Dio]'s [DioError] Exception
 class AdapterError extends DioError implements Responsable {
   AdapterError({
     RequestOptions request,

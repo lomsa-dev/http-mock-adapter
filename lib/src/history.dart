@@ -30,8 +30,6 @@ class History {
 
             current.responseBody =
                 requestHandler.requestMap[requestHandler.statusCode];
-            // print(element.requestHandler.requestMap[requestHandler.statusCode]
-            //     .runtimeType);
           }
         });
 

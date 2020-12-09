@@ -3,7 +3,7 @@ import 'package:http_mock_adapter/src/interfaces.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
-/// wraper of  [Dio]'s ResponseBody
+/// wrapper of [Dio]'s ResponseBody
 class AdapterResponse extends ResponseBody implements Responsable {
   AdapterResponse(
     Stream<Uint8List> stream,

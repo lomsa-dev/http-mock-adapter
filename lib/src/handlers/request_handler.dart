@@ -13,10 +13,10 @@ class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
   int statusCode;
 
-  /// Map of <[statusCode], [ResponseBody]>.
+  /// Map of <[statusCode], [Responsable]>.
   final Map<int, Responsable> requestMap = {};
 
-  /// Stores [ResponseBody] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
+  /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
   AdapterInterface reply(
     int statusCode,
@@ -42,7 +42,7 @@ class RequestHandler<T> {
   /// the latter which is utilized for method chaining.
   AdapterInterface throws(int statusCode, DioError dioError) {
     if (dioError.runtimeType != DioError &&
-        dioError.runtimeType != AdapterError) return throw throwsException();
+        dioError.runtimeType != AdapterError) return throw ThrowsException();
 
     dynamic error = AdapterError.from(dioError);
     this.statusCode = statusCode;
