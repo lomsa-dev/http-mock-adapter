@@ -55,7 +55,8 @@ extension Signature on RequestOptions {
       '/$headers';
 }
 
-/// [sortedData] sorts request [Signature]'s and [Request.signature]'s 'data' and 'queryParameters' portion if it is a subtype of [Map].
+/// [sortedData] sorts request [Signature]'s and [Request.signature]'s 'data'
+/// and 'queryParameters' portion if it is a subtype of [Map].
 /// This makes sure, that data passed during request and data saved inside
 /// 'requestMap' while using [RequestRouted.onPost] or other [RequestRouted]
 /// methods will be excatly same inside the [Signature] which is used to
