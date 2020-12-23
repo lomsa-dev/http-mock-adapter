@@ -29,7 +29,7 @@ class RequestHandler<T> {
 
     requestMap[this.statusCode] = AdapterResponse.from(
       jsonEncode(data),
-      HttpStatus.ok,
+      this.statusCode,
       headers: headers,
       statusMessage: statusMessage,
       isRedirect: isRedirect,
