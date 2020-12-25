@@ -36,14 +36,38 @@ class Request {
 
   /// [signature] is the [String] representation of the [Request]'s body.
   String get signature =>
-      '$route/${method.value}/$data/$queryParameters/$headers';
+      '$route/${method.value}/' +
+      sortedData(data) +
+      '/' +
+      sortedData(queryParameters) +
+      '/$headers';
 }
 
 /// [Signature] extension method adds [signature] getter to [RequestOptions]
 /// in order to easily retrieve [Request]'s body representation as [String].
 extension Signature on RequestOptions {
   /// [signature] is the [String] representation of the [RequestOptions]'s body.
-  String get signature => '$path/$method/$data/$queryParameters/$headers';
+  String get signature =>
+      '$path/$method/' +
+      sortedData(data) +
+      '/' +
+      sortedData(queryParameters) +
+      '/$headers';
+}
+
+/// [sortedData] sorts request [Signature]'s and [Request.signature]'s 'data'
+/// and 'queryParameters' portion if it is a subtype of [Map].
+/// This makes sure, that data passed during request and data saved inside
+/// 'requestMap' while using [RequestRouted.onPost] or other [RequestRouted]
+/// methods will be excatly same inside the [Signature] which is used to
+/// compare executed request to the list of requests saved by 'DioAdapter' or
+/// by 'DioIntercepor'
+String sortedData(dynamic data) {
+  if (data is Map) {
+    final sortedKeys = data.keys.toList()..sort();
+    data = {for (var k in sortedKeys) k: data[k]};
+  }
+  return data.toString();
 }
 
 /// Matcher of [Request] and [responseBody] based on route and [RequestHandler].
