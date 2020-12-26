@@ -31,9 +31,9 @@ void main() async {
           getResponse.data);
 
       // Making dio.post request on the path an expecting mocked response
-      final postResposne = await dio.post(path);
+      final postResponse = await dio.post(path);
       expect(jsonEncode({'message': 'Successfully mocked POST!'}),
-          postResposne.data);
+          postResponse.data);
     });
 
     // Alternatively you can use onRoute chain to pass custom requests
@@ -63,7 +63,7 @@ void main() async {
   });
 
   // Also, for mocking requests, you can use dio Interceptor
-  group('DioAdapter usage', () {
+  group('DioInterceptor usage', () {
     // Creating dio instance for mocking.
     // For instance: you can use your own instance from injection and add
     // DioInterceptor in dio.interceptors list
@@ -93,6 +93,44 @@ void main() async {
       final postResposne = await dioForInterceptor.patch(path);
       expect(jsonEncode({'message': 'Successfully mocked POST!'}),
           postResposne.data);
+    });
+  });
+
+  group('Raising the custrom Error onRequest', () {
+    const path = 'https://example.com';
+
+    test('Test that throws raises custom exception', () async {
+      final dio = Dio();
+      final dioAdapter = DioAdapter();
+
+      dio.httpClientAdapter = dioAdapter;
+      const type = DioErrorType.RESPONSE;
+      final response = Response(statusCode: 500);
+      const error = 'Some beautiful error';
+
+      // Building request to throw the DioError exception
+      // on onGet for the specific path
+      dioAdapter.onGet(path).throws(
+            500,
+            DioError(
+              type: type,
+              response: response,
+              error: error,
+            ),
+          );
+
+      // Checking that exception type can match `AdapterError` type too
+      expect(() async => await dio.get(path),
+          throwsA(TypeMatcher<AdapterError>()));
+
+      // Checking that exception type can match `DioError` type too
+      expect(() async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
+
+      // Checking the type and the message of the exception
+      expect(
+          () async => await dio.get(path),
+          throwsA(
+              predicate((DioError e) => e is DioError && e.message == error)));
     });
   });
 }
