@@ -258,18 +258,16 @@ void main() {
         expect(jsonEncode({'message': 'Post!'}), response.data);
 
         dioAdapter.onPatch(
-          '/route',
-          data: {'patch': '404'},
+          '/routes',
+          data: {'patch': '207'},
           headers: {
             Headers.contentTypeHeader: Headers.jsonContentType,
             Headers.contentLengthHeader:
                 jsonEncode({'patch': '404'}).toString().length.toString()
           },
-        ).reply(404, {
+        ).reply(207, {
           'message': 'Patch!',
         });
-
-        response = await dio.patch('/route', data: {'patch': '404'});
 
         expect(jsonEncode({'message': 'Patch!'}), response.data);
 
