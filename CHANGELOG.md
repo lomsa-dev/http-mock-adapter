@@ -11,8 +11,17 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [v0.1.2] (2020-11-26)
 
+## [v0.1.4] (2020-12-28)
+
+- **Updated**
+  - Addeed throws functionality to test dio exceptions
+
+  - Changes in architecture.
+
+  - Corrected Signiture bug.
+
+---
 
 ## [v0.1.3] (2020-12-4)
 
@@ -64,6 +73,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License
 
+[v0.1.4]: https://github.com/lomsa-dev/http-mock-adapter/compare/a577c79060e8dbe33a2b768d7c675a9498a00d29...07128b3b06ada73746ba19c104dc3e7017d1d22e
 [v0.1.3]: https://github.com/lomsa-dev/http-mock-adapter/compare/c0ab40ed59d3898ebf03d706b25ca8b91c2d065d...a577c79060e8dbe33a2b768d7c675a9498a00d29
 [v0.1.2]: https://github.com/lomsa-dev/http-mock-adapter/compare/87c41f1758660b94efc1538de39fb04bb12c0b95...c0ab40ed59d3898ebf03d706b25ca8b91c2d065d
 [v0.1.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/c3da8b18fb583cac0500f9899c4901f40fdf18e5...87c41f1758660b94efc1538de39fb04bb12c0b95

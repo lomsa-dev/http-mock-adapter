@@ -50,7 +50,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:
-  http_mock_adapter: ^0.1.3
+  http_mock_adapter: ^0.1.4
 ```
 
 ### Install it
