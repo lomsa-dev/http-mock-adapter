@@ -269,6 +269,7 @@ void main() {
           'message': 'Patch!',
         });
 
+        response = await dio.patch('/routes', data: {'patch': '207'});
         expect(jsonEncode({'message': 'Patch!'}), response.data);
 
         dioAdapter.onGet('/api').reply(200, {
