@@ -25,13 +25,20 @@ class History {
         }
 
         data.forEach((element) {
-          if (options.signature == element.request.signature) {
+          if (options.signature == element.request.signature ||
+              options.matchesRequest(element.request)) {
             _requestInvocationIndex = data.indexOf(element);
 
             current.responseBody =
                 requestHandler.requestMap[requestHandler.statusCode];
           }
         });
+
+        /// fail when a mocked route is not found for the request
+        if (_requestInvocationIndex == null || _requestInvocationIndex < 0) {
+          throw AssertionError(
+              'Could not find mock route matching request for ${options.signature}');
+        }
 
         final responseBody = current.responseBody;
 

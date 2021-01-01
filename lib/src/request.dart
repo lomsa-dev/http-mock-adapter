@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
@@ -68,6 +69,79 @@ String sortedData(dynamic data) {
     data = {for (var k in sortedKeys) k: data[k]};
   }
   return data.toString();
+}
+
+/// [MatchesRequest] enhances the RequestOptions by allowing different types
+/// of matchers to validate the data and headers of the request.
+extension MatchesRequest on RequestOptions {
+  /// Check values against matchers.
+  /// [req] is the configured [Request] which would contain the matchers if used.
+  bool matchesRequest(Request req) {
+    if (path != req.route ||
+        method != req.method.value ||
+
+        /// request body
+        (data != null && req.data != null && !matches(data, req.data)) ||
+
+        /// query params
+        (queryParameters != null &&
+            req.queryParameters != null &&
+            !matches(queryParameters, req.queryParameters)) ||
+
+        /// headers
+        (headers != null &&
+            req.headers != null &&
+            !matches(headers, req.headers))) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Check the map keys and values determined by the definition
+  bool matches(dynamic a, dynamic b) {
+    if (b is Matcher) {
+      /// check the match here to bypass the fallthrough strict equality check
+      /// at the end
+      if (!b.matches(a)) {
+        return false;
+      }
+    } else if (a is Map && b is Map) {
+      for (var k in a.keys.toList()) {
+        if (!b.containsKey(k)) {
+          return false;
+        } else if (b[k] is Matcher) {
+          /// check matcher for the configured request
+          if (!b[k].matches(a[k])) {
+            return false;
+          }
+        } else if (b[k] != a[k]) {
+          /// exact match unless map
+          if (b[k] is Map && a[k] is Map) {
+            if (!matches(a[k], b[k])) {
+              /// allow maps to uses matchers
+              return false;
+            }
+          } else if (b[k].toString() != a[k].toString()) {
+            /// if somoe other kind of object like list then rely on `toString`
+            /// to provide comparison value
+            return false;
+          }
+        }
+      }
+    } else if (a is List && b is List) {
+      for (var i = 0; i < a.length; i++) {
+        if (!matches(a[i], b[i])) {
+          return false;
+        }
+      }
+    } else if (a != b) {
+      /// fall back to original check
+      return false;
+    }
+
+    return true;
+  }
 }
 
 /// Matcher of [Request] and [responseBody] based on route and [RequestHandler].
