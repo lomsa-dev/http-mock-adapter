@@ -54,7 +54,7 @@ class Matchers {
   const Matchers._();
 }
 
-/// [Matchers] is an interface for various strict [Matcher] types.
+/// [StrictMatchers] is an interface for various strict [Matcher] types.
 class StrictMatchers {
   /// [boolean] matches any pure [bool] value.
   final BooleanMatcher boolean = const BooleanMatcher(strict: true);
