@@ -79,23 +79,22 @@ extension MatchesRequest on RequestOptions {
   /// Check values against matchers.
   /// [request] is the configured [Request] which would contain the matchers if used.
   bool matchesRequest(Request request) {
+    final hasRequestBody =
+        data != null && request.data != null && !matches(data, request.data);
+
+    final hasQueryParameters = queryParameters != null &&
+        request.queryParameters != null &&
+        !matches(queryParameters, request.queryParameters);
+
+    final hasHeaders = headers != null &&
+        request.headers != null &&
+        !matches(headers, request.headers);
+
     if (path != request.route ||
         method != request.method.value ||
-
-        // Request body.
-        (data != null &&
-            request.data != null &&
-            !matches(data, request.data)) ||
-
-        // Query parameters.
-        (queryParameters != null &&
-            request.queryParameters != null &&
-            !matches(queryParameters, request.queryParameters)) ||
-
-        // Headers.
-        (headers != null &&
-            request.headers != null &&
-            !matches(headers, request.headers))) {
+        hasRequestBody ||
+        hasQueryParameters ||
+        hasHeaders) {
       return false;
     }
 
@@ -123,7 +122,7 @@ extension MatchesRequest on RequestOptions {
           // Exact match unless map.
           if (expected[key] is Map && actual[key] is Map) {
             if (!matches(actual[key], expected[key])) {
-              // Allow maps to uses matchers.
+              // Allow maps to use matchers.
               return false;
             }
           } else if (expected[key].toString() != actual[key].toString()) {
@@ -139,6 +138,8 @@ extension MatchesRequest on RequestOptions {
           return false;
         }
       }
+    } else if (actual is Set && expected is Set) {
+      return !matches(actual.containsAll(expected), false);
     } else if (actual != expected) {
       // Fall back to original check.
       return false;

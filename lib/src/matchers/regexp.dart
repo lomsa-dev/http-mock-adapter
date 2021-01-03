@@ -8,13 +8,13 @@ class RegExpMatcher extends Matcher {
 
   RegExpMatcher({
     String pattern,
-    bool multiline = false,
+    bool multiLine = false,
     bool caseSensitive = false,
     RegExp regExp,
   }) : regExp = regExp ??
             RegExp(
               pattern,
-              multiLine: multiline,
+              multiLine: multiLine,
               caseSensitive: caseSensitive,
             );
 

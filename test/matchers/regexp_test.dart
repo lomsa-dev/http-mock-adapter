@@ -4,38 +4,32 @@ import 'package:test/test.dart';
 void main() {
   group('RegExpMatcher', () {
     test('from pre-defined RegExp instance matches correctly', () {
-      expect(RegExpMatcher(regExp: RegExp(r'[0-9]')).matches('1'), true);
-      expect(RegExpMatcher(regExp: RegExp(r'[a-z]')).matches('a'), true);
-      expect(RegExpMatcher(regExp: RegExp(r'[a-z]+')).matches('abcdef'), true);
-      expect(RegExpMatcher(regExp: RegExp(r'[a-z]+')).matches('abcdef '), true);
-      expect(
-        RegExpMatcher(regExp: RegExp(r'[a-z]+$')).matches('abcdef '),
-        false,
-      );
-      expect(RegExpMatcher(regExp: RegExp(r'a')).matches(1), false);
-      expect(RegExpMatcher(regExp: RegExp(r'[0-9]')).matches(null), false);
-      expect(RegExpMatcher(regExp: RegExp(r'[0-9]')).matches({}), false);
-      expect(RegExpMatcher(regExp: RegExp(r'[0-9]')).matches([]), false);
-      expect(RegExpMatcher(regExp: RegExp(r'[0-9]')).matches(Any()), false);
+      expect(Matchers.regExp(RegExp(r'[0-9]')).matches('1'), true);
+      expect(Matchers.regExp(RegExp(r'[a-z]')).matches('a'), true);
+      expect(Matchers.regExp(RegExp(r'[a-z]+')).matches('abcdef'), true);
+      expect(Matchers.regExp(RegExp(r'[a-z]+')).matches('abcdef '), true);
+      expect(Matchers.regExp(RegExp(r'[a-z]+$')).matches('abcdef '), false);
+      expect(Matchers.regExp(RegExp(r'a')).matches(1), false);
+      expect(Matchers.regExp(RegExp(r'[0-9]')).matches(null), false);
+      expect(Matchers.regExp(RegExp(r'[0-9]')).matches({}), false);
+      expect(Matchers.regExp(RegExp(r'[0-9]')).matches([]), false);
     });
 
     test('from pre-defined pattern value matches correctly', () {
-      expect(RegExpMatcher(pattern: r'[0-9]').matches('1'), true);
-      expect(RegExpMatcher(pattern: r'[a-z]').matches('a'), true);
+      expect(Matchers.pattern(r'[0-9]').matches('1'), true);
+      expect(Matchers.pattern(r'[a-z]').matches('a'), true);
       expect(
-        RegExpMatcher(
-          pattern: r'[a-z]+',
-          caseSensitive: false,
-        ).matches('AbCdEf'),
-        true,
-      );
-      expect(RegExpMatcher(pattern: r'[a-z]+').matches('abcdef '), true);
-      expect(RegExpMatcher(pattern: r'[a-z]+$').matches('abcdef '), false);
-      expect(RegExpMatcher(pattern: r'a').matches(1), false);
-      expect(RegExpMatcher(pattern: r'[0-9]').matches(null), false);
-      expect(RegExpMatcher(pattern: r'[0-9]').matches({}), false);
-      expect(RegExpMatcher(pattern: r'[0-9]').matches([]), false);
-      expect(RegExpMatcher(pattern: r'[0-9]').matches(Any()), false);
+          Matchers.pattern(
+            r'[a-z]+',
+            caseSensitive: false,
+          ).matches('AbCdEf'),
+          true);
+      expect(Matchers.pattern(r'[a-z]+').matches('abcdef '), true);
+      expect(Matchers.pattern(r'[a-z]+$').matches('abcdef '), false);
+      expect(Matchers.pattern(r'a').matches(1), false);
+      expect(Matchers.pattern(r'[0-9]').matches(null), false);
+      expect(Matchers.pattern(r'[0-9]').matches({}), false);
+      expect(Matchers.pattern(r'[0-9]').matches([]), false);
     });
   });
 }

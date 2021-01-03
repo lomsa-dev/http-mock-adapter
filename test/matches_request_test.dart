@@ -65,10 +65,10 @@ void main() {
           };
 
           const expected = {
-            'a': anyValue,
+            'a': Matchers.any,
             'b': 'b',
-            'c': anyNumber,
-            'd': anyNumber,
+            'c': Matchers.number,
+            'd': Matchers.integer,
           };
 
           expect(options.matches(actual, expected), true);
@@ -79,14 +79,14 @@ void main() {
             'a': 'a',
             'b': 'b',
             'c': '123A',
-            'd': 123,
+            'd': 123.0,
           };
 
           const expected = {
-            'a': anyValue,
+            'a': Matchers.any,
             'b': 'b',
-            'c': anyNumber,
-            'd': anyNumber,
+            'c': Matchers.number,
+            'd': Matchers.decimal,
           };
 
           expect(options.matches(actual, expected), false);
@@ -102,15 +102,25 @@ void main() {
         });
 
         test('uses matchers to validate', () {
-          const actual = ['a', 'b', '123', 123];
-          const expected = [anyValue, 'b', anyNumber, anyNumber];
+          const actual = ['a', false, '123', 123];
+          const expected = [
+            Matchers.any,
+            Matchers.boolean,
+            Matchers.number,
+            Matchers.number,
+          ];
 
           expect(options.matches(actual, expected), true);
         });
 
         test('uses matchers but does not validate', () {
           const actual = ['a', 'b', '123A', 123];
-          const expected = [anyValue, 'b', anyNumber, anyNumber];
+          const expected = [
+            Matchers.any,
+            Matchers.string,
+            Matchers.number,
+            Matchers.number,
+          ];
 
           expect(options.matches(actual, expected), false);
         });
@@ -141,24 +151,32 @@ void main() {
           dioAdapter.onPost(
             '/post-any-data',
             data: {
-              'any': anyValue,
-              'pattern': RegExpMatcher(pattern: 'TEST'),
-              'regexp': RegExpMatcher(regExp: RegExp(r'([a-z]{3} ?){3}')),
+              'any': Matchers.any,
+              'boolean': Matchers.boolean,
+              'integer': Matchers.integer,
+              'decimal': Matchers.decimal,
+              'string': Matchers.string,
+              'pattern': Matchers.pattern('TEST'),
+              'regexp': Matchers.regExp(RegExp(r'([a-z]{3} ?){3}')),
               'strict': 'match',
               'map': {
-                'a': anyValue,
+                'a': Matchers.any,
                 'b': 'b',
               },
               'list': ['a', 'b'],
             },
             headers: {
-              'content-type': RegExpMatcher(pattern: 'application'),
-              'content-length': anyNumber,
+              'content-type': Matchers.pattern('application'),
+              'content-length': Matchers.number,
             },
           ).reply(statusCode, data);
 
           response = await dio.post('/post-any-data', data: {
             'any': '201',
+            'boolean': 'FalsE',
+            'integer': 3902,
+            'decimal': '32.134',
+            'string': '',
             'pattern': 'this is a test with ',
             'regexp': 'abc def hij',
             'strict': 'match',
