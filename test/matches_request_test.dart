@@ -4,27 +4,28 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
-const String PATH = '/test';
+const String path = '/test';
 
 void main() {
-  group('Request Options matchers', () {
+  group('RequestOptions matchers', () {
     test('general truthy test', () {
-      /// these RequestOptions and Request properties are required defaults
-      var options = RequestOptions(
-        path: PATH,
+      // These RequestOptions and Request properties are required defaults.
+      final options = RequestOptions(
+        path: path,
         method: 'GET',
-        contentType: Headers.jsonContentType, // necessary or is set to null
+        // Necessary or is set to null.
+        contentType: Headers.jsonContentType,
         headers: {Headers.contentTypeHeader: Headers.jsonContentType},
         queryParameters: {},
       );
 
-      var req = Request(
-        route: PATH,
+      const request = Request(
+        route: path,
         method: RequestMethods.GET,
         queryParameters: {},
       );
 
-      expect(options.matchesRequest(req), true);
+      expect(options.matchesRequest(request), true);
     });
 
     group('matches', () {
@@ -32,7 +33,7 @@ void main() {
 
       setUp(() {
         options = RequestOptions(
-          path: PATH,
+          path: path,
           method: 'GET',
           contentType: Headers.jsonContentType,
           headers: {Headers.contentTypeHeader: Headers.jsonContentType},
@@ -42,81 +43,83 @@ void main() {
 
       group('map', () {
         test('exactly', () {
-          var a = {
-            'a': 'a',
-            'b': 'b',
-          };
-          var b = {
+          const actual = {
             'a': 'a',
             'b': 'b',
           };
 
-          expect(options.matches(a, b), true);
+          const expected = {
+            'a': 'a',
+            'b': 'b',
+          };
+
+          expect(options.matches(actual, expected), true);
         });
 
         test('uses matchers to validate', () {
-          var a = {
+          const actual = {
             'a': 'a',
             'b': 'b',
             'c': '123',
             'd': 123,
           };
-          var b = {
+
+          const expected = {
             'a': anyValue,
             'b': 'b',
             'c': anyNumber,
             'd': anyNumber,
           };
 
-          expect(options.matches(a, b), true);
+          expect(options.matches(actual, expected), true);
         });
 
         test('uses matchers but does not validate', () {
-          var a = {
+          const actual = {
             'a': 'a',
             'b': 'b',
             'c': '123A',
             'd': 123,
           };
-          var b = {
+
+          const expected = {
             'a': anyValue,
             'b': 'b',
             'c': anyNumber,
             'd': anyNumber,
           };
 
-          expect(options.matches(a, b), false);
+          expect(options.matches(actual, expected), false);
         });
       });
 
       group('list', () {
         test('exactly', () {
-          var a = ['a', 'b'];
-          var b = ['a', 'b'];
+          const actual = ['a', 'b'];
+          const expected = ['a', 'b'];
 
-          expect(options.matches(a, b), true);
+          expect(options.matches(actual, expected), true);
         });
 
         test('uses matchers to validate', () {
-          var a = ['a', 'b', '123', 123];
-          var b = [anyValue, 'b', anyNumber, anyNumber];
+          const actual = ['a', 'b', '123', 123];
+          const expected = [anyValue, 'b', anyNumber, anyNumber];
 
-          expect(options.matches(a, b), true);
+          expect(options.matches(actual, expected), true);
         });
 
         test('uses matchers but does not validate', () {
-          var a = ['a', 'b', '123A', 123];
-          var b = [anyValue, 'b', anyNumber, anyNumber];
+          const actual = ['a', 'b', '123A', 123];
+          const expected = [anyValue, 'b', anyNumber, anyNumber];
 
-          expect(options.matches(a, b), false);
+          expect(options.matches(actual, expected), false);
         });
       });
 
       group('Dio request with matchers', () {
         Dio dio;
 
-        Map<String, dynamic> data = {'message': 'Test!'};
-        const path = 'https://example.com';
+        const data = {'message': 'Test!'};
 
         Response<dynamic> response;
         const statusCode = 200;
@@ -140,7 +143,7 @@ void main() {
             data: {
               'any': anyValue,
               'pattern': RegExpMatcher(pattern: 'TEST'),
-              'regexp': RegExpMatcher(regexp: RegExp(r'([a-z]{3} ?){3}')),
+              'regexp': RegExpMatcher(regExp: RegExp(r'([a-z]{3} ?){3}')),
               'strict': 'match',
               'map': {
                 'a': anyValue,

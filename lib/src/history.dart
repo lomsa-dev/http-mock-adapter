@@ -34,10 +34,11 @@ class History {
           }
         });
 
-        /// fail when a mocked route is not found for the request
+        // Fail when a mocked route is not found for the request.
         if (_requestInvocationIndex == null || _requestInvocationIndex < 0) {
           throw AssertionError(
-              'Could not find mock route matching request for ${options.signature}');
+            'Could not find mocked route matching request for ${options.signature}',
+          );
         }
 
         final responseBody = current.responseBody;
