@@ -189,6 +189,27 @@ void main() {
 
           expect(jsonEncode({'message': 'Test!'}), response.data);
         });
+
+        test('mocks date formatted POST request as intended', () async {
+          dioAdapter = DioAdapter();
+
+          dio.httpClientAdapter = dioAdapter;
+
+          const pattern = r'(0?[1-9]|[12][0-9]|3[01])\-(0?[1-9]|1[012])\-\d{4}';
+
+          dioAdapter.onPost(
+            path,
+            data: {'date': Matchers.pattern(pattern)},
+            headers: {
+              Headers.contentTypeHeader: Matchers.pattern('application'),
+              Headers.contentLengthHeader: Matchers.integer,
+            },
+          ).reply(statusCode, data);
+
+          response = await dio.post(path, data: {'date': '04-01-2021'});
+
+          expect(jsonEncode({'message': 'Test!'}), response.data);
+        });
       });
     });
   });

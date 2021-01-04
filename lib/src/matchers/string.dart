@@ -6,7 +6,7 @@ class StringMatcher extends Matcher {
   const StringMatcher();
 
   @override
-  bool matches(dynamic actual) => actual != null && actual is String;
+  bool matches(dynamic actual) => actual is String;
 
   @override
   String toString() => 'StringMatcher';
