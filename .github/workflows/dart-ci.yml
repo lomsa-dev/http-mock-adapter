@@ -1,0 +1,43 @@
+name: Dart CI
+
+# This workflow is triggered on pull requests and pushes to the repository.
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+jobs:
+  ci:
+    name: Build, format, analyze and test the package
+
+    # This job will run on Ubuntu virtual machine.
+    runs-on: ubuntu-latest
+
+    # Note that this workflow uses the latest stable version of the Dart SDK.
+    # Docker images for other release channels - like dev and beta - are also
+    # available. See https://hub.docker.com/r/google/dart/ for the available
+    # images.
+    container:
+      image: google/dart:latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Print Dart SDK version
+        run: dart --version
+
+      - name: Install dependencies
+        run: dart pub get
+
+      # Consider passing '--output=none' to 'format' for no standard output.
+      - name: Verify formatting
+        run: dart format --set-exit-if-changed .
+
+      # Consider passing '--fatal-infos' for slightly stricter analysis.
+      - name: Analyze project source
+        run: dart analyze
+
+      - name: Test the package
+        run: dart test
