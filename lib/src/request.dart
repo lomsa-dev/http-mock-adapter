@@ -79,22 +79,22 @@ extension MatchesRequest on RequestOptions {
   /// Check values against matchers.
   /// [request] is the configured [Request] which would contain the matchers if used.
   bool matchesRequest(Request request) {
-    final hasRequestBody =
+    final matchesRequestBody =
         data != null && request.data != null && !matches(data, request.data);
 
-    final hasQueryParameters = queryParameters != null &&
+    final matchesQueryParameters = queryParameters != null &&
         request.queryParameters != null &&
         !matches(queryParameters, request.queryParameters);
 
-    final hasHeaders = headers != null &&
+    final matchesHeaders = headers != null &&
         request.headers != null &&
         !matches(headers, request.headers);
 
     if (path != request.route ||
         method != request.method.value ||
-        hasRequestBody ||
-        hasQueryParameters ||
-        hasHeaders) {
+        matchesRequestBody ||
+        matchesQueryParameters ||
+        matchesHeaders) {
       return false;
     }
 
