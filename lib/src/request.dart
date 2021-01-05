@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:meta/meta.dart';
 
 import 'handlers/request_handler.dart';
@@ -61,13 +62,91 @@ extension Signature on RequestOptions {
 /// 'requestMap' while using [RequestRouted.onPost] or other [RequestRouted]
 /// methods will be excatly same inside the [Signature] which is used to
 /// compare executed request to the list of requests saved by 'DioAdapter' or
-/// by 'DioIntercepor'
+/// by 'DioInterceptor'
 String sortedData(dynamic data) {
   if (data is Map) {
     final sortedKeys = data.keys.toList()..sort();
-    data = {for (var k in sortedKeys) k: data[k]};
+
+    data = {for (final sortedKey in sortedKeys) sortedKey: data[sortedKey]};
   }
+
   return data.toString();
+}
+
+/// [MatchesRequest] enhances the RequestOptions by allowing different types
+/// of matchers to validate the data and headers of the request.
+extension MatchesRequest on RequestOptions {
+  /// Check values against matchers.
+  /// [request] is the configured [Request] which would contain the matchers if used.
+  bool matchesRequest(Request request) {
+    final matchesRequestBody =
+        data != null && request.data != null && !matches(data, request.data);
+
+    final matchesQueryParameters = queryParameters != null &&
+        request.queryParameters != null &&
+        !matches(queryParameters, request.queryParameters);
+
+    final matchesHeaders = headers != null &&
+        request.headers != null &&
+        !matches(headers, request.headers);
+
+    if (path != request.route ||
+        method != request.method.value ||
+        matchesRequestBody ||
+        matchesQueryParameters ||
+        matchesHeaders) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Check the map keys and values determined by the definition.
+  bool matches(dynamic actual, dynamic expected) {
+    if (expected is Matcher) {
+      /// Check the match here to bypass the fallthrough strict equality check
+      /// at the end.
+      if (!expected.matches(actual)) {
+        return false;
+      }
+    } else if (actual is Map && expected is Map) {
+      for (final key in actual.keys.toList()) {
+        if (!expected.containsKey(key)) {
+          return false;
+        } else if (expected[key] is Matcher) {
+          // Check matcher for the configured request.
+          if (!expected[key].matches(actual[key])) {
+            return false;
+          }
+        } else if (expected[key] != actual[key]) {
+          // Exact match unless map.
+          if (expected[key] is Map && actual[key] is Map) {
+            if (!matches(actual[key], expected[key])) {
+              // Allow maps to use matchers.
+              return false;
+            }
+          } else if (expected[key].toString() != actual[key].toString()) {
+            // If some other kind of object like list then rely on `toString`
+            // to provide comparison value.
+            return false;
+          }
+        }
+      }
+    } else if (actual is List && expected is List) {
+      for (var index in Iterable.generate(actual.length)) {
+        if (!matches(actual[index], expected[index])) {
+          return false;
+        }
+      }
+    } else if (actual is Set && expected is Set) {
+      return !matches(actual.containsAll(expected), false);
+    } else if (actual != expected) {
+      // Fall back to original check.
+      return false;
+    }
+
+    return true;
+  }
 }
 
 /// Matcher of [Request] and [responseBody] based on route and [RequestHandler].
