@@ -11,12 +11,8 @@ jobs:
   ci:
     name: Build, format, analyze and test the package
 
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
-
-    # This job will run on Ubuntu, macOS and Windows virtual machines.
-    runs-on: ${{ matrix.platform }}
+    # This job will run on Ubuntu virtual machine.
+    runs-on: ubuntu-latest
 
     # Note that this workflow uses the latest stable version of the Dart SDK.
     # Docker images for other release channels - like dev and beta - are also
