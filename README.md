@@ -1,12 +1,24 @@
 # http-mock-adapter
 
-[![LICENSE](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/lomsa-dev/http-mock-adapter#License "Project's LICENSE section")
+[![Package Version](https://img.shields.io/pub/v/http_mock_adapter?color=teal)](https://github.com/lomsa-dev/http-mock-adapter "Published package version")
+[![Style: Pedantic](https://img.shields.io/badge/style-pedantic-teal.svg)](https://github.com/tenhobi/effective_dart "Package linter helper")
+[![Dart CI](https://github.com/lomsa-dev/http-mock-adapter/workflows/Dart%20CI/badge.svg?branch=develop)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Dart+CI%22 "Dart CI workflow")
+[![Publish Package](https://github.com/lomsa-dev/http-mock-adapter/workflows/Publish%20Package/badge.svg?branch=main)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Publish+Package%22 "Publish Package workflow")
+[![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/lomsa-dev/http-mock-adapter#License "Project's LICENSE section")
 
 ## Description
 
 Dio HTTP mock adapter for Dart/Flutter (compatible with Mockito).
 
-Sometimes, testing classes which are dependent on [Dio](https://pub.dev/packages/dio) requests are really tricky and require lots of boilerplate, this is where [http_mock_adapter](https://pub.dev/packages/http_mock_adapter) comes in, to make [Dio](https://pub.dev/packages/dio) request testing more flexible than it has ever been. By simply defining requests with their methods and responses by using chains of our [DioAdapter](https://pub.dev/documentation/http_mock_adapter/latest/http_mock_adapter/DioAdapter-class.html) and replacing [Dio](https://pub.dev/packages/dio)'s [httpClientAdapter](https://pub.dev/documentation/dio/latest/dio/HttpClientAdapter-class.html) with your custom mocked adapter, you will be able to mock basically any request that [Dio](https://pub.dev/packages/dio) can support. More over, [http_mock_adapter](https://pub.dev/packages/http_mock_adapter) package, supports request mocking with interceptors which are created via DioInterceptor class, so instead of replacing [Dio](https://pub.dev/packages/dio)'s [httpClientAdapter](https://pub.dev/documentation/dio/latest/dio/HttpClientAdapter-class.html) you can add your mocked interceptor inside the [dio.interceptors](https://pub.dev/documentation/dio/latest/dio/Interceptors-class.html) list by using its [add method](https://api.dart.dev/dev/2.12.0-29.0.dev/dart-collection/ListMixin/add.html). you can find example in [examples](https://pub.dev/packages/http_mock_adapter/example) section of [http_mock_adapter](https://pub.dev/packages/http_mock_adapter) package
+Sometimes, testing classes which are dependent on [Dio](https://pub.dev/packages/dio) requests are really tricky and require lots of boilerplate, this is where [http_mock_adapter](https://pub.dev/packages/http_mock_adapter) comes in, to make `Dio` request testing more flexible than it has ever been.
+
+By simply defining requests with their methods and responses by using chains of our [DioAdapter](https://pub.dev/documentation/http_mock_adapter/latest/http_mock_adapter/DioAdapter-class.html) and replacing `Dio`'s [httpClientAdapter](https://pub.dev/documentation/dio/latest/dio/HttpClientAdapter-class.html) with your custom mocked adapter, you will be able to mock basically any request that `Dio` can support.
+
+Moreover, `http_mock_adapter` package supports request mocking with interceptors which are created via DioInterceptor class, so instead of replacing `Dio`'s `httpClientAdapter`, you can add your mocked interceptor inside the [dio.interceptors](https://pub.dev/documentation/dio/latest/dio/Interceptors-class.html) list by using its [add](https://api.dart.dev/dev/2.12.0-29.0.dev/dart-collection/ListMixin/add.html) method.
+
+You can find example in [examples](https://pub.dev/packages/http_mock_adapter/example) section of `http_mock_adapter` package.
+
+See the following [DEV](https://dev.to/lomsa/simulating-http-request-response-workflow-for-effective-testing-in-dart-flutter-via-http-mock-adapter-5eii)/[Medium](https://lomsa.medium.com/simulating-http-request-response-workflow-for-effective-testing-in-dart-flutter-via-7d53ddb724d6) article for more background.
 
 ---
 
@@ -50,7 +62,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:
-  http_mock_adapter: ^0.1.4
+  http_mock_adapter: ^0.1.5
 ```
 
 ### Install it

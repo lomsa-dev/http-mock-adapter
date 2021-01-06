@@ -36,7 +36,7 @@ void main() {
     ) async {
       response = await request();
 
-      expect(jsonEncode(actual), response.data);
+      expect(actual, response.data);
     }
 
     group('RequestRouted', () {
@@ -46,7 +46,7 @@ void main() {
         const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
-        // on onGet for the specific path
+        // on onGet for the specific path.
         dioInterceptor.onGet(path).throws(
               500,
               AdapterError(
@@ -56,15 +56,15 @@ void main() {
               ),
             );
 
-        // Checking that exception type can match `AdapterError` type too
+        // Checking that exception type can match `AdapterError` type too.
         expect(() async => await dio.get(path),
             throwsA(TypeMatcher<AdapterError>()));
 
-        // Checking that exception type can match `DioError` type too
+        // Checking that exception type can match `DioError` type too.
         expect(
             () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
 
-        // Checking the type and the message of the exception
+        // Checking the type and the message of the exception.
         expect(
             () async => await dio.get(path),
             throwsA(predicate(
@@ -130,13 +130,13 @@ void main() {
       dio.interceptors.add(dioInterceptor);
 
       response = await dio.get(path);
-      expect(response.data, jsonEncode(data));
+      expect(response.data, data);
 
       response = await dio.post(path);
-      expect(response.data, jsonEncode(data));
+      expect(response.data, data);
 
       response = await dio.patch(path);
-      expect(response.data, jsonEncode(data));
+      expect(response.data, data);
     });
   });
 
@@ -160,7 +160,7 @@ void main() {
         const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
-        // on onGet for the specific path
+        // on onGet for the specific path.
         dioAdapter.onGet(path).throws(
               500,
               DioError(
@@ -170,15 +170,15 @@ void main() {
               ),
             );
 
-        // Checking that exception type can match `AdapterError` type too
+        // Checking that exception type can match `AdapterError` type too.
         expect(() async => await dio.get(path),
             throwsA(TypeMatcher<AdapterError>()));
 
-        // Checking that exception type can match `DioError` type too
+        // Checking that exception type can match `DioError` type too.
         expect(
             () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
 
-        // Checking the type and the message of the exception
+        // Checking the type and the message of the exception.
         expect(
             () async => await dio.get(path),
             throwsA(predicate(
@@ -191,7 +191,7 @@ void main() {
       ) async {
         response = await request();
 
-        expect(jsonEncode(actual), response.data);
+        expect(actual, response.data);
       }
 
       test('mocks requests via onRoute() as intended', () async {
@@ -255,7 +255,7 @@ void main() {
 
         response = await dio.post('/route', data: {'post': '201'});
 
-        expect(jsonEncode({'message': 'Post!'}), response.data);
+        expect({'message': 'Post!'}, response.data);
 
         dioAdapter.onPatch(
           '/routes',
@@ -270,7 +270,7 @@ void main() {
         });
 
         response = await dio.patch('/routes', data: {'patch': '207'});
-        expect(jsonEncode({'message': 'Patch!'}), response.data);
+        expect({'message': 'Patch!'}, response.data);
 
         dioAdapter.onGet('/api').reply(200, {
           'message': 'Get!',
@@ -278,7 +278,7 @@ void main() {
 
         response = await dio.get('/api');
 
-        expect(jsonEncode({'message': 'Get!'}), response.data);
+        expect({'message': 'Get!'}, response.data);
       });
 
       test('mocks multiple requests non-sequantially as intended', () async {
@@ -297,16 +297,16 @@ void main() {
             .reply(200, {'message': 'Third!'});
 
         response = await dio.get('/second-route');
-        expect(jsonEncode({'message': 'Second!'}), response.data);
+        expect({'message': 'Second!'}, response.data);
 
         response = await dio.get('/third-route');
-        expect(jsonEncode({'message': 'Third!'}), response.data);
+        expect({'message': 'Third!'}, response.data);
 
         response = await dio.get('/first-route');
-        expect(jsonEncode({'message': 'First!'}), response.data);
+        expect({'message': 'First!'}, response.data);
 
         response = await dio.post('/second-route');
-        expect(jsonEncode({'message': 'Second again!'}), response.data);
+        expect({'message': 'Second again!'}, response.data);
       });
 
       test('mocks multiple requests by chaining methods as intended', () async {
@@ -321,10 +321,10 @@ void main() {
             .reply(200, {'message': 'Chain!'});
 
         response = await dio.get('/route');
-        expect(jsonEncode({'message': 'Unbreakable...'}), response.data);
+        expect({'message': 'Unbreakable...'}, response.data);
 
         response = await dio.get('/api');
-        expect(jsonEncode({'message': 'Chain!'}), response.data);
+        expect({'message': 'Chain!'}, response.data);
       });
     });
   });

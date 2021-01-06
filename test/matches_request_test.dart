@@ -187,7 +187,7 @@ void main() {
             'list': ['a', 'b'],
           });
 
-          expect(jsonEncode({'message': 'Test!'}), response.data);
+          expect({'message': 'Test!'}, response.data);
         });
 
         test('mocks date formatted POST request as intended', () async {
@@ -208,7 +208,7 @@ void main() {
 
           response = await dio.post(path, data: {'date': '04-01-2021'});
 
-          expect(jsonEncode({'message': 'Test!'}), response.data);
+          expect({'message': 'Test!'}, response.data);
         });
       });
     });
