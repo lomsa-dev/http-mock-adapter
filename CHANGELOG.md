@@ -35,7 +35,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Source code documentation;
   - License's `Copyright (c)` year;
   - `http` and `test` `dev_dependencies`' version;
-  - Header setting logic for both request and response (defaults to JSON).
+  - Header setting logic for both request and response (defaults to JSON);
+  - Project's meta files;
+  - Tests by relocating, reformatting, organizing them.
 
 ---
 
