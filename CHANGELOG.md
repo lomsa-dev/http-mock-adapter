@@ -29,13 +29,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Updated**
   - Issue templates;
   - Pull request template;
-  - Header setting logic for `DioAdapter` (It now by default matches any `Headers.contentTypeLength`);
   - `example/main.dart` code;
   - Source code formatting/style;
   - Source code documentation;
   - License's `Copyright (c)` year;
   - `http` and `test` `dev_dependencies`' version;
-  - Header setting logic for both request and response (defaults to JSON);
+  - Header setting logic for both request and response (Defaults to JSON and matches any `Headers.contentTypeLength`);
   - Project's meta files;
   - Tests by relocating, reformatting, organizing them.
 
