@@ -101,7 +101,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License.
 
-[v0.1.5]: https://github.com/lomsa-dev/http-mock-adapter/compare/19310519550fc6402eb760ee5f3ef0757d187b89...HEAD
+[v0.1.5]: https://github.com/lomsa-dev/http-mock-adapter/compare/19310519550fc6402eb760ee5f3ef0757d187b89...ff0b5b1c9d976e774002f3176fa0b6acd193c715
 [v0.1.4]: https://github.com/lomsa-dev/http-mock-adapter/compare/21f5d211b8a798206fe4a727bff3a60eb8e3dcaf...19310519550fc6402eb760ee5f3ef0757d187b89
 [v0.1.3]: https://github.com/lomsa-dev/http-mock-adapter/compare/c0ab40ed59d3898ebf03d706b25ca8b91c2d065d...21f5d211b8a798206fe4a727bff3a60eb8e3dcaf
 [v0.1.2]: https://github.com/lomsa-dev/http-mock-adapter/compare/87c41f1758660b94efc1538de39fb04bb12c0b95...c0ab40ed59d3898ebf03d706b25ca8b91c2d065d
