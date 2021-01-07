@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   Dio dio;
 
-  Map<String, dynamic> data = {'message': 'Test!'};
+  const data = {'message': 'Test!'};
   const path = 'https://example.com';
 
   Response<dynamic> response;
@@ -13,7 +13,6 @@ void main() {
 
   group('DioInterceptor', () {
     DioInterceptor dioInterceptor;
-
 
     setUpAll(() {
       dio = Dio();
