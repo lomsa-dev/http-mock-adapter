@@ -9,13 +9,11 @@ void main() {
   Response<dynamic> response;
 
   const path = 'https://example.com';
-
   const data = {
     'payload': {
       'data': 'content',
     }
   };
-
   const statusCode = 200;
 
   setUpAll(() {
