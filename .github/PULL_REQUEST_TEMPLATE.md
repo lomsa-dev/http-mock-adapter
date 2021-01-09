@@ -10,6 +10,8 @@ Please review the [guidelines for contributing](https://github.com/lomsa-dev/htt
 - [ ] Check the commit's or even all commits' message styles to match our requested structure.
 - [ ] Check your code additions will fail neither code linting checks nor unit test.
 
+**Tip**: Delete everything but the following section that contains the description of the pull request.
+
 ---
 
 ## Description

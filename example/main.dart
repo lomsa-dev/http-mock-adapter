@@ -5,132 +5,114 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  // How to mock with DioAdapter
-  group('DioAdapter usage', () {
-    // Creating dio instance for mocking.
-    // For instance: you can use your own instance from injection and replace
-    // dio.httpClientAdapter with mocker DioAdapter
+  Dio dio;
 
-    const path = 'https://example.com';
+  Map<String, dynamic> data;
 
-    test('Expects Dioadapter to mock the data', () async {
-      final dio = Dio();
-      final dioAdapter = DioAdapter();
+  final payload = jsonEncode({
+    'payload': {'data': 'Test data!'},
+  });
+
+  const path = 'https://example.com';
+
+  group('DioAdapter', () {
+    DioAdapter dioAdapter;
+
+    setUpAll(() {
+      dio = Dio();
+
+      dioAdapter = DioAdapter();
 
       dio.httpClientAdapter = dioAdapter;
-      dioAdapter
-          .onGet(path)
-          .reply(200,
-              {'message': 'Successfully mocked GET!'}) // only use double quotes
-          .onPost(path)
-          .reply(200, {'message': 'Successfully mocked POST!'});
-
-      // Making dio.get request on the path an expecting mocked response
-      final getResponse = await dio.get(path);
-      expect(jsonEncode({'message': 'Successfully mocked GET!'}),
-          getResponse.data);
-
-      // Making dio.post request on the path an expecting mocked response
-      final postResponse = await dio.post(path);
-      expect(jsonEncode({'message': 'Successfully mocked POST!'}),
-          postResponse.data);
     });
 
-    // Alternatively you can use onRoute chain to pass custom requests
-    test('Expects Dioadapter to mock the data with onRoute', () async {
-      final dio = Dio();
-      final dioAdapter = DioAdapter();
+    test('mocks the data', () async {
+      data = {'message': 'Successfully mocked GET!'};
 
-      dio.httpClientAdapter = dioAdapter;
+      dioAdapter.onGet('https://api.mocki.io/v1/b043df5a').reply(200, data);
+
+      final getResponse = await dio.get('https://api.mocki.io/v1/b043df5a');
+
+      expect(getResponse.data, data);
+    });
+
+    test('mocks the data with onRoute', () async {
+      data = {'message': 'Successfully mocked PATCH!'};
+
       dioAdapter
-          .onRoute(path, request: Request(method: RequestMethods.PATCH))
-          .reply(200, {
-            'message': 'Successfully mocked PATCH!'
-          }) // only use double quotes
-          .onRoute(path, request: Request(method: RequestMethods.DELETE))
-          .reply(200, {'message': 'Successfully mocked DELETE!'});
+          .onRoute(
+            path,
+            request: Request(method: RequestMethods.PATCH, data: payload),
+          )
+          .reply(200, data);
 
-      // Making dio.get request on the path an expecting mocked response
-      final patchResponse = await dio.patch(path);
-      expect(jsonEncode({'message': 'Successfully mocked PATCH!'}),
-          patchResponse.data);
+      final patchResponse = await dio.patch(path, data: payload);
 
-      // Making dio.post request on the path an expecting mocked response
-      final deleteResposne = await dio.delete(path);
-      expect(jsonEncode({'message': 'Successfully mocked DELETE!'}),
-          deleteResposne.data);
+      expect(patchResponse.data, data);
     });
   });
 
-  // Also, for mocking requests, you can use dio Interceptor
-  group('DioInterceptor usage', () {
-    // Creating dio instance for mocking.
-    // For instance: you can use your own instance from injection and add
-    // DioInterceptor in dio.interceptors list
-    final dioForInterceptor = Dio();
-    final dioInterceptor =
-        DioInterceptor(); // creating DioInterceptor instance for mocking requests
+  group('DioInterceptor', () {
+    DioInterceptor dioInterceptor;
 
-    dioForInterceptor.interceptors.add(dioInterceptor);
+    setUpAll(() {
+      dio = Dio();
 
-    const path = 'https://example2.com';
+      dioInterceptor = DioInterceptor();
 
-    test('Expects Dioadapter to mock the data', () async {
-      // Defining request types and their responses respectively with their paths
-      dioInterceptor
-          .onDelete(path)
-          .reply(200,
-              {'message': 'Successfully mocked GET!'}) // only use double quotes
-          .onPatch(path)
-          .reply(200, {'message': 'Successfully mocked POST!'});
+      dio.interceptors.add(dioInterceptor);
+    });
 
-      // Making dio.delete request on the path an expecting mocked response
-      final getResponse = await dioForInterceptor.delete(path);
-      expect(jsonEncode({'message': 'Successfully mocked GET!'}),
-          getResponse.data);
+    test('mocks the data', () async {
+      data = {'message': 'Successfully mocked DELETE!'};
 
-      // Making dio.patch request on the path an expecting mocked response
-      final postResposne = await dioForInterceptor.patch(path);
-      expect(jsonEncode({'message': 'Successfully mocked POST!'}),
-          postResposne.data);
+      dioInterceptor.onDelete(path).reply(200, data);
+
+      final deleteResponse = await dio.delete(path);
+
+      expect(deleteResponse.data, data);
+
+      dioInterceptor.onPut(path, data: payload).reply(200, data);
+
+      final putResponse = await dio.put(path, data: payload);
+
+      expect(putResponse.data, data);
     });
   });
 
-  group('Raising the custrom Error onRequest', () {
-    const path = 'https://example.com';
+  group('AdapterError/DioError', () {
+    DioAdapter dioAdapter;
 
-    test('Test that throws raises custom exception', () async {
-      final dio = Dio();
-      final dioAdapter = DioAdapter();
+    setUpAll(() {
+      dio = Dio();
+
+      dioAdapter = DioAdapter();
 
       dio.httpClientAdapter = dioAdapter;
-      const type = DioErrorType.RESPONSE;
-      final response = Response(statusCode: 500);
-      const error = 'Some beautiful error';
+    });
 
-      // Building request to throw the DioError exception
-      // on onGet for the specific path
-      dioAdapter.onGet(path).throws(
-            500,
-            DioError(
-              type: type,
-              response: response,
-              error: error,
-            ),
-          );
+    test('throws custom exception', () async {
+      final dioError = DioError(
+        error: {'message': 'Some beautiful error!'},
+        response: Response(statusCode: 500),
+        type: DioErrorType.RESPONSE,
+      );
 
-      // Checking that exception type can match `AdapterError` type too
-      expect(() async => await dio.get(path),
-          throwsA(TypeMatcher<AdapterError>()));
+      dioAdapter.onGet(path).throws(500, dioError);
 
-      // Checking that exception type can match `DioError` type too
-      expect(() async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
-
-      // Checking the type and the message of the exception
+      expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));
+      expect(() async => await dio.get(path), throwsA(isA<DioError>()));
       expect(
-          () async => await dio.get(path),
-          throwsA(
-              predicate((DioError e) => e is DioError && e.message == error)));
+        () async => await dio.get(path),
+        throwsA(
+          predicate(
+            (DioError error) =>
+                error is DioError &&
+                error is AdapterError &&
+                error.message == dioError.error.toString(),
+          ),
+        ),
+      );
     });
   });
 }

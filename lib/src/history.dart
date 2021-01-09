@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/types.dart';
@@ -18,20 +17,22 @@ class History {
 
   /// Getter for the current request invocation's intended [responseBody].
   AdapterResponseBody get responseBody => (options) {
-        if (options.headers == null || options.headers.isEmpty) {
-          options.headers = {
-            Headers.contentTypeHeader: Headers.jsonContentType,
-          };
-        }
-
         data.forEach((element) {
-          if (options.signature == element.request.signature) {
+          if (options.signature == element.request.signature ||
+              options.matchesRequest(element.request)) {
             _requestInvocationIndex = data.indexOf(element);
 
             current.responseBody =
                 requestHandler.requestMap[requestHandler.statusCode];
           }
         });
+
+        // Fail when a mocked route is not found for the request.
+        if (_requestInvocationIndex == null || _requestInvocationIndex < 0) {
+          throw AssertionError(
+            'Could not find mocked route matching request for ${options.signature}',
+          );
+        }
 
         final responseBody = current.responseBody;
 
