@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/types.dart';
@@ -18,12 +17,6 @@ class History {
 
   /// Getter for the current request invocation's intended [responseBody].
   AdapterResponseBody get responseBody => (options) {
-        if (options.headers == null || options.headers.isEmpty) {
-          options.headers = {
-            Headers.contentTypeHeader: Headers.jsonContentType,
-          };
-        }
-
         data.forEach((element) {
           if (options.signature == element.request.signature ||
               options.matchesRequest(element.request)) {

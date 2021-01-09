@@ -20,12 +20,12 @@ class DioAdapter extends HttpClientAdapter
   static final DioAdapter _dioAdapter = DioAdapter._construct();
 
   /// Factory method of [DioAdapter] utilized to return [_dioAdapter]
-  /// singleton instance each time it is called;
+  /// singleton instance each time it is called.
   factory DioAdapter() {
     return _dioAdapter;
   }
 
-  /// Takes in route, request, sets corresponding [RequestHandler],
+  /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
   RequestHandler onRoute(String route, {Request request = const Request()}) {
@@ -37,11 +37,8 @@ class DioAdapter extends HttpClientAdapter
           route: route,
           method: request.method,
           data: request.data,
-          queryParameters: request.queryParameters ?? const {},
-          headers: request.headers ??
-              {
-                Headers.contentTypeHeader: Headers.jsonContentType,
-              },
+          queryParameters: request.queryParameters,
+          headers: request.headers,
         ),
         requestHandler,
       ),
@@ -62,6 +59,11 @@ class DioAdapter extends HttpClientAdapter
 
     // throws error if response type is AdapterError
     throwError(responseBody);
+
+    responseBody.headers = responseBody.headers ??
+        const {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        };
 
     return responseBody;
   }

@@ -33,14 +33,14 @@ import 'package:http_mock_adapter/src/response.dart';
 class DioInterceptor extends Interceptor
     with Tracked, RequestRouted
     implements AdapterInterface {
-  /// [DioInterceptor]'s singleton instance
+  /// [DioInterceptor]'s singleton instance.
   static final DioInterceptor _interceptor = DioInterceptor._construct();
 
-  /// [DioInterceptor]'s private constructor method
+  /// [DioInterceptor]'s private constructor method.
   DioInterceptor._construct();
 
   /// Factory method of [DioInterceptor] utilized to return [_interceptor]
-  /// singleton instance each time it is called;
+  /// singleton instance each time it is called.
   factory DioInterceptor() {
     return _interceptor;
   }
@@ -57,11 +57,8 @@ class DioInterceptor extends Interceptor
           route: route,
           method: request.method,
           data: request.data,
-          queryParameters: request.queryParameters ?? const {},
-          headers: request.headers ??
-              const {
-                Headers.contentTypeHeader: Headers.jsonContentType,
-              },
+          queryParameters: request.queryParameters,
+          headers: request.headers,
         ),
         requestHandler,
       ),
@@ -71,29 +68,24 @@ class DioInterceptor extends Interceptor
   }
 
   /// Dio [Interceptor]`s [onRequest] configuration intended to catch and return
-  /// mocked request and data respectively
+  /// mocked request and data respectively.
   @override
   Future<Response<dynamic>> onRequest(options) async {
     final response = history.responseBody(options);
 
-    // throws error if response type is DioError
+    // Throws error if response type is DioError.
     throwError(response);
 
     AdapterResponse responseBody = response;
-    responseBody.headers = responseBody.headers ?? {};
 
-    final headers = Headers.fromMap(responseBody.headers ?? {});
-    headers.set(Headers.contentTypeHeader, Headers.jsonContentType);
+    responseBody.headers = responseBody.headers ??
+        const {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        };
 
     return Response(
       data: await DefaultTransformer().transformResponse(options, responseBody),
-      headers: Headers.fromMap(
-        responseBody.headers ??
-            const {
-              Headers.contentTypeHeader,
-              Headers.jsonContentType,
-            },
-      ),
+      headers: Headers.fromMap(responseBody.headers),
       isRedirect: responseBody.isRedirect,
       redirects: responseBody.redirects ?? [],
       request: options,
