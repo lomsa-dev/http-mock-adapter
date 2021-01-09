@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
@@ -187,7 +185,7 @@ void main() {
             'list': ['a', 'b'],
           });
 
-          expect(jsonEncode({'message': 'Test!'}), response.data);
+          expect({'message': 'Test!'}, response.data);
         });
 
         test('mocks date formatted POST request as intended', () async {
@@ -208,7 +206,7 @@ void main() {
 
           response = await dio.post(path, data: {'date': '04-01-2021'});
 
-          expect(jsonEncode({'message': 'Test!'}), response.data);
+          expect({'message': 'Test!'}, response.data);
         });
       });
     });

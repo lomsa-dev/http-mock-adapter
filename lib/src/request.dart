@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/adapters/dio_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
-import 'package:http_mock_adapter/src/matchers/matcher.dart';
-import 'package:meta/meta.dart';
-
-import 'handlers/request_handler.dart';
-import 'package:http_mock_adapter/src/types.dart';
-
+import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/interfaces.dart';
+import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
+import 'package:http_mock_adapter/src/types.dart';
+import 'package:meta/meta.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
@@ -63,8 +63,8 @@ extension Signature on RequestOptions {
 /// This makes sure, that data passed during request and data saved inside
 /// 'requestMap' while using [RequestRouted.onPost] or other [RequestRouted]
 /// methods will be excatly same inside the [Signature] which is used to
-/// compare executed request to the list of requests saved by 'DioAdapter' or
-/// by 'DioInterceptor'
+/// compare executed request to the list of requests saved by [DioAdapter] or
+/// by [DioInterceptor].
 String sortedData(dynamic data) {
   if (data is Map) {
     final sortedKeys = data.keys.toList()..sort();
@@ -75,7 +75,7 @@ String sortedData(dynamic data) {
   return data.toString();
 }
 
-/// [MatchesRequest] enhances the RequestOptions by allowing different types
+/// [MatchesRequest] enhances the [RequestOptions] by allowing different types
 /// of matchers to validate the data and headers of the request.
 extension MatchesRequest on RequestOptions {
   /// Check values against matchers.
