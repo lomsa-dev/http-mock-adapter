@@ -6,7 +6,7 @@ import 'package:http_mock_adapter/src/request.dart';
 
 /// Type for request chainers like onGet.
 typedef AdapterRequest = RequestHandler Function(
-  String route, {
+  dynamic route, {
   dynamic data,
   dynamic headers,
 });

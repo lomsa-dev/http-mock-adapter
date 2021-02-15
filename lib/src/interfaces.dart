@@ -17,7 +17,7 @@ import 'package:http_mock_adapter/src/types.dart';
 /// implement this interface to provide good developer experience.
 abstract class AdapterInterface {
   AdapterRequest get onGet;
-  RequestHandler onRoute(String route, {Request request = const Request()});
+  RequestHandler onRoute(dynamic route, {Request request = const Request()});
   AdapterRequest get onHead;
   AdapterRequest get onPost;
   AdapterRequest get onPut;

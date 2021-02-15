@@ -11,8 +11,8 @@ import 'package:meta/meta.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
-  /// This is the route specified by the client.
-  final String route;
+  /// This is the route specified by the client- expected to be [String] or [RegExp].
+  final dynamic route;
 
   /// An HTTP method such as [RequestMethods.GET] or [RequestMethods.POST].
   final RequestMethods method;
@@ -81,6 +81,7 @@ extension MatchesRequest on RequestOptions {
   /// Check values against matchers.
   /// [request] is the configured [Request] which would contain the matchers if used.
   bool matchesRequest(Request request) {
+    final routeMatched = doesRouteMatch(path, request.route);
     final requestBodyMatched = matches(data, request.data);
 
     final queryParametersMatched =
@@ -94,7 +95,7 @@ extension MatchesRequest on RequestOptions {
         };
     final headersMatched = matches(headers, requestHeaders);
 
-    if (path != request.route ||
+    if (!routeMatched ||
         method != request.method.value ||
         !requestBodyMatched ||
         !queryParametersMatched ||
@@ -103,6 +104,29 @@ extension MatchesRequest on RequestOptions {
     }
 
     return true;
+  }
+
+  /// Check to see if route matches the mock specification
+  /// Allows user to specify route as they intend rather than assuming string
+  /// is a pattern. Route will be dynamic.
+  bool doesRouteMatch(dynamic actual, dynamic expected) {
+    // if null then fail. the route should never be null...ever.
+    if (actual == null || expected == null) {
+      return false;
+    }
+
+    // if strings, just compare
+    if (actual is String && expected is String) {
+      return actual == expected;
+    }
+
+    // allow regex mtch of route, expected should be provided via the mocking
+    if (expected is RegExp) {
+      return expected.hasMatch(actual);
+    }
+
+    // default to no match
+    return false;
   }
 
   /// Check the map keys and values determined by the definition.
@@ -211,13 +235,14 @@ extension ValueToString on RequestMethods {
 /// [Request], both of which ultimately get processed by [RequestHandler].
 mixin RequestRouted {
   /// Takes in route, request, and sets corresponding [RequestHandler].
+  /// route is expected to be of type [String] or [RegExp]
   @visibleForOverriding
-  RequestHandler onRoute(String route, {Request request = const Request()});
+  RequestHandler onRoute(dynamic route, {Request request = const Request()});
 
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onGet => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
@@ -233,7 +258,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onHead => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
@@ -249,7 +274,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onPost => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
@@ -265,7 +290,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onPut => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
@@ -281,7 +306,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onDelete => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
@@ -297,7 +322,7 @@ mixin RequestRouted {
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
   AdapterRequest get onPatch => (
-        String route, {
+        dynamic route, {
         dynamic data,
         dynamic headers,
       }) =>
