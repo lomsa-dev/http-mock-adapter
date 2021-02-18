@@ -48,7 +48,7 @@ class DioInterceptor extends Interceptor
   /// Takes in route, request, sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
-  RequestHandler onRoute(String route, {Request request = const Request()}) {
+  RequestHandler onRoute(dynamic route, {Request request = const Request()}) {
     final requestHandler = RequestHandler<DioInterceptor>();
 
     history.data.add(
