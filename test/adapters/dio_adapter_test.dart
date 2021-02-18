@@ -163,6 +163,15 @@ void main() {
         response = await dio.get('/api');
         expect({'message': 'Chain!'}, response.data);
       });
+
+      test('mocks route pattern', () async {
+        dioAdapter
+            .onGet(RegExp(r'/test-route/[0-9]{6}'))
+            .reply(200, {'message': 'Test!'});
+
+        response = await dio.get('/test-route/123456');
+        expect({'message': 'Test!'}, response.data);
+      });
     });
   });
 }
