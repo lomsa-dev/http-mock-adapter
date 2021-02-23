@@ -12,7 +12,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [Responsable]>.
-  final Map<int, Responsable> requestMap = {};
+  final Map<int, AdapterResponse Function()> requestMap = {};
 
   /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
@@ -27,13 +27,13 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = AdapterResponse.from(
-      jsonEncode(data),
-      this.statusCode,
-      headers: headers,
-      statusMessage: statusMessage,
-      isRedirect: isRedirect,
-    );
+    requestMap[this.statusCode] = () => AdapterResponse.from(
+          jsonEncode(data),
+          this.statusCode,
+          headers: headers,
+          statusMessage: statusMessage,
+          isRedirect: isRedirect,
+        );
 
     return _createChain();
   }
