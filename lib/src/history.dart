@@ -23,7 +23,7 @@ class History {
             _requestInvocationIndex = data.indexOf(element);
 
             current.responseBody =
-                requestHandler.requestMap[requestHandler.statusCode]();
+                requestHandler.requestMap[requestHandler.statusCode];
           }
         });
 
@@ -34,9 +34,7 @@ class History {
           );
         }
 
-        final responseBody = current.responseBody;
-
-        return responseBody;
+        return current.responseBody();
       };
 
   /// Getter for the current request invocation's [RequestHandler].

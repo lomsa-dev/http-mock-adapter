@@ -167,7 +167,8 @@ void main() {
               'content-type': Matchers.pattern('application'),
               'content-length': Matchers.number,
             },
-          ).reply(statusCode, data);
+            handler: (response) => response.reply(statusCode, data),
+          );
 
           response = await dio.post('/post-any-data', data: {
             'any': '201',
@@ -202,7 +203,8 @@ void main() {
               Headers.contentTypeHeader: Matchers.pattern('application'),
               Headers.contentLengthHeader: Matchers.integer,
             },
-          ).reply(statusCode, data);
+            handler: (response) => response.reply(statusCode, data),
+          );
 
           response = await dio.post(path, data: {'date': '04-01-2021'});
 

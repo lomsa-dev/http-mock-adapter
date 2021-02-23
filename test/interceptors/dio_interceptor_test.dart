@@ -34,19 +34,21 @@ void main() {
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
         const type = DioErrorType.RESPONSE;
-        final response = Response(statusCode: 500);
         const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception
         // on onGet for the specific path.
-        dioInterceptor.onGet(path).throws(
-              500,
-              AdapterError(
-                type: type,
-                response: response,
-                error: error,
-              ),
-            );
+        dioInterceptor.onGet(
+          path,
+          handler: (response) => response.throws(
+            500,
+            AdapterError(
+              type: type,
+              response: Response(statusCode: 500),
+              error: error,
+            ),
+          ),
+        );
 
         // Checking that exception type can match `AdapterError` type too.
         expect(() async => await dio.get(path),
@@ -70,54 +72,78 @@ void main() {
       });
 
       test('mocks requests via onGet() as intended', () async {
-        dioInterceptor.onGet(path).reply(statusCode, data);
+        dioInterceptor.onGet(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.get(path), data);
       });
 
       test('mocks requests via onHead() as intended', () async {
-        dioInterceptor.onHead(path).reply(statusCode, data);
+        dioInterceptor.onHead(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.head(path), data);
       });
 
       test('mocks requests via onPost() as intended', () async {
-        dioInterceptor.onPost(path).reply(statusCode, data);
+        dioInterceptor.onPost(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.post(path), data);
       });
 
       test('mocks requests via onPut() as intended', () async {
-        dioInterceptor.onPut(path).reply(statusCode, data);
+        dioInterceptor.onPut(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.put(path), data);
       });
 
       test('mocks requests via onDelete() as intended', () async {
-        dioInterceptor.onDelete(path).reply(statusCode, data);
+        dioInterceptor.onDelete(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.delete(path), data);
       });
 
       test('mocks requests via onPatch() as intended', () async {
-        dioInterceptor.onPatch(path).reply(statusCode, data);
+        dioInterceptor.onPatch(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.patch(path), data);
       });
     });
 
-    test('mocks multiple requests sequantially by method chaining', () async {
+    test('mocks multiple requests sequentially by method chaining', () async {
       final dio = Dio();
 
       final dioInterceptor = DioInterceptor();
 
       dioInterceptor
-          .onGet(path)
-          .reply(statusCode, data)
-          .onPost(path)
-          .reply(statusCode, data)
-          .onPatch(path)
-          .reply(statusCode, data);
+        ..onGet(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        )
+        ..onPost(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        )
+        ..onPatch(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
       dio.interceptors.add(dioInterceptor);
 

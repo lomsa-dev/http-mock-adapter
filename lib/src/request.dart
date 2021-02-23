@@ -6,7 +6,6 @@ import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
-import 'package:http_mock_adapter/src/types.dart';
 import 'package:meta/meta.dart';
 
 /// [Request] class contains members to hold network request information.
@@ -62,7 +61,7 @@ extension Signature on RequestOptions {
 /// and 'queryParameters' portion if it is a subtype of [Map].
 /// This makes sure, that data passed during request and data saved inside
 /// 'requestMap' while using [RequestRouted.onPost] or other [RequestRouted]
-/// methods will be excatly same inside the [Signature] which is used to
+/// methods will be exactly same inside the [Signature] which is used to
 /// compare executed request to the list of requests saved by [DioAdapter] or
 /// by [DioInterceptor].
 String sortedData(dynamic data) {
@@ -120,7 +119,7 @@ extension MatchesRequest on RequestOptions {
       return actual == expected;
     }
 
-    // allow regex mtch of route, expected should be provided via the mocking
+    // allow regex match of route, expected should be provided via the mocking
     if (expected is RegExp) {
       return expected.hasMatch(actual);
     }
@@ -190,7 +189,7 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response body to the request.
-  Responsable responseBody;
+  Responsable Function() responseBody;
 
   RequestMatcher(
     this.request,
@@ -233,113 +232,133 @@ extension ValueToString on RequestMethods {
 
 /// [RequestRouted] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
-mixin RequestRouted {
+mixin RequestRouted implements AdapterInterface {
   /// Takes in route, request, and sets corresponding [RequestHandler].
   /// route is expected to be of type [String] or [RegExp]
+  @override
   @visibleForOverriding
   RequestHandler onRoute(dynamic route, {Request request = const Request()});
 
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onGet => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.GET,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onGet(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.GET,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onHead => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.HEAD,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onHead(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.HEAD,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPost => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.POST,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onPost(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.POST,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPut => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.PUT,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onPut(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.PUT,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onDelete => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.DELETE,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onDelete(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.DELETE,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
-  AdapterRequest get onPatch => (
-        dynamic route, {
-        dynamic data,
-        dynamic headers,
-      }) =>
-          onRoute(
-            route,
-            request: Request(
-              method: RequestMethods.PATCH,
-              data: data,
-              headers: headers,
-            ),
-          );
+  @override
+  void onPatch(
+    dynamic route, {
+    dynamic data,
+    dynamic headers,
+    @required void Function(RequestHandler response) handler,
+  }) {
+    handler(onRoute(
+      route,
+      request: Request(
+        method: RequestMethods.PATCH,
+        data: data,
+        headers: headers,
+      ),
+    ));
+  }
 
-  dynamic throwError(Responsable response) {
+  @override
+  void throwError(Responsable response) {
     if (response.runtimeType == AdapterError) {
       AdapterError error = response;
 
-      return throw error;
+      throw error;
     }
   }
 }

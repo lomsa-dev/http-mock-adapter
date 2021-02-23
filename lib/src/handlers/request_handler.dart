@@ -17,7 +17,7 @@ class RequestHandler<T> {
 
   /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
-  AdapterInterface reply(
+  void reply(
     int statusCode,
     dynamic data, {
     Map<String, List<String>> headers = const {
@@ -35,43 +35,18 @@ class RequestHandler<T> {
           statusMessage: statusMessage,
           isRedirect: isRedirect,
         );
-
-    return _createChain();
   }
 
   /// Stores the [DioError] inside the [requestMap]
   /// and returns [DioAdapter] or [DioInterceptor],
   /// the latter which is utilized for method chaining.
-  AdapterInterface throws(int statusCode, DioError dioError) {
+  void throws(int statusCode, DioError dioError) {
     if (dioError.runtimeType != DioError &&
         dioError.runtimeType != AdapterError) {
-      return throw ThrowsException();
+      throw ThrowsException();
     }
 
     this.statusCode = statusCode;
     requestMap[this.statusCode] = () => AdapterError.from(dioError);
-
-    return _createChain();
-  }
-
-  /// Checking the type of the `type parameter`
-  /// and returning the relevant Class Instance
-  /// If type parameter of the class is none of the following:
-  /// [DioAdapter], [DioInterceptor], [dynamic], throws [RequestHandlerException].
-  AdapterInterface _createChain() {
-    switch (T) {
-      case DioInterceptor:
-        return DioInterceptor();
-        break;
-      case DioAdapter:
-        return DioAdapter();
-        break;
-      case dynamic:
-        return DioAdapter();
-        break;
-      default:
-        return throw RequestHandlerException();
-        break;
-    }
   }
 }

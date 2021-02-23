@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/history.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
@@ -25,14 +24,12 @@ import 'package:http_mock_adapter/src/response.dart';
 /// .reply("response for route 2")
 /// .onPatch("/route-3")
 /// .reply("response for route 3")
-/// // adding intercetor inside the [Dio]'s interceptors
+/// // adding interceptor inside the [Dio]'s interceptors
 /// dio.interceptors.add(interceptor);
 /// ```
 /// If you now make request like this `dio.get("/route-1");`
 /// Your response will be `Response(data:"response for route 1",........)`
-class DioInterceptor extends Interceptor
-    with Tracked, RequestRouted
-    implements AdapterInterface {
+class DioInterceptor extends Interceptor with Tracked, RequestRouted {
   /// Takes in route, request, sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
