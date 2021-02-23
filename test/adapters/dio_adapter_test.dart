@@ -215,6 +215,19 @@ void main() {
         response = await dio.get('/test-route/123456');
         expect({'message': 'Test!'}, response.data);
       });
+
+      test('returns a new response every time for the same request', () async {
+        dioAdapter.onGet(
+          '/route',
+          handler: (response) => response.reply(200, {'message': 'Success'}),
+        );
+
+        response = await dio.get('/route');
+        expect({'message': 'Success'}, response.data);
+
+        response = await dio.get('/route');
+        expect({'message': 'Success'}, response.data);
+      });
     });
   });
 }
