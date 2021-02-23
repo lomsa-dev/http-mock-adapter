@@ -233,12 +233,6 @@ extension ValueToString on RequestMethods {
 /// [RequestRouted] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
 mixin RequestRouted implements AdapterInterface {
-  /// Takes in route, request, and sets corresponding [RequestHandler].
-  /// route is expected to be of type [String] or [RegExp]
-  @override
-  @visibleForOverriding
-  RequestHandler onRoute(dynamic route, {Request request = const Request()});
-
   /// Takes in a route, requests with [RequestMethods.GET],
   /// and sets corresponding [RequestHandler].
   @override
@@ -247,16 +241,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.GET,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.GET,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
@@ -266,16 +260,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.HEAD,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.HEAD,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
@@ -285,16 +279,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.POST,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.POST,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
@@ -304,16 +298,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.PUT,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.PUT,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
@@ -323,16 +317,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.DELETE,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.DELETE,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
@@ -342,16 +336,16 @@ mixin RequestRouted implements AdapterInterface {
     dynamic data,
     dynamic headers,
     @required void Function(RequestHandler response) handler,
-  }) {
-    handler(onRoute(
-      route,
-      request: Request(
-        method: RequestMethods.PATCH,
-        data: data,
-        headers: headers,
-      ),
-    ));
-  }
+  }) =>
+      onRoute(
+        route,
+        request: Request(
+          method: RequestMethods.PATCH,
+          data: data,
+          headers: headers,
+        ),
+        handler: handler,
+      );
 
   @override
   void throwError(Responsable response) {

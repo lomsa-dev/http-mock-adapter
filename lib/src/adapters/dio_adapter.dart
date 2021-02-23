@@ -1,6 +1,7 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:meta/meta.dart';
 
 import '../history.dart';
 import '../request.dart';
@@ -13,9 +14,13 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
-  RequestHandler onRoute(dynamic route, {Request request = const Request()}) {
+  void onRoute(
+    dynamic route, {
+    Request request = const Request(),
+    @required void Function(RequestHandler response) handler,
+  }) {
     final requestHandler = RequestHandler<DioAdapter>();
-
+    handler(requestHandler);
     history.data.add(
       RequestMatcher(
         Request(
@@ -28,8 +33,6 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
         requestHandler,
       ),
     );
-
-    return requestHandler;
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.

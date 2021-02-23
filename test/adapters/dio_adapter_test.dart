@@ -61,7 +61,10 @@ void main() {
       });
 
       test('mocks requests via onRoute() as intended', () async {
-        dioAdapter.onRoute(path).reply(statusCode, data);
+        dioAdapter.onRoute(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await testDioAdapter(() => dio.get(path), data);
       });

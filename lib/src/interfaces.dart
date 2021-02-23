@@ -22,7 +22,11 @@ abstract class AdapterInterface {
     dynamic headers,
     @required void Function(RequestHandler response) handler,
   });
-  RequestHandler onRoute(dynamic route, {Request request = const Request()});
+  void onRoute(
+    dynamic route, {
+    Request request = const Request(),
+    @required void Function(RequestHandler response) handler,
+  });
   void onHead(
     dynamic route, {
     dynamic data,

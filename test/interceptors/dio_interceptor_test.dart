@@ -66,7 +66,10 @@ void main() {
       });
 
       test('mocks requests via onRoute() as intended', () async {
-        dioInterceptor.onRoute(path).reply(statusCode, data);
+        dioInterceptor.onRoute(
+          path,
+          handler: (response) => response.reply(statusCode, data),
+        );
 
         await _testDioInterceptor(() => dio.get(path), data);
       });

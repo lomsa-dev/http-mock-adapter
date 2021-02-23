@@ -42,12 +42,11 @@ void main() async {
     test('mocks the data with onRoute', () async {
       data = {'message': 'Successfully mocked PATCH!'};
 
-      dioAdapter
-          .onRoute(
-            path,
-            request: Request(method: RequestMethods.PATCH, data: payload),
-          )
-          .reply(200, data);
+      dioAdapter.onRoute(
+        path,
+        request: Request(method: RequestMethods.PATCH, data: payload),
+        handler: (response) => response.reply(200, data),
+      );
 
       final patchResponse = await dio.patch(path, data: payload);
 
