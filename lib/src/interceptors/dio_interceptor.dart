@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/history.dart';
-import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/interfaces.dart';
+import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
 /// [DioInterceptor] is a class for mocking the [Dio] requests with interceptors.
@@ -33,18 +33,6 @@ import 'package:http_mock_adapter/src/response.dart';
 class DioInterceptor extends Interceptor
     with Tracked, RequestRouted
     implements AdapterInterface {
-  /// [DioInterceptor]'s singleton instance.
-  static final DioInterceptor _interceptor = DioInterceptor._construct();
-
-  /// [DioInterceptor]'s private constructor method.
-  DioInterceptor._construct();
-
-  /// Factory method of [DioInterceptor] utilized to return [_interceptor]
-  /// singleton instance each time it is called.
-  factory DioInterceptor() {
-    return _interceptor;
-  }
-
   /// Takes in route, request, sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override

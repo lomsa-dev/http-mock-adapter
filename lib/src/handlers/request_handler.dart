@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
 /// The handler of requests sent by clients.
@@ -12,7 +13,7 @@ class RequestHandler<T> {
   int statusCode;
 
   /// Map of <[statusCode], [Responsable]>.
-  final Map<int, Responsable> requestMap = {};
+  final Map<int, Responsable Function()> requestMap = {};
 
   /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
   /// the latter which is utilized for method chaining.
@@ -27,13 +28,13 @@ class RequestHandler<T> {
   }) {
     this.statusCode = statusCode;
 
-    requestMap[this.statusCode] = AdapterResponse.from(
-      jsonEncode(data),
-      this.statusCode,
-      headers: headers,
-      statusMessage: statusMessage,
-      isRedirect: isRedirect,
-    );
+    requestMap[this.statusCode] = () => AdapterResponse.from(
+          jsonEncode(data),
+          this.statusCode,
+          headers: headers,
+          statusMessage: statusMessage,
+          isRedirect: isRedirect,
+        );
 
     return _createChain();
   }
@@ -47,10 +48,8 @@ class RequestHandler<T> {
       return throw ThrowsException();
     }
 
-    dynamic error = AdapterError.from(dioError);
-
     this.statusCode = statusCode;
-    requestMap[this.statusCode] = error;
+    requestMap[this.statusCode] = () => AdapterError.from(dioError);
 
     return _createChain();
   }

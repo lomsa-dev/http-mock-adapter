@@ -13,7 +13,7 @@ import 'package:http_mock_adapter/src/types.dart';
 /// 2. Because of the reason that [RequestHandler] is returning different
 /// class instances form reply method, depending on its generic type
 /// parameters by using [dynamic] type for reply was removing
-/// autocomplition ability, and that's why both Adapters
+/// autocompletion ability, and that's why both Adapters
 /// implement this interface to provide good developer experience.
 abstract class AdapterInterface {
   AdapterRequest get onGet;
@@ -29,6 +29,4 @@ abstract class AdapterInterface {
 /// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioError].
 /// This interface makes sure that we can save [DioError] and [ResponseBody]
 /// inside the same list.
-abstract class Responsable {
-  static dynamic from() {}
-}
+abstract class Responsable {}

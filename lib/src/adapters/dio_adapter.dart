@@ -1,7 +1,7 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/interfaces.dart';
 
 import '../history.dart';
 import '../request.dart';
@@ -12,18 +12,6 @@ class DioAdapter extends HttpClientAdapter
     implements AdapterInterface {
   /// [Dio]`s default HTTP client adapter implementation.
   final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
-
-  /// [DioAdapter]'s private constructor method.
-  DioAdapter._construct();
-
-  /// [DioAdapter]'s singleton instance.
-  static final DioAdapter _dioAdapter = DioAdapter._construct();
-
-  /// Factory method of [DioAdapter] utilized to return [_dioAdapter]
-  /// singleton instance each time it is called.
-  factory DioAdapter() {
-    return _dioAdapter;
-  }
 
   /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
