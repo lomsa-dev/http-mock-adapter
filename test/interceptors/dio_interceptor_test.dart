@@ -33,7 +33,7 @@ void main() {
 
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
-        const type = DioErrorType.RESPONSE;
+        const type = DioErrorType.response;
         const error = 'Some beautiful error';
 
         // Building request to throw the DioError exception

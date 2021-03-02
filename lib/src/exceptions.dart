@@ -49,7 +49,7 @@ class AdapterError extends DioError implements Responsable {
   AdapterError({
     RequestOptions request,
     Response response,
-    DioErrorType type = DioErrorType.DEFAULT,
+    DioErrorType type = DioErrorType.other,
     dynamic error,
   }) : super(
           request: request,

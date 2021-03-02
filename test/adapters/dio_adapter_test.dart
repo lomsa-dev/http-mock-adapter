@@ -39,7 +39,7 @@ void main() {
         final dioError = DioError(
           error: {'message': 'error'},
           response: Response(statusCode: 500),
-          type: DioErrorType.RESPONSE,
+          type: DioErrorType.response,
         );
 
         dioAdapter.onGet(
