@@ -87,14 +87,14 @@ void main() async {
   });
 
   group('AdapterError/DioError', () {
-    DioAdapter? dioAdapter;
+    late DioAdapter dioAdapter;
 
     setUpAll(() {
       dio = Dio();
 
       dioAdapter = DioAdapter();
 
-      dio.httpClientAdapter = dioAdapter!;
+      dio.httpClientAdapter = dioAdapter;
     });
 
     test('throws custom exception', () async {
@@ -107,7 +107,7 @@ void main() async {
         type: DioErrorType.response,
       );
 
-      dioAdapter!.onGet(
+      dioAdapter.onGet(
         path,
         (request) => request.throws(500, dioError),
       );
