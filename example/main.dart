@@ -31,7 +31,7 @@ void main() async {
 
       dioAdapter.onGet(
         'https://api.mocki.io/v1/b043df5a',
-        handler: (response) => response.reply(200, data),
+        (request) => request.reply(200, data),
       );
 
       final getResponse = await dio.get('https://api.mocki.io/v1/b043df5a');
@@ -44,8 +44,8 @@ void main() async {
 
       dioAdapter.onRoute(
         path,
+        (request) => request.reply(200, data),
         request: Request(method: RequestMethods.PATCH, data: payload),
-        handler: (response) => response.reply(200, data),
       );
 
       final patchResponse = await dio.patch(path, data: payload);
@@ -70,7 +70,7 @@ void main() async {
 
       dioInterceptor.onDelete(
         path,
-        handler: (response) => response.reply(200, data),
+        (request) => request.reply(200, data),
       );
 
       final deleteResponse = await dio.delete(path);
@@ -79,8 +79,8 @@ void main() async {
 
       dioInterceptor.onPut(
         path,
+        (request) => request.reply(200, data),
         data: payload,
-        handler: (response) => response.reply(200, data),
       );
 
       final putResponse = await dio.put(path, data: payload);
@@ -109,7 +109,7 @@ void main() async {
 
       dioAdapter.onGet(
         path,
-        handler: (response) => response.throws(500, dioError),
+        (request) => request.throws(500, dioError),
       );
 
       expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));

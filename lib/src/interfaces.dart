@@ -3,7 +3,7 @@ import 'package:http_mock_adapter/src/adapters/dio_adapter.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/request.dart';
-import 'package:meta/meta.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// Top level interface of all the adapters.
 /// It is implemented by [DioInterceptor] and [DioAdapter].
@@ -17,45 +17,45 @@ import 'package:meta/meta.dart';
 /// implement this interface to provide good developer experience.
 abstract class AdapterInterface {
   void onGet(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void onRoute(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     Request request = const Request(),
-    @required void Function(RequestHandler response) handler,
   });
   void onHead(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void onPost(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void onPut(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void onDelete(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void onPatch(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   });
   void throwError(Responsable response);
 }

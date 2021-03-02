@@ -6,7 +6,7 @@ import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
-import 'package:meta/meta.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// [Request] class contains members to hold network request information.
 class Request {
@@ -237,114 +237,114 @@ mixin RequestRouted implements AdapterInterface {
   /// and sets corresponding [RequestHandler].
   @override
   void onGet(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.GET,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   /// Takes in a route, requests with [RequestMethods.HEAD],
   /// and sets corresponding [RequestHandler].
   @override
   void onHead(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.HEAD,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   /// Takes in a route, requests with [RequestMethods.POST],
   /// and sets corresponding [RequestHandler].
   @override
   void onPost(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.POST,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   /// Takes in a route, requests with [RequestMethods.PUT],
   /// and sets corresponding [RequestHandler].
   @override
   void onPut(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.PUT,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   /// Takes in a route, requests with [RequestMethods.DELETE],
   /// and sets corresponding [RequestHandler].
   @override
   void onDelete(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.DELETE,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   /// Takes in a route, requests with [RequestMethods.PATCH],
   /// and sets corresponding [RequestHandler].
   @override
   void onPatch(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     dynamic data,
     dynamic headers,
-    @required void Function(RequestHandler response) handler,
   }) =>
       onRoute(
         route,
+        callback,
         request: Request(
           method: RequestMethods.PATCH,
           data: data,
           headers: headers,
         ),
-        handler: handler,
       );
 
   @override

@@ -42,8 +42,10 @@ void main() {
           type: DioErrorType.RESPONSE,
         );
 
-        dioAdapter.onGet(path,
-            handler: (response) => response.throws(500, dioError));
+        dioAdapter.onGet(
+          path,
+          (request) => request.throws(500, dioError),
+        );
 
         expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));
         expect(() async => await dio.get(path), throwsA(isA<DioError>()));
@@ -63,15 +65,17 @@ void main() {
       test('mocks requests via onRoute() as intended', () async {
         dioAdapter.onRoute(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.get(path), data);
       });
 
       test('mocks requests via onGet() as intended', () async {
-        dioAdapter.onGet(path,
-            handler: (response) => response.reply(statusCode, data));
+        dioAdapter.onGet(
+          path,
+          (request) => request.reply(statusCode, data),
+        );
 
         await testDioAdapter(() => dio.get(path), data);
       });
@@ -79,7 +83,7 @@ void main() {
       test('mocks requests via onHead() as intended', () async {
         dioAdapter.onHead(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.head(path), data);
@@ -88,7 +92,7 @@ void main() {
       test('mocks requests via onPost() as intended', () async {
         dioAdapter.onPost(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.post(path), data);
@@ -97,7 +101,7 @@ void main() {
       test('mocks requests via onPut() as intended', () async {
         dioAdapter.onPut(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.put(path), data);
@@ -106,7 +110,7 @@ void main() {
       test('mocks requests via onDelete() as intended', () async {
         dioAdapter.onDelete(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.delete(path), data);
@@ -115,7 +119,7 @@ void main() {
       test('mocks requests via onPatch() as intended', () async {
         dioAdapter.onPatch(
           path,
-          handler: (response) => response.reply(statusCode, data),
+          (request) => request.reply(statusCode, data),
         );
 
         await testDioAdapter(() => dio.patch(path), data);
@@ -124,10 +128,10 @@ void main() {
       test('mocks multiple requests sequentially as intended', () async {
         dioAdapter.onPost(
           '/route',
-          data: {'post': '201'},
-          handler: (response) => response.reply(201, {
+          (request) => request.reply(201, {
             'message': 'Post!',
           }),
+          data: {'post': '201'},
         );
 
         response = await dio.post('/route', data: {'post': '201'});
@@ -136,10 +140,10 @@ void main() {
 
         dioAdapter.onPatch(
           '/routes',
-          data: {'patch': '207'},
-          handler: (response) => response.reply(207, {
+          (request) => request.reply(207, {
             'message': 'Patch!',
           }),
+          data: {'patch': '207'},
         );
 
         response = await dio.patch('/routes', data: {'patch': '207'});
@@ -147,7 +151,7 @@ void main() {
 
         dioAdapter.onGet(
           '/api',
-          handler: (response) => response.reply(200, {
+          (request) => request.reply(200, {
             'message': 'Get!',
           }),
         );
@@ -161,20 +165,19 @@ void main() {
         dioAdapter
           ..onGet(
             '/first-route',
-            handler: (response) => response.reply(200, {'message': 'First!'}),
+            (request) => request.reply(200, {'message': 'First!'}),
           )
           ..onGet(
             '/second-route',
-            handler: (response) => response.reply(200, {'message': 'Second!'}),
+            (request) => request.reply(200, {'message': 'Second!'}),
           )
           ..onPost(
             '/second-route',
-            handler: (response) =>
-                response.reply(200, {'message': 'Second again!'}),
+            (request) => request.reply(200, {'message': 'Second again!'}),
           )
           ..onGet(
             '/third-route',
-            handler: (response) => response.reply(200, {'message': 'Third!'}),
+            (request) => request.reply(200, {'message': 'Third!'}),
           );
 
         response = await dio.get('/second-route');
@@ -194,12 +197,11 @@ void main() {
         dioAdapter
           ..onGet(
             '/route',
-            handler: (response) =>
-                response.reply(201, {'message': 'Unbreakable...'}),
+            (request) => request.reply(201, {'message': 'Unbreakable...'}),
           )
           ..onGet(
             '/api',
-            handler: (response) => response.reply(200, {'message': 'Chain!'}),
+            (request) => request.reply(200, {'message': 'Chain!'}),
           );
 
         response = await dio.get('/route');
@@ -212,7 +214,7 @@ void main() {
       test('mocks route pattern', () async {
         dioAdapter.onGet(
           RegExp(r'/test-route/[0-9]{6}'),
-          handler: (response) => response.reply(200, {'message': 'Test!'}),
+          (request) => request.reply(200, {'message': 'Test!'}),
         );
 
         response = await dio.get('/test-route/123456');
@@ -222,7 +224,7 @@ void main() {
       test('returns a new response every time for the same request', () async {
         dioAdapter.onGet(
           '/route',
-          handler: (response) => response.reply(200, {'message': 'Success'}),
+          (request) => request.reply(200, {'message': 'Success'}),
         );
 
         response = await dio.get('/route');

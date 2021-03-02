@@ -41,11 +41,11 @@ void main() async {
   dioAdapter
       ..onGet(
         path,
-        handler: (response) => response.reply(200, {'message': 'Successfully mocked GET!'}),
+        (request) => request.reply(200, {'message': 'Successfully mocked GET!'}),
       )
       ..onGet(
         path,
-        handler: (response) => response.reply(200, {'message': 'Successfully mocked POST!'}),
+        (request) => request.reply(200, {'message': 'Successfully mocked POST!'}),
       );
 
   final onGetResponse = await dio.get(path);

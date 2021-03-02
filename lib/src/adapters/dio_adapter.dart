@@ -1,7 +1,7 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
-import 'package:meta/meta.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 import '../history.dart';
 import '../request.dart';
@@ -15,12 +15,12 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
   void onRoute(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     Request request = const Request(),
-    @required void Function(RequestHandler response) handler,
   }) {
-    final requestHandler = RequestHandler<DioAdapter>();
-    handler(requestHandler);
+    final handler = RequestHandler<DioAdapter>();
+    callback(handler);
     history.data.add(
       RequestMatcher(
         Request(
@@ -30,7 +30,7 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
           queryParameters: request.queryParameters,
           headers: request.headers,
         ),
-        requestHandler,
+        handler,
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/history.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
-import 'package:meta/meta.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// [DioInterceptor] is a class for mocking the [Dio] requests with interceptors.
 ///
@@ -35,12 +35,12 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
   void onRoute(
-    dynamic route, {
+    dynamic route,
+    RequestHandlerCallback callback, {
     Request request = const Request(),
-    @required void Function(RequestHandler response) handler,
   }) {
-    final requestHandler = RequestHandler<DioInterceptor>();
-    handler(requestHandler);
+    final handler = RequestHandler<DioInterceptor>();
+    callback(handler);
 
     history.data.add(
       RequestMatcher(
@@ -51,7 +51,7 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
           queryParameters: request.queryParameters,
           headers: request.headers,
         ),
-        requestHandler,
+        handler,
       ),
     );
   }
