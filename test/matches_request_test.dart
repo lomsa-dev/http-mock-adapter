@@ -148,6 +148,7 @@ void main() {
 
           dioAdapter.onPost(
             '/post-any-data',
+            (request) => request.reply(statusCode, data),
             data: {
               'any': Matchers.any,
               'boolean': Matchers.boolean,
@@ -167,7 +168,7 @@ void main() {
               'content-type': Matchers.pattern('application'),
               'content-length': Matchers.number,
             },
-          ).reply(statusCode, data);
+          );
 
           response = await dio.post('/post-any-data', data: {
             'any': '201',
@@ -197,12 +198,13 @@ void main() {
 
           dioAdapter.onPost(
             path,
+            (request) => request.reply(statusCode, data),
             data: {'date': Matchers.pattern(pattern)},
             headers: {
               Headers.contentTypeHeader: Matchers.pattern('application'),
               Headers.contentLengthHeader: Matchers.integer,
             },
-          ).reply(statusCode, data);
+          );
 
           response = await dio.post(path, data: {'date': '04-01-2021'});
 

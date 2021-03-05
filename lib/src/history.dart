@@ -34,9 +34,7 @@ class History {
           );
         }
 
-        final responseBody = current.responseBody;
-
-        return responseBody;
+        return current.responseBody();
       };
 
   /// Getter for the current request invocation's [RequestHandler].

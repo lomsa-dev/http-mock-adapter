@@ -39,10 +39,14 @@ void main() async {
   const path = 'https://example.com';
 
   dioAdapter
-      .onGet(path) // `path` can be either `String` or `RegExp`
-      .reply(200, {'message': 'Successfully mocked GET!'})
-      .onPost(path)
-      .reply(200, {'message': 'Successfully mocked POST!'});
+      ..onGet(
+        path,
+        (request) => request.reply(200, {'message': 'Successfully mocked GET!'}),
+      )
+      ..onGet(
+        path,
+        (request) => request.reply(200, {'message': 'Successfully mocked POST!'}),
+      );
 
   final onGetResponse = await dio.get(path);
   print(onGetResponse.data); // {message: Successfully mocked GET!}
