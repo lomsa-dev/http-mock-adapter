@@ -3,7 +3,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Dio dio;
+  late Dio dio;
 
   const data = {'message': 'Test!'};
   const path = 'https://example.com';
@@ -12,7 +12,7 @@ void main() {
   const statusCode = 200;
 
   group('DioInterceptor', () {
-    DioInterceptor dioInterceptor;
+    late DioInterceptor dioInterceptor;
 
     setUpAll(() {
       dio = Dio();
@@ -44,7 +44,10 @@ void main() {
             500,
             AdapterError(
               type: type,
-              response: Response(statusCode: 500),
+              response: Response(
+                statusCode: 500,
+                request: RequestOptions(path: '/foo'),
+              ),
               error: error,
             ),
           ),

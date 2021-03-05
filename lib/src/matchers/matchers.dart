@@ -38,8 +38,8 @@ class Matchers {
   /// It is mainly used as a shorthand for matching via [RegExp].
   static RegExpMatcher pattern(
     String pattern, {
-    bool multiLine,
-    bool caseSensitive,
+    bool? multiLine,
+    bool? caseSensitive,
   }) =>
       RegExpMatcher(
         pattern: pattern,

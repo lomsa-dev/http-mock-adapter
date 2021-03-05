@@ -10,7 +10,7 @@ import 'package:http_mock_adapter/src/response.dart';
 /// The handler of requests sent by clients.
 class RequestHandler<T> {
   /// An HTTP status code such as - `200`, `404`, `500`, etc.
-  int statusCode;
+  late int statusCode;
 
   /// Map of <[statusCode], [Responsable]>.
   final Map<int, Responsable Function()> requestMap = {};
@@ -23,8 +23,8 @@ class RequestHandler<T> {
     Map<String, List<String>> headers = const {
       Headers.contentTypeHeader: [Headers.jsonContentType],
     },
-    String statusMessage,
-    bool isRedirect,
+    String? statusMessage,
+    bool isRedirect = false,
   }) {
     this.statusCode = statusCode;
 

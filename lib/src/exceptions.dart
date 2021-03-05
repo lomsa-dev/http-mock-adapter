@@ -47,8 +47,8 @@ class ThrowsException implements Exception {
 /// Wrapper of [Dio]'s [DioError] [Exception].
 class AdapterError extends DioError implements Responsable {
   AdapterError({
-    RequestOptions request,
-    Response response,
+    RequestOptions? request,
+    Response? response,
     DioErrorType type = DioErrorType.other,
     dynamic error,
   }) : super(
@@ -59,9 +59,9 @@ class AdapterError extends DioError implements Responsable {
         );
 
   static AdapterError from(DioError dioError) => AdapterError(
-        request: dioError?.request,
-        response: dioError?.response,
-        type: dioError?.type,
-        error: dioError?.error,
+        request: dioError.request,
+        response: dioError.response,
+        type: dioError.type,
+        error: dioError.error,
       );
 }

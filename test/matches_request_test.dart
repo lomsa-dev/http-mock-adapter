@@ -27,7 +27,7 @@ void main() {
     });
 
     group('matches', () {
-      RequestOptions options;
+      late RequestOptions options;
 
       setUp(() {
         options = RequestOptions(
@@ -125,7 +125,7 @@ void main() {
       });
 
       group('Dio request with matchers', () {
-        Dio dio;
+        late Dio dio;
 
         const data = {'message': 'Test!'};
 

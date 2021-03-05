@@ -3,8 +3,8 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Dio dio;
-  DioAdapter dioAdapter;
+  late Dio dio;
+  late DioAdapter dioAdapter;
 
   Response<dynamic> response;
 
@@ -17,11 +17,8 @@ void main() {
   const statusCode = 200;
 
   setUp(() {
-    dio = Dio();
-
     dioAdapter = DioAdapter();
-
-    dio.httpClientAdapter = dioAdapter;
+    dio = Dio()..httpClientAdapter = dioAdapter;
   });
 
   group('DioAdapter', () {
@@ -38,7 +35,10 @@ void main() {
       test('Test that throws raises custom exception', () async {
         final dioError = DioError(
           error: {'message': 'error'},
-          response: Response(statusCode: 500),
+          response: Response(
+            statusCode: 500,
+            request: RequestOptions(path: '/foo'),
+          ),
           type: DioErrorType.response,
         );
 

@@ -65,12 +65,7 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
     // Throws error if response type is DioError.
     throwError(response);
 
-    AdapterResponse responseBody = response;
-
-    responseBody.headers = responseBody.headers ??
-        const {
-          Headers.contentTypeHeader: [Headers.jsonContentType],
-        };
+    final responseBody = response as AdapterResponse;
 
     return Response(
       data: await DefaultTransformer().transformResponse(options, responseBody),
