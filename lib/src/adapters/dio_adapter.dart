@@ -1,36 +1,26 @@
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 import '../history.dart';
 import '../request.dart';
 
 /// [HttpClientAdapter] extension with data mocking and tracking functionality.
-class DioAdapter extends HttpClientAdapter
-    with RequestRouted, Tracked
-    implements AdapterInterface {
+class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   /// [Dio]`s default HTTP client adapter implementation.
   final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
-
-  /// [DioAdapter]'s private constructor method.
-  DioAdapter._construct();
-
-  /// [DioAdapter]'s singleton instance.
-  static final DioAdapter _dioAdapter = DioAdapter._construct();
-
-  /// Factory method of [DioAdapter] utilized to return [_dioAdapter]
-  /// singleton instance each time it is called.
-  factory DioAdapter() {
-    return _dioAdapter;
-  }
 
   /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
-  RequestHandler onRoute(dynamic route, {Request request = const Request()}) {
-    final requestHandler = RequestHandler<DioAdapter>();
-
+  void onRoute(
+    dynamic route,
+    RequestHandlerCallback callback, {
+    Request request = const Request(),
+  }) {
+    final handler = RequestHandler<DioAdapter>();
+    callback(handler);
     history.data.add(
       RequestMatcher(
         Request(
@@ -40,11 +30,9 @@ class DioAdapter extends HttpClientAdapter
           queryParameters: request.queryParameters,
           headers: request.headers,
         ),
-        requestHandler,
+        handler,
       ),
     );
-
-    return requestHandler;
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.

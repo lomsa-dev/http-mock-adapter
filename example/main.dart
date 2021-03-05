@@ -29,7 +29,10 @@ void main() async {
     test('mocks the data', () async {
       data = {'message': 'Successfully mocked GET!'};
 
-      dioAdapter.onGet('https://api.mocki.io/v1/b043df5a').reply(200, data);
+      dioAdapter.onGet(
+        'https://api.mocki.io/v1/b043df5a',
+        (request) => request.reply(200, data),
+      );
 
       final getResponse = await dio.get('https://api.mocki.io/v1/b043df5a');
 
@@ -39,12 +42,11 @@ void main() async {
     test('mocks the data with onRoute', () async {
       data = {'message': 'Successfully mocked PATCH!'};
 
-      dioAdapter
-          .onRoute(
-            path,
-            request: Request(method: RequestMethods.PATCH, data: payload),
-          )
-          .reply(200, data);
+      dioAdapter.onRoute(
+        path,
+        (request) => request.reply(200, data),
+        request: Request(method: RequestMethods.PATCH, data: payload),
+      );
 
       final patchResponse = await dio.patch(path, data: payload);
 
@@ -66,13 +68,20 @@ void main() async {
     test('mocks the data', () async {
       data = {'message': 'Successfully mocked DELETE!'};
 
-      dioInterceptor.onDelete(path).reply(200, data);
+      dioInterceptor.onDelete(
+        path,
+        (request) => request.reply(200, data),
+      );
 
       final deleteResponse = await dio.delete(path);
 
       expect(deleteResponse.data, data);
 
-      dioInterceptor.onPut(path, data: payload).reply(200, data);
+      dioInterceptor.onPut(
+        path,
+        (request) => request.reply(200, data),
+        data: payload,
+      );
 
       final putResponse = await dio.put(path, data: payload);
 
@@ -98,7 +107,10 @@ void main() async {
         type: DioErrorType.RESPONSE,
       );
 
-      dioAdapter.onGet(path).throws(500, dioError);
+      dioAdapter.onGet(
+        path,
+        (request) => request.throws(500, dioError),
+      );
 
       expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));
       expect(() async => await dio.get(path), throwsA(isA<DioError>()));
