@@ -16,47 +16,60 @@ import 'package:http_mock_adapter/src/types.dart';
 /// autocompletion ability, and that's why both Adapters
 /// implement this interface to provide good developer experience.
 abstract class AdapterInterface {
-  void onGet(
-    dynamic route,
-    RequestHandlerCallback callback, {
-    dynamic data,
-    dynamic headers,
-  });
   void onRoute(
     dynamic route,
     RequestHandlerCallback callback, {
     Request request = const Request(),
   });
+
+  void onGet(
+    dynamic route,
+    RequestHandlerCallback callback, {
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    dynamic headers,
+  });
+
   void onHead(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   });
+
   void onPost(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   });
+
   void onPut(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   });
+
   void onDelete(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   });
+
   void onPatch(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   });
+
   void throwError(Responsable response);
 }
 
