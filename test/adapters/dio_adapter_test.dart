@@ -37,7 +37,7 @@ void main() {
           error: {'message': 'error'},
           response: Response(
             statusCode: 500,
-            request: RequestOptions(path: '/foo'),
+            request: RequestOptions(path: path),
           ),
           type: DioErrorType.response,
         );
@@ -53,10 +53,7 @@ void main() {
           () async => await dio.get(path),
           throwsA(
             predicate(
-              (DioError error) =>
-                  error is DioError &&
-                  error is AdapterError &&
-                  error.message == dioError.error.toString(),
+              (DioError error) => error is DioError && error is AdapterError && error.message == dioError.error.toString(),
             ),
           ),
         );

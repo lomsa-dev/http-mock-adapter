@@ -19,7 +19,7 @@ jobs:
     # available. See https://hub.docker.com/r/google/dart/ for the available
     # images.
     container:
-      image: google/dart:beta
+      image: google/dart:latest
 
     steps:
       - name: Checkout the repository

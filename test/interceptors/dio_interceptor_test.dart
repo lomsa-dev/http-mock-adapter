@@ -46,7 +46,7 @@ void main() {
               type: type,
               response: Response(
                 statusCode: 500,
-                request: RequestOptions(path: '/foo'),
+                request: RequestOptions(path: path),
               ),
               error: error,
             ),
@@ -54,18 +54,13 @@ void main() {
         );
 
         // Checking that exception type can match `AdapterError` type too.
-        expect(() async => await dio.get(path),
-            throwsA(TypeMatcher<AdapterError>()));
+        expect(() async => await dio.get(path), throwsA(TypeMatcher<AdapterError>()));
 
         // Checking that exception type can match `DioError` type too.
-        expect(
-            () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
+        expect(() async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
 
         // Checking the type and the message of the exception.
-        expect(
-            () async => await dio.get(path),
-            throwsA(predicate(
-                (DioError e) => e is DioError && e.message == error)));
+        expect(() async => await dio.get(path), throwsA(predicate((DioError e) => e is DioError && e.message == error)));
       });
 
       test('mocks requests via onRoute() as intended', () async {
