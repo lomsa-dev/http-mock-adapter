@@ -39,6 +39,9 @@ class History {
 
   /// Getter for the current request invocation's [RequestHandler].
   RequestHandler get requestHandler => current.requestHandler;
+
+  /// Clears the [data] list.
+  void reset() => data.clear();
 }
 
 /// An ability that lets a construct to have a [History] instance.
