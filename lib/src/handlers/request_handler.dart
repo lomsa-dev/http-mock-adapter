@@ -41,8 +41,7 @@ class RequestHandler<T> {
   /// and returns [DioAdapter] or [DioInterceptor],
   /// the latter which is utilized for method chaining.
   void throws(int statusCode, DioError dioError) {
-    if (dioError.runtimeType != DioError &&
-        dioError.runtimeType != AdapterError) {
+    if (!(dioError is DioError) && !(dioError is AdapterError)) {
       throw ThrowsException();
     }
 

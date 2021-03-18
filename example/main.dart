@@ -100,9 +100,10 @@ void main() async {
     test('throws custom exception', () async {
       final dioError = DioError(
         error: {'message': 'Some beautiful error!'},
+        requestOptions: RequestOptions(path: '/foo'),
         response: Response(
           statusCode: 500,
-          request: RequestOptions(path: '/foo'),
+          requestOptions: RequestOptions(path: '/foo'),
         ),
         type: DioErrorType.response,
       );

@@ -35,9 +35,10 @@ void main() {
       test('Test that throws raises custom exception', () async {
         final dioError = DioError(
           error: {'message': 'error'},
+          requestOptions: RequestOptions(path: path),
           response: Response(
             statusCode: 500,
-            request: RequestOptions(path: path),
+            requestOptions: RequestOptions(path: path),
           ),
           type: DioErrorType.response,
         );

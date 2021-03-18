@@ -47,7 +47,9 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
     dynamic responseBody = history.responseBody(options);
 
     // throws error if response type is AdapterError
-    throwError(responseBody);
+    if (isError(responseBody)) {
+      throw responseBody as DioError;
+    }
 
     responseBody.headers = responseBody.headers ??
         const {

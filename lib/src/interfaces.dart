@@ -57,7 +57,7 @@ abstract class AdapterInterface {
     dynamic data,
     dynamic headers,
   });
-  void throwError(Responsable response);
+  bool isError(Responsable response);
 }
 
 /// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioError].

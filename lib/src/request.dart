@@ -348,9 +348,5 @@ mixin RequestRouted implements AdapterInterface {
       );
 
   @override
-  void throwError(Responsable response) {
-    if (response is AdapterError) {
-      throw response;
-    }
-  }
+  bool isError(Responsable response) => response is AdapterError;
 }

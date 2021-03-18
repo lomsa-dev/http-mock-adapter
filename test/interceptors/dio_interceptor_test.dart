@@ -44,9 +44,10 @@ void main() {
             500,
             AdapterError(
               type: type,
+              requestOptions: RequestOptions(path: path),
               response: Response(
                 statusCode: 500,
-                request: RequestOptions(path: path),
+                requestOptions: RequestOptions(path: path),
               ),
               error: error,
             ),

@@ -59,22 +59,25 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
   /// Dio [Interceptor]`s [onRequest] configuration intended to catch and return
   /// mocked request and data respectively.
   @override
-  Future<Response<dynamic>> onRequest(options) async {
+  void onRequest(options, handler) async {
     final response = history.responseBody(options);
 
-    // Throws error if response type is DioError.
-    throwError(response);
+    // Reject the response if type is AdapterError.
+    if (isError(response)) {
+      handler.reject(response as DioError);
+      return;
+    }
 
     final responseBody = response as AdapterResponse;
 
-    return Response(
+    handler.resolve(Response(
       data: await DefaultTransformer().transformResponse(options, responseBody),
       headers: Headers.fromMap(responseBody.headers),
       isRedirect: responseBody.isRedirect,
       redirects: responseBody.redirects ?? [],
-      request: options,
+      requestOptions: options,
       statusCode: responseBody.statusCode,
       statusMessage: responseBody.statusMessage,
-    );
+    ));
   }
 }
