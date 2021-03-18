@@ -11,9 +11,7 @@ void main() {
       final options = RequestOptions(
         path: path,
         method: 'GET',
-        // Necessary or is set to null.
         contentType: Headers.jsonContentType,
-        headers: {Headers.contentTypeHeader: Headers.jsonContentType},
         queryParameters: {},
       );
 
@@ -34,7 +32,6 @@ void main() {
           path: path,
           method: 'GET',
           contentType: Headers.jsonContentType,
-          headers: {Headers.contentTypeHeader: Headers.jsonContentType},
           queryParameters: {},
         );
       });
