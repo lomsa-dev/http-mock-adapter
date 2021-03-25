@@ -8,6 +8,7 @@ import 'matchers/integer_test.dart' as integer_test;
 import 'matchers/number_test.dart' as number_test;
 import 'matchers/regexp_test.dart' as regexp_test;
 import 'matchers/string_test.dart' as string_test;
+import 'history_test.dart' as history_test;
 import 'matches_request_test.dart' as matches_request_test;
 import 'utils_test.dart' as utils_test;
 
@@ -27,6 +28,9 @@ void main() {
   number_test.main();
   regexp_test.main();
   string_test.main();
+
+  // History.
+  history_test.main();
 
   // Matches request.
   matches_request_test.main();
