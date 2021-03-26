@@ -125,6 +125,26 @@ void main() {
         await testDioAdapter(() => dio.patch(path), data);
       });
 
+      test('mocks requests with query parameters', () async {
+        const books = [
+          {'name': 'First Book'},
+          {'name': 'Second Book'},
+        ];
+
+        dioAdapter.onGet(
+          '/search',
+          (request) => request.reply(200, books),
+          queryParameters: {'query': 'book'},
+        );
+
+        response = await dio.get(
+          '/search',
+          queryParameters: {'query': 'book'},
+        );
+
+        expect(books, response.data);
+      });
+
       test('mocks multiple requests sequentially as intended', () async {
         dioAdapter.onPost(
           '/route',

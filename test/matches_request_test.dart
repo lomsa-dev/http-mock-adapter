@@ -17,10 +17,10 @@ void main() {
         queryParameters: {},
       );
 
-      const request = Request(
+      final request = Request(
         route: path,
-        method: RequestMethods.GET,
-        queryParameters: {},
+        method: RequestMethods.get,
+        queryParameters: <String, dynamic>{},
       );
 
       expect(options.matchesRequest(request), true);
