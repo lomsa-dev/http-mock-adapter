@@ -42,7 +42,7 @@ void main() async {
       dioAdapter.onRoute(
         path,
         (request) => request.reply(200, data),
-        request: Request(method: RequestMethods.PATCH, data: payload),
+        request: Request(method: RequestMethods.patch, data: payload),
       );
 
       final patchResponse = await dio.patch(path, data: payload);

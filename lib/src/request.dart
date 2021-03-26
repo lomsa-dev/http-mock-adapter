@@ -13,7 +13,7 @@ class Request {
   /// This is the route specified by the client- expected to be [String] or [RegExp].
   final dynamic route;
 
-  /// An HTTP method such as [RequestMethods.GET] or [RequestMethods.POST].
+  /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
   final RequestMethods method;
 
   /// The payload.
@@ -27,14 +27,16 @@ class Request {
 
   const Request({
     this.route,
-    this.method = RequestMethods.GET,
+    this.method = RequestMethods.get,
     this.data,
-    this.queryParameters = const {},
-    this.headers = const {
-      Headers.contentTypeHeader: Headers.jsonContentType,
-      Headers.contentLengthHeader: Matchers.integer,
-    },
-  });
+    queryParameters,
+    headers,
+  })  : queryParameters = queryParameters ?? const {},
+        headers = headers ??
+            const {
+              Headers.contentTypeHeader: Headers.jsonContentType,
+              Headers.contentLengthHeader: Matchers.integer,
+            };
 
   /// [signature] is the [String] representation of the [Request]'s body.
   String get signature =>
@@ -200,149 +202,161 @@ class RequestMatcher {
 
 /// HTTP methods.
 enum RequestMethods {
-  /// The [GET] method requests a representation of the specified resource.
-  /// Requests using [GET] should only retrieve data.
-  GET,
+  /// The [get] method requests a representation of the specified resource.
+  /// Requests using [get] should only retrieve data.
+  get,
 
-  /// The [HEAD] method asks for a response identical to that of a [GET] request,
+  /// The [head] method asks for a response identical to that of a [get] request,
   /// but without the response body.
-  HEAD,
+  head,
 
-  /// The [POST] method is used to submit an entity to the specified resource,
+  /// The [post] method is used to submit an entity to the specified resource,
   /// often causing a change in state or side effects on the server.
-  POST,
+  post,
 
-  /// The [PUT] method replaces all current representations of the
+  /// The [put] method replaces all current representations of the
   /// target resource with the request payload.
-  PUT,
+  put,
 
-  /// The [DELETE] method deletes the specified resource.
-  DELETE,
+  /// The [delete] method deletes the specified resource.
+  delete,
 
-  /// The [PATCH] method is used to apply partial modifications to a resource.
-  PATCH,
+  /// The [patch] method is used to apply partial modifications to a resource.
+  patch,
 }
 
 /// [ValueToString] extension method grants [RequestMethods] enumeration
 /// the ability to obtain [String] type depictions of enumeration's values.
 extension ValueToString on RequestMethods {
   /// Gets the [String] depiction of the current value.
-  String get value => toString().split('.').last;
+  String get value => toString().split('.').last.toUpperCase();
 }
 
 /// [RequestRouted] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
 mixin RequestRouted implements AdapterInterface {
-  /// Takes in a route, requests with [RequestMethods.GET],
+  /// Takes in a route, requests with [RequestMethods.get],
   /// and sets corresponding [RequestHandler].
   @override
   void onGet(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.GET,
+          method: RequestMethods.get,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
 
-  /// Takes in a route, requests with [RequestMethods.HEAD],
+  /// Takes in a route, requests with [RequestMethods.head],
   /// and sets corresponding [RequestHandler].
   @override
   void onHead(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.HEAD,
+          method: RequestMethods.head,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
 
-  /// Takes in a route, requests with [RequestMethods.POST],
+  /// Takes in a route, requests with [RequestMethods.post],
   /// and sets corresponding [RequestHandler].
   @override
   void onPost(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.POST,
+          method: RequestMethods.post,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
 
-  /// Takes in a route, requests with [RequestMethods.PUT],
+  /// Takes in a route, requests with [RequestMethods.put],
   /// and sets corresponding [RequestHandler].
   @override
   void onPut(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.PUT,
+          method: RequestMethods.put,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
 
-  /// Takes in a route, requests with [RequestMethods.DELETE],
+  /// Takes in a route, requests with [RequestMethods.delete],
   /// and sets corresponding [RequestHandler].
   @override
   void onDelete(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.DELETE,
+          method: RequestMethods.delete,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
 
-  /// Takes in a route, requests with [RequestMethods.PATCH],
+  /// Takes in a route, requests with [RequestMethods.patch],
   /// and sets corresponding [RequestHandler].
   @override
   void onPatch(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
+    Map<String, dynamic> queryParameters,
     dynamic headers,
   }) =>
       onRoute(
         route,
         callback,
         request: Request(
-          method: RequestMethods.PATCH,
+          method: RequestMethods.patch,
           data: data,
+          queryParameters: queryParameters,
           headers: headers,
         ),
       );
