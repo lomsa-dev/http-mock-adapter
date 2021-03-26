@@ -39,24 +39,14 @@ class Request {
             };
 
   /// [signature] is the [String] representation of the [Request]'s body.
-  String get signature =>
-      '$route/${method.value}/' +
-      sortedData(data) +
-      '/' +
-      sortedData(queryParameters) +
-      '/$headers';
+  String get signature => '$route/${method.value}/' + sortedData(data) + '/' + sortedData(queryParameters) + '/$headers';
 }
 
 /// [Signature] extension method adds [signature] getter to [RequestOptions]
 /// in order to easily retrieve [Request]'s body representation as [String].
 extension Signature on RequestOptions {
   /// [signature] is the [String] representation of the [RequestOptions]'s body.
-  String get signature =>
-      '$path/$method/' +
-      sortedData(data) +
-      '/' +
-      sortedData(queryParameters) +
-      '/$headers';
+  String get signature => '$path/$method/' + sortedData(data) + '/' + sortedData(queryParameters) + '/$headers';
 }
 
 /// [sortedData] sorts request [Signature]'s and [Request.signature]'s 'data'
@@ -85,22 +75,13 @@ extension MatchesRequest on RequestOptions {
     final routeMatched = doesRouteMatch(path, request.route);
     final requestBodyMatched = matches(data, request.data);
 
-    final queryParametersMatched =
-        matches(queryParameters, request.queryParameters);
+    final queryParametersMatched = matches(queryParameters, request.queryParameters);
 
     // dio adds headers to the request when none aare specified
-    final requestHeaders = request.headers ??
-        {
-          Headers.contentTypeHeader: Headers.jsonContentType,
-          Headers.contentLengthHeader: Matchers.number
-        };
+    final requestHeaders = request.headers ?? {Headers.contentTypeHeader: Headers.jsonContentType, Headers.contentLengthHeader: Matchers.number};
     final headersMatched = matches(headers, requestHeaders);
 
-    if (!routeMatched ||
-        method != request.method.value ||
-        !requestBodyMatched ||
-        !queryParametersMatched ||
-        !headersMatched) {
+    if (!routeMatched || method != request.method.value || !requestBodyMatched || !queryParametersMatched || !headersMatched) {
       return false;
     }
 
@@ -242,7 +223,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -263,7 +244,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -284,7 +265,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -305,7 +286,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -326,7 +307,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -347,7 +328,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
