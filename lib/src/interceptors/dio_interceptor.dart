@@ -25,7 +25,7 @@ import 'package:http_mock_adapter/src/types.dart';
 /// .reply("response for route 2")
 /// .onPatch("/route-3")
 /// .reply("response for route 3")
-/// // adding interceptor inside the [Dio]'s interceptors
+/// adding interceptor inside the [Dio]'s interceptors
 /// dio.interceptors.add(interceptor);
 /// ```
 /// If you now make request like this `dio.get("/route-1");`
