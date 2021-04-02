@@ -5,17 +5,14 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Dio dio;
-  DioAdapter dioAdapter;
+  late Dio dio;
+  late DioAdapter dioAdapter;
 
   const path = 'https://example.com';
 
   setUpAll(() {
-    dio = Dio();
-
     dioAdapter = DioAdapter();
-
-    dio.httpClientAdapter = dioAdapter;
+    dio = Dio()..httpClientAdapter = dioAdapter;
   });
 
   group('History', () {

@@ -5,15 +5,15 @@ import 'package:http_mock_adapter/src/types.dart';
 /// Intended to keep track of request history.
 class History {
   /// The index of request invocations.
-  int _requestInvocationIndex;
+  int? _requestInvocationIndex;
 
-  RequestMatcher requestMatcher;
+  RequestMatcher? requestMatcher;
 
   /// The history content containing [RequestMatcher] objects.
   List<RequestMatcher> data = [];
 
   /// Gets current [RequestMatcher].
-  RequestMatcher get current => data[_requestInvocationIndex];
+  RequestMatcher get current => data[_requestInvocationIndex!];
 
   /// Getter for the current request invocation's intended [responseBody].
   AdapterResponseBody get responseBody => (options) {
@@ -28,13 +28,13 @@ class History {
         });
 
         // Fail when a mocked route is not found for the request.
-        if (_requestInvocationIndex == null || _requestInvocationIndex < 0) {
+        if (_requestInvocationIndex == null || _requestInvocationIndex! < 0) {
           throw AssertionError(
             'Could not find mocked route matching request for ${options.signature}',
           );
         }
 
-        return current.responseBody();
+        return current.responseBody!();
       };
 
   /// Getter for the current request invocation's [RequestHandler].

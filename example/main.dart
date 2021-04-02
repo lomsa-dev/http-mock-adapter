@@ -5,7 +5,7 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  Dio dio;
+  late Dio dio;
 
   Map<String, dynamic> data;
 
@@ -16,14 +16,11 @@ void main() async {
   const path = 'https://example.com';
 
   group('DioAdapter', () {
-    DioAdapter dioAdapter;
+    late DioAdapter dioAdapter;
 
     setUpAll(() {
-      dio = Dio();
-
       dioAdapter = DioAdapter();
-
-      dio.httpClientAdapter = dioAdapter;
+      dio = Dio()..httpClientAdapter = dioAdapter;
     });
 
     test('mocks the data', () async {
@@ -55,7 +52,7 @@ void main() async {
   });
 
   group('DioInterceptor', () {
-    DioInterceptor dioInterceptor;
+    late DioInterceptor dioInterceptor;
 
     setUpAll(() {
       dio = Dio();
@@ -90,7 +87,7 @@ void main() async {
   });
 
   group('AdapterError/DioError', () {
-    DioAdapter dioAdapter;
+    late DioAdapter dioAdapter;
 
     setUpAll(() {
       dio = Dio();
@@ -103,8 +100,12 @@ void main() async {
     test('throws custom exception', () async {
       final dioError = DioError(
         error: {'message': 'Some beautiful error!'},
-        response: Response(statusCode: 500),
-        type: DioErrorType.RESPONSE,
+        requestOptions: RequestOptions(path: '/foo'),
+        response: Response(
+          statusCode: 500,
+          requestOptions: RequestOptions(path: '/foo'),
+        ),
+        type: DioErrorType.response,
       );
 
       dioAdapter.onGet(

@@ -6,17 +6,14 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 void main() {
-  Dio dio;
-  DioAdapterMockito dioAdapterMockito;
+  late Dio dio;
+  late DioAdapterMockito dioAdapterMockito;
 
   Response<dynamic> response;
 
   setUpAll(() {
-    dio = Dio();
-
     dioAdapterMockito = DioAdapterMockito();
-
-    dio.httpClientAdapter = dioAdapterMockito;
+    dio = Dio()..httpClientAdapter = dioAdapterMockito;
   });
 
   group('DioAdapterMockito', () {

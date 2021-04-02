@@ -7,13 +7,13 @@ class RegExpMatcher extends Matcher {
   final RegExp regExp;
 
   RegExpMatcher({
-    String pattern,
+    String? pattern,
     bool multiLine = false,
     bool caseSensitive = false,
-    RegExp regExp,
+    RegExp? regExp,
   }) : regExp = regExp ??
             RegExp(
-              pattern,
+              pattern!,
               multiLine: multiLine,
               caseSensitive: caseSensitive,
             );

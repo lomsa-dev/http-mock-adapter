@@ -1,10 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/history.dart';
+import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/types.dart';
-
-import '../history.dart';
-import '../request.dart';
 
 /// [HttpClientAdapter] extension with data mocking and tracking functionality.
 class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
@@ -40,13 +41,15 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   @override
   Future<ResponseBody> fetch(
     RequestOptions options,
-    Stream<List<int>> requestStream,
-    Future cancelFuture,
+    Stream<Uint8List>? requestStream,
+    Future? cancelFuture,
   ) async {
     dynamic responseBody = history.responseBody(options);
 
     // throws error if response type is AdapterError
-    throwError(responseBody);
+    if (isError(responseBody)) {
+      throw responseBody as DioError;
+    }
 
     responseBody.headers = responseBody.headers ??
         const {

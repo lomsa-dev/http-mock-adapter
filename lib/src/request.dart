@@ -23,7 +23,7 @@ class Request {
   final Map<String, dynamic> queryParameters;
 
   /// Headers to encompass content-types.
-  final Map<String, dynamic> headers;
+  final Map<String, dynamic>? headers;
 
   const Request({
     this.route,
@@ -68,7 +68,7 @@ extension Signature on RequestOptions {
 /// by [DioInterceptor].
 String sortedData(dynamic data) {
   if (data is Map) {
-    final sortedKeys = data.keys.toList()..sort();
+    final dynamic sortedKeys = data.keys.toList()..sort();
 
     data = {for (final sortedKey in sortedKeys) sortedKey: data[sortedKey]};
   }
@@ -88,7 +88,7 @@ extension MatchesRequest on RequestOptions {
     final queryParametersMatched =
         matches(queryParameters, request.queryParameters);
 
-    // dio adds headers to the requeset when none aare specified
+    // dio adds headers to the request when none aare specified
     final requestHeaders = request.headers ??
         {
           Headers.contentTypeHeader: Headers.jsonContentType,
@@ -191,7 +191,7 @@ class RequestMatcher {
   final RequestHandler requestHandler;
 
   /// This is an artificial response body to the request.
-  Responsable Function() responseBody;
+  Responsable Function()? responseBody;
 
   RequestMatcher(
     this.request,
@@ -242,7 +242,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -263,7 +263,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -284,7 +284,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -305,7 +305,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -326,7 +326,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -347,7 +347,7 @@ mixin RequestRouted implements AdapterInterface {
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
+    Map<String, dynamic> queryParameters = const {},
     dynamic headers,
   }) =>
       onRoute(
@@ -362,11 +362,5 @@ mixin RequestRouted implements AdapterInterface {
       );
 
   @override
-  void throwError(Responsable response) {
-    if (response.runtimeType == AdapterError) {
-      AdapterError error = response;
-
-      throw error;
-    }
-  }
+  bool isError(Responsable response) => response is AdapterError;
 }
