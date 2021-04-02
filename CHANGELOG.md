@@ -12,6 +12,33 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.2.0] (2021-04-02)
+
+- **Added**
+  - Null safety.
+
+## [v0.1.6] (2021-03-30)
+
+- **Added**
+  - Ability to match routes based on pattern;
+  - Tests;
+  - Straightforward way to reset history;
+  - Query parameters to `RequestRouted`'s methods.
+
+- **Fixed**
+  - `Response` problems regarding closed streams.
+
+- **Removed**
+  - Singleton instances of `DioAdapter` and `DioInterceptor`;
+
+- **Updated**
+  - `Match` variable names;
+  - `matches` function to include null check;
+  - `.gitignore` now includes `pubspec.lock`;
+  - Request mock method chaining variation.
+
+---
+
 ## [v0.1.5] (2021-01-07)
 
 - **Added**
@@ -102,6 +129,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License.
 
+[v0.2.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/24cafff5236f8cc7d52a05529751ac47abd895ff...f138e738dea358a386537adfb9df3e1c5dc79c0c
+[v0.1.6]: https://github.com/lomsa-dev/http-mock-adapter/compare/ff0b5b1c9d976e774002f3176fa0b6acd193c715...24cafff5236f8cc7d52a05529751ac47abd895ff
 [v0.1.5]: https://github.com/lomsa-dev/http-mock-adapter/compare/19310519550fc6402eb760ee5f3ef0757d187b89...ff0b5b1c9d976e774002f3176fa0b6acd193c715
 [v0.1.4]: https://github.com/lomsa-dev/http-mock-adapter/compare/21f5d211b8a798206fe4a727bff3a60eb8e3dcaf...19310519550fc6402eb760ee5f3ef0757d187b89
 [v0.1.3]: https://github.com/lomsa-dev/http-mock-adapter/compare/c0ab40ed59d3898ebf03d706b25ca8b91c2d065d...21f5d211b8a798206fe4a727bff3a60eb8e3dcaf
