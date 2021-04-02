@@ -12,6 +12,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.2.1] (2021-04-02)
+
+- **Removed**
+  - Unused and artificially deprecated code.
+
+- **Updated**
+  - CI workflow;
+  - Packages.
+
 ## [v0.2.0] (2021-04-02)
 
 - **Added**
@@ -129,6 +138,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License.
 
+[v0.2.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/f138e738dea358a386537adfb9df3e1c5dc79c0c...ec13a0f1ca3cb0fd56620832a79db5ab04ad8742
 [v0.2.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/24cafff5236f8cc7d52a05529751ac47abd895ff...f138e738dea358a386537adfb9df3e1c5dc79c0c
 [v0.1.6]: https://github.com/lomsa-dev/http-mock-adapter/compare/ff0b5b1c9d976e774002f3176fa0b6acd193c715...24cafff5236f8cc7d52a05529751ac47abd895ff
 [v0.1.5]: https://github.com/lomsa-dev/http-mock-adapter/compare/19310519550fc6402eb760ee5f3ef0757d187b89...ff0b5b1c9d976e774002f3176fa0b6acd193c715
