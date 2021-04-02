@@ -10,7 +10,6 @@ import 'matchers/regexp_test.dart' as regexp_test;
 import 'matchers/string_test.dart' as string_test;
 import 'history_test.dart' as history_test;
 import 'matches_request_test.dart' as matches_request_test;
-import 'utils_test.dart' as utils_test;
 
 void main() {
   // Adapters.
@@ -34,7 +33,4 @@ void main() {
 
   // Matches request.
   matches_request_test.main();
-
-  // Utils.
-  utils_test.main();
 }
