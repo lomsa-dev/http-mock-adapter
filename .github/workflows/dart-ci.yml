@@ -10,20 +10,17 @@ on:
 jobs:
   ci:
     name: Build, format, analyze and test the package
-
-    # This job will run on Ubuntu virtual machine.
-    runs-on: ubuntu-latest
-
-    # Note that this workflow uses the latest stable version of the Dart SDK.
-    # Docker images for other release channels - like dev and beta - are also
-    # available. See https://hub.docker.com/r/google/dart/ for the available
-    # images.
-    container:
-      image: google/dart:latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@v1
 
       - name: Print Dart SDK version
         run: dart --version
