@@ -49,10 +49,10 @@ void main() async {
       );
 
   final getResponse = await dio.get(path);
-  print(onGetResponse.data); // {message: Successfully mocked GET!}
+  print(getResponse.data); // {message: Successfully mocked GET!}
 
   final postResponse = await dio.post(path);
-  print(onPostResponse.data); // {message: Successfully mocked POST!}
+  print(postResponse.data); // {message: Successfully mocked POST!}
 }
 ```
 
