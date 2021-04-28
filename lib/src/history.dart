@@ -17,6 +17,7 @@ class History {
 
   /// Getter for the current request invocation's intended [responseBody].
   AdapterResponseBody get responseBody => (options) {
+        _requestInvocationIndex = null;
         data.forEach((element) {
           if (options.signature == element.request.signature ||
               options.matchesRequest(element.request)) {
