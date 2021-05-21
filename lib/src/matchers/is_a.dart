@@ -1,6 +1,7 @@
 import 'package:http_mock_adapter/src/matchers/matcher.dart';
 
-/// Subclass of [Matcher] that always returns true when calling [matches].
+/// Subclass of [Matcher] that only returns true upon calling
+/// [matches] if provided with a instance having the same type [T].
 class IsAMatcher<T> extends Matcher {
   const IsAMatcher();
 
