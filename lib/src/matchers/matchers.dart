@@ -1,18 +1,25 @@
+import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/matchers/any.dart';
 import 'package:http_mock_adapter/src/matchers/boolean.dart';
 import 'package:http_mock_adapter/src/matchers/decimal.dart';
+import 'package:http_mock_adapter/src/matchers/form_data.dart';
 import 'package:http_mock_adapter/src/matchers/integer.dart';
+import 'package:http_mock_adapter/src/matchers/is_a.dart';
 import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:http_mock_adapter/src/matchers/number.dart';
 import 'package:http_mock_adapter/src/matchers/regexp.dart';
 import 'package:http_mock_adapter/src/matchers/string.dart';
 
+export 'package:http_mock_adapter/src/matchers/matcher.dart';
 export 'package:http_mock_adapter/src/matchers/matchers.dart' show Matchers;
 
 /// [Matchers] is an interface for various [Matcher] types.
 class Matchers {
   /// [any] matches any typed value.
   static const AnyMatcher any = AnyMatcher();
+
+  /// [isA] matches any value of type [T].
+  static IsAMatcher<T> isA<T>() => IsAMatcher<T>();
 
   /// [boolean] matches any [bool] alike value.
   static const BooleanMatcher boolean = BooleanMatcher(strict: false);
@@ -50,6 +57,13 @@ class Matchers {
   /// [regExp] matches value by utilizing [RegExp] through building it via
   /// [RegExp] typed regular expression.
   static RegExpMatcher regExp(RegExp regExp) => RegExpMatcher(regExp: regExp);
+
+  /// [formData] matches against the expected [FormData]
+  /// by comparing filename, contentType and length.
+  ///
+  /// Does NOT compare file contents.
+  static FormDataMatcher formData(FormData expected) =>
+      FormDataMatcher(expected: expected);
 
   const Matchers._();
 }
