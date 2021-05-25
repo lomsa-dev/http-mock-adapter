@@ -13,25 +13,22 @@ class FormDataMatcher extends Matcher {
   const FormDataMatcher({required this.expected});
 
   @override
-  bool matches(dynamic actual) {
-    if (actual is! FormData) {
-      return false;
-    }
-    return MapEquality<String, String>().equals(
-          Map.fromEntries(expected.fields),
-          Map.fromEntries(actual.fields),
-        ) &&
-        MapEquality<String, MultipartFile>(
-          values: MultiEquality([
-            EqualityBy<MultipartFile, String?>((file) => file.filename),
-            EqualityBy<MultipartFile, MediaType?>((file) => file.contentType),
-            EqualityBy<MultipartFile, int?>((file) => file.length),
-          ]),
-        ).equals(
-          Map.fromEntries(expected.files),
-          Map.fromEntries(actual.files),
-        );
-  }
+  bool matches(dynamic actual) =>
+      actual is FormData &&
+      MapEquality<String, String>().equals(
+        Map.fromEntries(expected.fields),
+        Map.fromEntries(actual.fields),
+      ) &&
+      MapEquality<String, MultipartFile>(
+        values: MultiEquality([
+          EqualityBy<MultipartFile, String?>((file) => file.filename),
+          EqualityBy<MultipartFile, MediaType?>((file) => file.contentType),
+          EqualityBy<MultipartFile, int?>((file) => file.length),
+        ]),
+      ).equals(
+        Map.fromEntries(expected.files),
+        Map.fromEntries(actual.files),
+      );
 
   @override
   String toString() =>
