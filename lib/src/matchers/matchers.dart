@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:dio/src/parameter.dart';
 import 'package:http_mock_adapter/src/matchers/any.dart';
 import 'package:http_mock_adapter/src/matchers/boolean.dart';
 import 'package:http_mock_adapter/src/matchers/decimal.dart';
 import 'package:http_mock_adapter/src/matchers/form_data.dart';
 import 'package:http_mock_adapter/src/matchers/integer.dart';
 import 'package:http_mock_adapter/src/matchers/is_a.dart';
+import 'package:http_mock_adapter/src/matchers/list_param.dart';
 import 'package:http_mock_adapter/src/matchers/matcher.dart';
 import 'package:http_mock_adapter/src/matchers/number.dart';
 import 'package:http_mock_adapter/src/matchers/regexp.dart';
@@ -64,6 +66,11 @@ class Matchers {
   /// Does NOT compare file contents.
   static FormDataMatcher formData(FormData expected) =>
       FormDataMatcher(expected: expected);
+
+  /// [listParam] matches against the expected [ListParam]
+  /// by comparing values and [ListFormat].
+  static ListParamMatcher<T> listParam<T>(ListParam<T> expected) =>
+      ListParamMatcher(expected: expected);
 
   const Matchers._();
 }
