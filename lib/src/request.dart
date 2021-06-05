@@ -238,14 +238,15 @@ mixin RequestRouted implements AdapterInterface {
   /// Takes in a route, requests with [RequestMethods.get],
   /// and sets corresponding [RequestHandler].
   @override
-  void onGet(
+  Future<void> onGet(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -254,19 +255,21 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   /// Takes in a route, requests with [RequestMethods.head],
   /// and sets corresponding [RequestHandler].
   @override
-  void onHead(
+  Future<void> onHead(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -275,19 +278,21 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   /// Takes in a route, requests with [RequestMethods.post],
   /// and sets corresponding [RequestHandler].
   @override
-  void onPost(
+  Future<void> onPost(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -296,19 +301,21 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   /// Takes in a route, requests with [RequestMethods.put],
   /// and sets corresponding [RequestHandler].
   @override
-  void onPut(
+  Future<void> onPut(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -317,19 +324,21 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   /// Takes in a route, requests with [RequestMethods.delete],
   /// and sets corresponding [RequestHandler].
   @override
-  void onDelete(
+  Future<void> onDelete(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -338,19 +347,21 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   /// Takes in a route, requests with [RequestMethods.patch],
   /// and sets corresponding [RequestHandler].
   @override
-  void onPatch(
+  Future<void> onPatch(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters = const {},
     dynamic headers,
-  }) =>
-      onRoute(
+    Duration delay = Duration.zero,
+  }) async =>
+      await onRoute(
         route,
         callback,
         request: Request(
@@ -359,8 +370,10 @@ mixin RequestRouted implements AdapterInterface {
           queryParameters: queryParameters,
           headers: headers,
         ),
+        delay: delay,
       );
 
   @override
   bool isError(Responsable response) => response is AdapterError;
 }
+

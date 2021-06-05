@@ -16,13 +16,41 @@ import 'package:http_mock_adapter/src/types.dart';
 /// autocompletion ability, and that's why both Adapters
 /// implement this interface to provide good developer experience.
 abstract class AdapterInterface {
-  void onRoute(
+  Future<void> onRoute(
     dynamic route,
     RequestHandlerCallback callback, {
     Request request = const Request(),
+    Duration delay,
   });
 
-  void onGet(
+  Future<void> onGet(
+    dynamic route,
+    RequestHandlerCallback callback, {
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    dynamic headers,
+    Duration delay,
+  });
+
+  Future<void> onHead(
+    dynamic route,
+    RequestHandlerCallback callback, {
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    dynamic headers,
+    Duration delay,
+  });
+
+  Future<void> onPost(
+    dynamic route,
+    RequestHandlerCallback callback, {
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    dynamic headers,
+    Duration delay,
+  });
+
+  Future<void> onPut(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
@@ -30,44 +58,22 @@ abstract class AdapterInterface {
     dynamic headers,
   });
 
-  void onHead(
+  Future<void> onDelete(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters,
     dynamic headers,
+    Duration delay,
   });
 
-  void onPost(
+  Future<void> onPatch(
     dynamic route,
     RequestHandlerCallback callback, {
     dynamic data,
     Map<String, dynamic> queryParameters,
     dynamic headers,
-  });
-
-  void onPut(
-    dynamic route,
-    RequestHandlerCallback callback, {
-    dynamic data,
-    Map<String, dynamic> queryParameters,
-    dynamic headers,
-  });
-
-  void onDelete(
-    dynamic route,
-    RequestHandlerCallback callback, {
-    dynamic data,
-    Map<String, dynamic> queryParameters,
-    dynamic headers,
-  });
-
-  void onPatch(
-    dynamic route,
-    RequestHandlerCallback callback, {
-    dynamic data,
-    Map<String, dynamic> queryParameters,
-    dynamic headers,
+    Duration delay,
   });
   bool isError(Responsable response);
 }
@@ -76,3 +82,4 @@ abstract class AdapterInterface {
 /// This interface makes sure that we can save [DioError] and [ResponseBody]
 /// inside the same list.
 abstract class Responsable {}
+

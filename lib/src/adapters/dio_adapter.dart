@@ -15,11 +15,13 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
-  void onRoute(
+  Future<void> onRoute(
     dynamic route,
     RequestHandlerCallback callback, {
     Request request = const Request(),
-  }) {
+    Duration delay = Duration.zero,
+  }) async {
+    await Future.delayed(delay);
     final handler = RequestHandler<DioAdapter>();
     callback(handler);
     history.data.add(
@@ -64,3 +66,4 @@ class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
   void close({bool force = false}) =>
       _defaultHttpClientAdapter.close(force: force);
 }
+

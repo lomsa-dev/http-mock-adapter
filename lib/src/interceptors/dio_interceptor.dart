@@ -34,14 +34,15 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
   /// Takes in route, request, sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [History.data].
   @override
-  void onRoute(
+  Future<void> onRoute(
     dynamic route,
     RequestHandlerCallback callback, {
     Request request = const Request(),
-  }) {
+    Duration delay = Duration.zero,
+  }) async {
+    await Future.delayed(delay);
     final handler = RequestHandler<DioInterceptor>();
     callback(handler);
-
     history.data.add(
       RequestMatcher(
         Request(
@@ -81,3 +82,4 @@ class DioInterceptor extends Interceptor with Tracked, RequestRouted {
     ));
   }
 }
+

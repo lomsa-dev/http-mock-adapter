@@ -11,11 +11,12 @@ import 'package:mockito/mockito.dart';
 /// [Mock]ed version of [DioAdapter].
 class DioAdapterMockito extends Mock implements DioAdapter {
   @override
-  void onRoute(
+  Future<void> onRoute(
     dynamic route,
     RequestHandlerCallback callback, {
     Request request = const Request(),
-  }) =>
+    Duration delay = Duration.zero,
+  }) async =>
       super.noSuchMethod(Invocation.method(#onRoute, [
         route,
         request,
@@ -40,8 +41,8 @@ class DioAdapterMockito extends Mock implements DioAdapter {
           )));
 
   @override
-  void close({bool? force = false}) =>
-      super.noSuchMethod(Invocation.method(#close, [
-        force,
-      ]));
+  void close({bool? force = false}) => super.noSuchMethod(
+        Invocation.method(#close, [force]),
+      );
 }
+
