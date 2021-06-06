@@ -1,5 +1,6 @@
 import 'adapters/dio_adapter_mockito_test.dart' as dio_adapter_mockito_test;
 import 'adapters/dio_adapter_test.dart' as dio_adapter_test;
+import 'handlers/request_handler_test.dart' as request_handler_test;
 import 'interceptors/dio_interceptor_test.dart' as dio_interceptor_test;
 import 'matchers/any_test.dart' as any_test;
 import 'matchers/boolean_test.dart' as boolean_test;
@@ -15,6 +16,9 @@ void main() {
   // Adapters.
   dio_adapter_mockito_test.main();
   dio_adapter_test.main();
+
+  // Handlers.
+  request_handler_test.main();
 
   // Interceptors.
   dio_interceptor_test.main();

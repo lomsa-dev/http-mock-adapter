@@ -27,9 +27,12 @@ class RequestHandler<T> {
     bool isRedirect = false,
   }) {
     this.statusCode = statusCode;
+    final isJson =
+        headers[Headers.contentTypeHeader]?.contains(Headers.jsonContentType) ??
+            false;
 
     requestMap[this.statusCode] = () => AdapterResponse.from(
-          jsonEncode(data),
+          isJson ? jsonEncode(data) : data,
           this.statusCode,
           headers: headers,
           statusMessage: statusMessage,
