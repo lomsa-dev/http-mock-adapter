@@ -15,7 +15,7 @@ void main() {
         queryParameters: {},
       );
 
-      final request = Request(
+      const request = Request(
         route: path,
         method: RequestMethods.get,
         queryParameters: <String, dynamic>{},

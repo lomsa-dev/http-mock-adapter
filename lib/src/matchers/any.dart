@@ -8,5 +8,5 @@ class AnyMatcher extends Matcher {
   bool matches(dynamic actual) => true;
 
   @override
-  String toString() => 'AnyMatcher';
+  String toString() => 'AnyMatcher {}';
 }

@@ -86,7 +86,7 @@ void main() async {
     });
   });
 
-  group('AdapterError/DioError', () {
+  group('MockDioError/DioError', () {
     late DioAdapter dioAdapter;
 
     setUpAll(() {
@@ -113,7 +113,7 @@ void main() async {
         (request) => request.throws(500, dioError),
       );
 
-      expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));
+      expect(() async => await dio.get(path), throwsA(isA<MockDioError>()));
       expect(() async => await dio.get(path), throwsA(isA<DioError>()));
       expect(
         () async => await dio.get(path),
@@ -121,7 +121,7 @@ void main() async {
           predicate(
             (DioError error) =>
                 error is DioError &&
-                error is AdapterError &&
+                error is MockDioError &&
                 error.message == dioError.error.toString(),
           ),
         ),

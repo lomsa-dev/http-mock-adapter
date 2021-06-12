@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
+
+/// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioError].
+/// This interface makes sure that we can save [DioError] and [ResponseBody]
+/// inside the same list.
+abstract class MockResponse {}
 
 /// Wrapper of [Dio]'s [ResponseBody].
-class AdapterResponse extends ResponseBody implements Responsable {
-  AdapterResponse(
+class MockResponseBody extends ResponseBody implements MockResponse {
+  MockResponseBody(
     Stream<Uint8List> stream,
     int statusCode, {
     required Map<String, List<String>> headers,
@@ -22,14 +26,14 @@ class AdapterResponse extends ResponseBody implements Responsable {
           redirects: redirects,
         );
 
-  static AdapterResponse from(
+  static MockResponseBody from(
     String text,
     int statusCode, {
     required Map<String, List<String>> headers,
     String? statusMessage,
     required bool isRedirect,
   }) =>
-      AdapterResponse(
+      MockResponseBody(
         Stream.fromIterable(
           utf8
               .encode(text)

@@ -3,64 +3,90 @@ import 'dart:typed_data';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
-import 'package:http_mock_adapter/src/history.dart';
+import 'package:http_mock_adapter/src/matchers/matchers.dart';
+import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/request.dart';
+import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/types.dart';
 
 /// [HttpClientAdapter] extension with data mocking and tracking functionality.
-class DioAdapter extends HttpClientAdapter with RequestRouted, Tracked {
+class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   /// [Dio]`s default HTTP client adapter implementation.
   final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
 
+  /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
+  RequestMethods method;
+
+  /// The payload.
+  dynamic data;
+
+  /// Query parameters to encompass additional parameters to the query.
+  Map<String, dynamic>? queryParameters;
+
+  /// Headers to encompass content-types.
+  Map<String, dynamic>? headers;
+
+  DioAdapter({
+    this.method = RequestMethods.get,
+    this.data,
+    this.queryParameters = const {},
+    this.headers = const {
+      Headers.contentTypeHeader: Headers.jsonContentType,
+      Headers.contentLengthHeader: Matchers.integer,
+    },
+  });
+
   /// Takes in [route], [request], sets corresponding [RequestHandler],
-  /// adds an instance of [RequestMatcher] in [History.data].
+  /// adds an instance of [RequestMatcher] in [history].
   @override
   void onRoute(
-    dynamic route,
-    RequestHandlerCallback callback, {
-    Request request = const Request(),
+    Pattern route,
+    RequestHandlerCallback requestHandlerCallback, {
+    required Request request,
   }) {
-    final handler = RequestHandler<DioAdapter>();
-    callback(handler);
-    history.data.add(
+    request = Request(
+      route: route,
+      method: request.method ?? method,
+      data: request.data ?? data,
+      queryParameters: request.queryParameters ?? queryParameters,
+      headers: request.headers ?? headers,
+    );
+
+    final requestHandler = RequestHandler<DioAdapter>(
+      requestSignature: request.signature,
+    );
+
+    requestHandlerCallback(requestHandler);
+
+    history.add(
       RequestMatcher(
-        Request(
-          route: route,
-          method: request.method,
-          data: request.data,
-          queryParameters: request.queryParameters,
-          headers: request.headers,
-        ),
-        handler,
+        request,
+        requestHandler,
       ),
     );
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.
-  /// Returns a [Future<ResponseBody>] from [History] based on [RequestOptions].
+  /// Returns a [Future<ResponseBody>] from [history] based on [RequestOptions].
   @override
   Future<ResponseBody> fetch(
-    RequestOptions options,
+    RequestOptions requestOptions,
     Stream<Uint8List>? requestStream,
     Future? cancelFuture,
   ) async {
-    dynamic responseBody = history.responseBody(options);
+    final response = mockResponse(requestOptions);
 
-    // throws error if response type is AdapterError
-    if (isError(responseBody)) {
-      throw responseBody as DioError;
+    // Throws DioError if response type is MockDioError.
+    if (isError(response)) {
+      throw response as DioError;
     }
 
-    responseBody.headers = responseBody.headers ??
-        const {
-          Headers.contentTypeHeader: [Headers.jsonContentType],
-        };
-
-    return responseBody;
+    return response as MockResponseBody;
   }
 
   /// Closes the [DioAdapter] by force.
   @override
-  void close({bool force = false}) =>
-      _defaultHttpClientAdapter.close(force: force);
+  void close({bool force = false}) => _defaultHttpClientAdapter.close(
+        force: force,
+      );
 }

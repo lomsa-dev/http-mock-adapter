@@ -20,7 +20,7 @@ void main() {
       double data;
       Response<dynamic> response;
 
-      tearDown(() => dioAdapter.history.reset());
+      tearDown(() => dioAdapter.reset());
 
       void expectRandomResponse() async {
         data = Random().nextDouble();
@@ -35,13 +35,12 @@ void main() {
         expect(data, response.data);
 
         // Affirm that the length of history's list is one due to reset.
-        expect(dioAdapter.history.data.length, 1);
+        expect(dioAdapter.history.length, 1);
       }
 
-      Iterable<int>.generate(10).forEach((index) => test(
-            'Test #${index + 1}',
-            () => expectRandomResponse(),
-          ));
+      for (var index in Iterable<int>.generate(10)) {
+        test('Test #${index + 1}', () => expectRandomResponse());
+      }
     });
   });
 }

@@ -9,5 +9,5 @@ class IsAMatcher<T> extends Matcher {
   bool matches(dynamic actual) => actual is T;
 
   @override
-  String toString() => 'IsAMatcher<$T>';
+  String toString() => 'IsAMatcher<$T> {}';
 }

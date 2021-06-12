@@ -31,6 +31,40 @@ void main() {
       expect(actual, response.data);
     }
 
+    test('uses default values from constructor', () async {
+      dioAdapter.onGet('/example', (request) => request.reply(200, {}));
+
+      response = await dio.get('/example');
+
+      expect(response.data, {});
+
+      dioAdapter
+        ..method = RequestMethods.post
+        ..data = {}
+        ..headers = {
+          Headers.contentTypeHeader: Headers.jsonContentType,
+          Headers.contentLengthHeader: Matchers.integer,
+        };
+
+      dioAdapter.onRoute(
+        '/example',
+        (request) => request.reply(200, {}),
+        request: const Request(),
+      );
+
+      response = await dio.post(
+        '/example',
+        data: {},
+        options: Options(
+          headers: {
+            Headers.contentTypeHeader: Headers.jsonContentType,
+          },
+        ),
+      );
+
+      expect(response.data, {});
+    });
+
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
         final dioError = DioError(
@@ -48,7 +82,7 @@ void main() {
           (request) => request.throws(500, dioError),
         );
 
-        expect(() async => await dio.get(path), throwsA(isA<AdapterError>()));
+        expect(() async => await dio.get(path), throwsA(isA<MockDioError>()));
         expect(() async => await dio.get(path), throwsA(isA<DioError>()));
         expect(
           () async => await dio.get(path),
@@ -56,7 +90,7 @@ void main() {
             predicate(
               (DioError error) =>
                   error is DioError &&
-                  error is AdapterError &&
+                  error is MockDioError &&
                   error.message == dioError.error.toString(),
             ),
           ),
@@ -67,6 +101,7 @@ void main() {
         dioAdapter.onRoute(
           path,
           (request) => request.reply(statusCode, data),
+          request: const Request(),
         );
 
         await testDioAdapter(() => dio.get(path), data);
