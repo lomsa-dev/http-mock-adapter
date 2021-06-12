@@ -121,6 +121,38 @@ void main() {
         });
       });
 
+      group('set', () {
+        test('exactly', () {
+          const actual = {'a', 'b'};
+          const expected = {'a', 'b'};
+
+          expect(options.matches(actual, expected), true);
+        });
+
+        test('uses matchers to validate', () {
+          const actual = {'a', false, '123', 'string'};
+          const expected = {
+            Matchers.any,
+            Matchers.boolean,
+            Matchers.number,
+            Matchers.string
+          };
+
+          expect(options.matches(actual, expected), true);
+        });
+
+        test('uses matchers but does not validate', () {
+          const actual = {'a', 'b', '123A'};
+          const expected = {
+            Matchers.any,
+            Matchers.string,
+            Matchers.number,
+          };
+
+          expect(options.matches(actual, expected), false);
+        });
+      });
+
       group('Dio request with matchers', () {
         late Dio dio;
 

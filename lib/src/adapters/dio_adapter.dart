@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
@@ -9,10 +11,13 @@ import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/types.dart';
 
-/// [HttpClientAdapter] extension with data mocking and tracking functionality.
+/// [HttpClientAdapter] extension with data mocking and recording functionality.
 class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   /// [Dio]`s default HTTP client adapter implementation.
   final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
+
+  /// State of [DioAdapter] that can be closed to prohibit functionality.
+  bool _isClosed = false;
 
   /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
   RequestMethods method;
@@ -74,6 +79,12 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
     Stream<Uint8List>? requestStream,
     Future? cancelFuture,
   ) async {
+    if (_isClosed) {
+      throw ClosedException(
+        'Cannot establish connection after [$runtimeType] got closed!',
+      );
+    }
+
     final response = mockResponse(requestOptions);
 
     // Throws DioError if response type is MockDioError.
@@ -86,7 +97,9 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
 
   /// Closes the [DioAdapter] by force.
   @override
-  void close({bool force = false}) => _defaultHttpClientAdapter.close(
-        force: force,
-      );
+  void close({bool force = false}) {
+    _defaultHttpClientAdapter.close(force: force);
+
+    _isClosed = true;
+  }
 }

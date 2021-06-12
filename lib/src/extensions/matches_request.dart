@@ -12,8 +12,10 @@ extension MatchesRequest on RequestOptions {
     final routeMatched = doesRouteMatch(path, request.route);
     final requestBodyMatched = matches(data, request.data);
 
-    final queryParametersMatched =
-        matches(queryParameters, request.queryParameters);
+    final queryParametersMatched = matches(
+      queryParameters,
+      request.queryParameters,
+    );
 
     // dio adds headers to the request when none aare specified
     final requestHeaders = request.headers ??
@@ -21,6 +23,7 @@ extension MatchesRequest on RequestOptions {
           Headers.contentTypeHeader: Headers.jsonContentType,
           Headers.contentLengthHeader: Matchers.number
         };
+
     final headersMatched = matches(headers, requestHeaders);
 
     if (!routeMatched ||
@@ -99,7 +102,17 @@ extension MatchesRequest on RequestOptions {
         }
       }
     } else if (actual is Set && expected is Set) {
-      return !matches(actual.containsAll(expected), false);
+      final exactMatch = !matches(actual.containsAll(expected), false);
+
+      if (exactMatch) {
+        return true;
+      }
+
+      for (var index in Iterable.generate(actual.length)) {
+        if (!matches(actual.elementAt(index), expected.elementAt(index))) {
+          return false;
+        }
+      }
     } else if (actual != expected) {
       // Fall back to original check.
       return false;

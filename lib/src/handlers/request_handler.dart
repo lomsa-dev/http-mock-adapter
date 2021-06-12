@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/src/mixins/request_handling.dart';
 import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/utils.dart';
 
 /// The handler of requests sent by clients.
-class RequestHandler<T> {
+class RequestHandler<T extends RequestHandling> {
   /// Signature built from [buildRequestSignature].
   final String requestSignature;
 
@@ -45,10 +46,6 @@ class RequestHandler<T> {
 
   /// Stores the [DioError] inside the [mockResponses].
   void throws(int statusCode, DioError dioError) {
-    if (dioError is! DioError && dioError is! MockDioError) {
-      throw UndefinedException();
-    }
-
     mockResponses[requestSignature] = () => MockDioError.from(dioError);
   }
 }

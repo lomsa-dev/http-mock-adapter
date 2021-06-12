@@ -12,6 +12,7 @@ void main() {
 
   setUpAll(() {
     dioAdapter = DioAdapter();
+
     dio = Dio()..httpClientAdapter = dioAdapter;
   });
 
@@ -41,6 +42,19 @@ void main() {
       for (var index in Iterable<int>.generate(10)) {
         test('Test #${index + 1}', () => expectRandomResponse());
       }
+    });
+
+    test('throws AssertionError when unable to find mocked route', () async {
+      expect(
+        () async => await dio.get('/undefined'),
+        throwsA(
+          predicate(
+            (DioError dioError) => dioError.message.startsWith(
+              'Assertion failed',
+            ),
+          ),
+        ),
+      );
     });
   });
 }

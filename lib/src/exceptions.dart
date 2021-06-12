@@ -1,29 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/adapters/dio_adapter.dart';
-import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
 import 'package:http_mock_adapter/src/response.dart';
-
-/// [RequestHandlerException] is thrown when [RequestHandler] method
-/// is called with generic type parameter.
-/// Available types are: [DioInterceptor] and [DioAdapter].
-class RequestHandlerException implements Exception {
-  final dynamic message;
-
-  RequestHandlerException([
-    this.message =
-        'Request handler should have generic type `DioAdapter` or `DioInterceptor`',
-  ]);
-
-  @override
-  String toString() {
-    if (message == null) {
-      return 'Provide the message inside the exception';
-    }
-
-    return 'RequestHandlerException: $message';
-  }
-}
 
 /// Wrapper of [Dio]'s [DioError] [Exception].
 class MockDioError extends DioError implements MockResponse {
@@ -47,21 +25,15 @@ class MockDioError extends DioError implements MockResponse {
       );
 }
 
-/// This [Exception] is thrown when throws gets wrong type of argument
-/// in the place of the [DioError].
-class UndefinedException implements Exception {
+/// [ClosedException] is thrown when [DioAdapter] or [DioInterceptor]
+/// get closed and and then accessed.
+class ClosedException implements Exception {
   final dynamic message;
 
-  UndefinedException([
-    this.message = 'Error should be either `DioError` or `MockDioError`',
+  ClosedException([
+    this.message = 'Cannot establish connection!',
   ]);
 
   @override
-  String toString() {
-    if (message == null) {
-      return 'Provide the message inside the exception';
-    }
-
-    return 'UndefinedException: $message';
-  }
+  String toString() => 'ClosedException: $message';
 }

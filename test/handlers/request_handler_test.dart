@@ -103,9 +103,9 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final adapterError = statusHandler!() as MockDioError;
+      final mockDioError = statusHandler!() as MockDioError;
 
-      expect(adapterError.type, dioError.type);
+      expect(mockDioError.type, dioError.type);
     });
   });
 }

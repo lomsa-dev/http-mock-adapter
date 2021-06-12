@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -289,6 +290,26 @@ void main() {
         response = await dio.get('/route');
         expect({'message': 'Success'}, response.data);
       });
+    });
+
+    test('closes itself by force', () async {
+      dioAdapter.close();
+
+      dioAdapter.onGet(
+        '/route',
+        (request) => request.reply(200, {'message': 'Success'}),
+      );
+
+      expect(
+        () async => await dio.get('/route'),
+        throwsA(
+          predicate(
+            (DioError dioError) => dioError.message.startsWith(
+              'ClosedException',
+            ),
+          ),
+        ),
+      );
     });
   });
 }
