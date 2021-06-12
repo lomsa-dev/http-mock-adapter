@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/response.dart';
 import 'package:test/test.dart';
@@ -10,8 +10,10 @@ void main() {
   group('RequestHandler', () {
     late RequestHandler requestHandler;
 
+    const requestSignature = 'test';
+
     setUp(() {
-      requestHandler = RequestHandler();
+      requestHandler = RequestHandler(requestSignature: requestSignature);
     });
 
     test('sets response data for a status with JSON by default', () async {
@@ -23,17 +25,22 @@ void main() {
         inputData,
       );
 
-      expect(requestHandler.statusCode, statusCode);
-      final statusHandler = requestHandler.requestMap[statusCode];
+      expect(requestHandler.requestSignature, requestSignature);
+
+      final statusHandler = requestHandler.mockResponses[requestSignature];
+
       expect(statusHandler, isNotNull);
-      final adapterResponse = statusHandler!() as AdapterResponse;
+
+      final mockResponseBody = statusHandler!() as MockResponseBody;
+
       final resolvedData = await DefaultTransformer().transformResponse(
         RequestOptions(path: ''),
-        adapterResponse,
+        mockResponseBody,
       );
+
       expect(resolvedData, inputData);
       expect(
-        adapterResponse.headers,
+        mockResponseBody.headers,
         {
           Headers.contentTypeHeader: [
             Headers.jsonContentType,
@@ -59,16 +66,21 @@ void main() {
         headers: headers,
       );
 
-      expect(requestHandler.statusCode, statusCode);
-      final statusHandler = requestHandler.requestMap[statusCode];
+      expect(requestHandler.requestSignature, requestSignature);
+
+      final statusHandler = requestHandler.mockResponses[requestSignature];
+
       expect(statusHandler, isNotNull);
-      final adapterResponse = statusHandler!() as AdapterResponse;
+
+      final mockResponseBody = statusHandler!() as MockResponseBody;
+
       final resolvedData = await DefaultTransformer().transformResponse(
         RequestOptions(path: ''),
-        adapterResponse,
+        mockResponseBody,
       );
+
       expect(resolvedData, inputData);
-      expect(adapterResponse.headers, headers);
+      expect(mockResponseBody.headers, headers);
     });
 
     test('sets DioError for a status code', () async {
@@ -85,10 +97,14 @@ void main() {
         dioError,
       );
 
-      expect(requestHandler.statusCode, statusCode);
-      final statusHandler = requestHandler.requestMap[statusCode];
+      expect(requestHandler.requestSignature, requestSignature);
+
+      final statusHandler = requestHandler.mockResponses[requestSignature];
+
       expect(statusHandler, isNotNull);
-      final adapterError = statusHandler!() as AdapterError;
+
+      final adapterError = statusHandler!() as MockDioError;
+
       expect(adapterError.type, dioError.type);
     });
   });
