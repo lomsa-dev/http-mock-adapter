@@ -1,7 +1,7 @@
 # http-mock-adapter
 
 [![Package Version](https://img.shields.io/pub/v/http_mock_adapter?color=teal)](https://github.com/lomsa-dev/http-mock-adapter "Published package version")
-[![Style: Pedantic](https://img.shields.io/badge/style-pedantic-teal.svg)](https://github.com/tenhobi/effective_dart "Package linter helper")
+[![Style: Lints](https://img.shields.io/badge/style-lints-teal.svg)](https://github.com/dart-lang/lints "Package linter helper")
 [![Dart CI](https://github.com/lomsa-dev/http-mock-adapter/workflows/Dart%20CI/badge.svg?branch=develop)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Dart+CI%22 "Dart CI workflow")
 [![Publish Package](https://github.com/lomsa-dev/http-mock-adapter/workflows/Publish%20Package/badge.svg?branch=main)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Publish+Package%22 "Publish Package workflow")
 [![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/lomsa-dev/http-mock-adapter#License "Project's LICENSE section")

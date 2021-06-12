@@ -6,7 +6,6 @@ on:
     branches: [develop, main]
   push:
     branches: [develop, main]
-  workflow_dispatch:
 
 jobs:
   ci:
