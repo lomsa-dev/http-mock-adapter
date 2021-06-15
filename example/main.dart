@@ -1,131 +1,103 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:test/test.dart';
 
 void main() async {
   late Dio dio;
+  late DioAdapter dioAdapter;
 
-  Map<String, dynamic> data;
+  Response<dynamic> response;
 
-  final payload = jsonEncode({
-    'payload': {'data': 'Test data!'},
-  });
+  group('Accounts', () {
+    const baseUrl = 'https://example.com';
 
-  const path = 'https://example.com';
+    const userCredentials = <String, dynamic>{
+      'email': 'test@example.com',
+      'password': 'password',
+    };
 
-  group('DioAdapter', () {
-    late DioAdapter dioAdapter;
-
-    setUpAll(() {
-      dioAdapter = DioAdapter();
-      dio = Dio()..httpClientAdapter = dioAdapter;
-    });
-
-    test('mocks the data', () async {
-      data = {'message': 'Successfully mocked GET!'};
-
-      dioAdapter.onGet(
-        'https://api.mocki.io/v1/b043df5a',
-        (request) => request.reply(200, data),
-      );
-
-      final getResponse = await dio.get('https://api.mocki.io/v1/b043df5a');
-
-      expect(getResponse.data, data);
-    });
-
-    test('mocks the data with onRoute', () async {
-      data = {'message': 'Successfully mocked PATCH!'};
-
-      dioAdapter.onRoute(
-        path,
-        (request) => request.reply(200, data),
-        request: Request(method: RequestMethods.patch, data: payload),
-      );
-
-      final patchResponse = await dio.patch(path, data: payload);
-
-      expect(patchResponse.data, data);
-    });
-  });
-
-  group('DioInterceptor', () {
-    late DioInterceptor dioInterceptor;
-
-    setUpAll(() {
-      dio = Dio();
-
-      dioInterceptor = DioInterceptor();
-
-      dio.interceptors.add(dioInterceptor);
-    });
-
-    test('mocks the data', () async {
-      data = {'message': 'Successfully mocked DELETE!'};
-
-      dioInterceptor.onDelete(
-        path,
-        (request) => request.reply(200, data),
-      );
-
-      final deleteResponse = await dio.delete(path);
-
-      expect(deleteResponse.data, data);
-
-      dioInterceptor.onPut(
-        path,
-        (request) => request.reply(200, data),
-        data: payload,
-      );
-
-      final putResponse = await dio.put(path, data: payload);
-
-      expect(putResponse.data, data);
-    });
-  });
-
-  group('MockDioError/DioError', () {
-    late DioAdapter dioAdapter;
-
-    setUpAll(() {
-      dio = Dio();
-
+    setUp(() {
+      dio = Dio(BaseOptions(baseUrl: baseUrl));
       dioAdapter = DioAdapter();
 
       dio.httpClientAdapter = dioAdapter;
     });
 
-    test('throws custom exception', () async {
-      final dioError = DioError(
-        error: {'message': 'Some beautiful error!'},
-        requestOptions: RequestOptions(path: '/foo'),
-        response: Response(
-          statusCode: 500,
-          requestOptions: RequestOptions(path: '/foo'),
-        ),
-        type: DioErrorType.response,
+    test('signs up user', () async {
+      const route = '/signup';
+
+      dioAdapter.onPost(
+        route,
+        (request) => request.reply(201, null),
+        data: userCredentials,
       );
 
-      dioAdapter.onGet(
-        path,
-        (request) => request.throws(500, dioError),
-      );
+      // Returns a response with 201 Created success status response code.
+      response = await dio.post(route, data: userCredentials);
 
-      expect(() async => await dio.get(path), throwsA(isA<MockDioError>()));
-      expect(() async => await dio.get(path), throwsA(isA<DioError>()));
-      expect(
-        () async => await dio.get(path),
-        throwsA(
-          predicate(
-            (DioError error) =>
-                error is DioError &&
-                error is MockDioError &&
-                error.message == dioError.error.toString(),
+      expect(response.statusCode, 201);
+    });
+
+    test('signs in user and fetches account information', () async {
+      const signInRoute = '/signin';
+      const accountRoute = '/account';
+
+      const accessToken = <String, dynamic>{
+        'token': 'ACCESS_TOKEN',
+      };
+
+      final headers = <String, dynamic>{
+        'Authentication': 'Bearer $accessToken',
+      };
+
+      const userInformation = <String, dynamic>{
+        'id': 1,
+        'email': 'test@example.com',
+        'password': 'password',
+        'email_verified': false,
+      };
+
+      dioAdapter
+        ..onPost(
+          signInRoute,
+          (request) => request.throws(
+            401,
+            DioError(
+              requestOptions: RequestOptions(
+                path: signInRoute,
+              ),
+            ),
           ),
-        ),
+        )
+        ..onPost(
+          signInRoute,
+          (request) => request.reply(200, accessToken),
+          data: userCredentials,
+        )
+        ..onGet(
+          accountRoute,
+          (request) => request.reply(200, userInformation),
+          headers: headers,
+        );
+
+      // Throws without user credentials.
+      expect(
+        () async => await dio.post(signInRoute),
+        throwsA(isA<DioError>()),
       );
+
+      // Returns an access token if user credentials are provided.
+      response = await dio.post(signInRoute, data: userCredentials);
+
+      expect(response.data, accessToken);
+
+      // Returns user information if an access token is provided in headers.
+      response = await dio.get(
+        accountRoute,
+        options: Options(headers: headers),
+      );
+
+      expect(response.data, userInformation);
     });
   });
 }

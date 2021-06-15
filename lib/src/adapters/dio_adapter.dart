@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/constants.dart' as constants;
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
-import 'package:http_mock_adapter/src/matchers/matchers.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
@@ -26,19 +26,16 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   dynamic data;
 
   /// Query parameters to encompass additional parameters to the query.
-  Map<String, dynamic>? queryParameters;
+  Map<String, dynamic> queryParameters;
 
   /// Headers to encompass content-types.
-  Map<String, dynamic>? headers;
+  Map<String, dynamic> headers;
 
   DioAdapter({
-    this.method = RequestMethods.get,
+    this.method = constants.defaultRequestMethod,
     this.data,
-    this.queryParameters = const {},
-    this.headers = const {
-      Headers.contentTypeHeader: Headers.jsonContentType,
-      Headers.contentLengthHeader: Matchers.integer,
-    },
+    this.queryParameters = constants.defaultQueryParameters,
+    this.headers = constants.defaultHeaders,
   });
 
   /// Takes in [route], [request], sets corresponding [RequestHandler],
@@ -49,12 +46,22 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
     RequestHandlerCallback requestHandlerCallback, {
     required Request request,
   }) {
+    final requestData = request.data ?? data;
+    Map<String, dynamic> requestHeaders = {...request.headers ?? headers};
+
+    if (requestData != null) {
+      requestHeaders.putIfAbsent(
+        Headers.contentLengthHeader,
+        () => Matchers.integer,
+      );
+    }
+
     request = Request(
       route: route,
       method: request.method ?? method,
-      data: request.data ?? data,
+      data: requestData,
       queryParameters: request.queryParameters ?? queryParameters,
-      headers: request.headers ?? headers,
+      headers: requestHeaders,
     );
 
     final requestHandler = RequestHandler<DioAdapter>(
@@ -88,7 +95,7 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
     final response = mockResponse(requestOptions);
 
     // Throws DioError if response type is MockDioError.
-    if (isError(response)) {
+    if (isMockDioError(response)) {
       throw response as DioError;
     }
 

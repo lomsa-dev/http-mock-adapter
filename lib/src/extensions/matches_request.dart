@@ -17,11 +17,10 @@ extension MatchesRequest on RequestOptions {
       request.queryParameters,
     );
 
-    // dio adds headers to the request when none aare specified
+    // Dio adds headers to the request when none are specified.
     final requestHeaders = request.headers ??
         {
           Headers.contentTypeHeader: Headers.jsonContentType,
-          Headers.contentLengthHeader: Matchers.number
         };
 
     final headersMatched = matches(headers, requestHeaders);
@@ -41,22 +40,22 @@ extension MatchesRequest on RequestOptions {
   /// Allows user to specify route as they intend rather than assuming string
   /// is a pattern. Route will be dynamic.
   bool doesRouteMatch(dynamic actual, dynamic expected) {
-    // if null then fail. the route should never be null...ever.
+    // If null then fail. The route should never be null... ever.
     if (actual == null || expected == null) {
       return false;
     }
 
-    // if strings, just compare
+    // Ff strings, just compare.
     if (actual is String && expected is String) {
       return actual == expected;
     }
 
-    // allow regex match of route, expected should be provided via the mocking
+    // Allow regex match of route, expected should be provided via the mocking.
     if (expected is RegExp) {
       return expected.hasMatch(actual);
     }
 
-    // default to no match
+    // Default to no match.
     return false;
   }
 

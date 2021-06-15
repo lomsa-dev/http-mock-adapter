@@ -139,5 +139,6 @@ mixin RequestHandling {
         ),
       );
 
-  bool isError(MockResponse mockResponse) => mockResponse is MockDioError;
+  bool isMockDioError(MockResponse mockResponse) =>
+      mockResponse is MockDioError;
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/constants.dart' as constants;
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/request.dart';
@@ -9,25 +10,22 @@ import 'package:http_mock_adapter/src/types.dart';
 /// [DioInterceptor] is a class for mocking [Dio] requests with [Interceptor].
 class DioInterceptor extends Interceptor with Recording, RequestHandling {
   /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
-  final RequestMethods method;
+  RequestMethods method;
 
   /// The payload.
-  final dynamic data;
+  dynamic data;
 
   /// Query parameters to encompass additional parameters to the query.
-  final Map<String, dynamic>? queryParameters;
+  Map<String, dynamic> queryParameters;
 
   /// Headers to encompass content-types.
-  final Map<String, dynamic>? headers;
+  Map<String, dynamic> headers;
 
   DioInterceptor({
-    this.method = RequestMethods.get,
+    this.method = constants.defaultRequestMethod,
     this.data,
-    this.queryParameters = const {},
-    this.headers = const {
-      Headers.contentTypeHeader: Headers.jsonContentType,
-      Headers.contentLengthHeader: Matchers.integer,
-    },
+    this.queryParameters = constants.defaultQueryParameters,
+    this.headers = constants.defaultHeaders,
   });
 
   /// Takes in route, request, sets corresponding [RequestHandler],
@@ -67,7 +65,7 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
     final response = mockResponse(requestOptions);
 
     // Reject the response if type is MockDioError.
-    if (isError(response)) {
+    if (isMockDioError(response)) {
       requestInterceptorHandler.reject(response as DioError);
 
       return;
