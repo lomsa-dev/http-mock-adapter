@@ -1,7 +1,5 @@
 name: http_mock_adapter
-description: HTTP mock adapter for Dio & Mockito. By simply defining requests
-  and corresponding responses through predefined adapters, you will be able to
-  mock requests sent via Dio.
+description: A simple to use mocking package for Dio intended to be used in tests. It provides various types and methods to declaratively mock request-response communication.
 version: 0.3.0
 homepage: https://lomsa.com
 repository: https://github.com/lomsa-dev/http-mock-adapter
@@ -12,7 +10,6 @@ environment:
 
 dependencies:
   dio: ^4.0.0
-  mockito: ^5.0.3
 
 dev_dependencies:
   lints: ^1.0.1
