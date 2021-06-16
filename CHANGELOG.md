@@ -12,6 +12,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.3.1] (2021-06-16)
+
+- **Removed**
+  - Unused import and code regarding `io_adapter` that reduced the overall score of the package.
+
+- **Updated**
+  - `pub` badge link in `README.md`.
+
 ## [v0.3.0] (2021-06-16)
 
 - **Added**
