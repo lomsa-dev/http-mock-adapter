@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/constants.dart' as constants;
@@ -13,9 +12,6 @@ import 'package:http_mock_adapter/src/types.dart';
 
 /// [HttpClientAdapter] extension with data mocking and recording functionality.
 class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
-  /// [Dio]`s default HTTP client adapter implementation.
-  final _defaultHttpClientAdapter = DefaultHttpClientAdapter();
-
   /// State of [DioAdapter] that can be closed to prohibit functionality.
   bool _isClosed = false;
 
@@ -104,9 +100,5 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
 
   /// Closes the [DioAdapter] by force.
   @override
-  void close({bool force = false}) {
-    _defaultHttpClientAdapter.close(force: force);
-
-    _isClosed = true;
-  }
+  void close({bool force = false}) => _isClosed = true;
 }
