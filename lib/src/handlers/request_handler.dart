@@ -1,22 +1,26 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
-import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
+import 'package:http_mock_adapter/src/mixins/request_handling.dart';
 import 'package:http_mock_adapter/src/response.dart';
+import 'package:http_mock_adapter/src/utils.dart';
 
 /// The handler of requests sent by clients.
-class RequestHandler<T> {
-  /// An HTTP status code such as - `200`, `404`, `500`, etc.
-  late int statusCode;
+class RequestHandler<T extends RequestHandling> {
+  /// Signature built from [buildRequestSignature].
+  final String requestSignature;
 
-  /// Map of <[statusCode], [Responsable]>.
-  final Map<int, Responsable Function()> requestMap = {};
+  RequestHandler({
+    required this.requestSignature,
+  });
 
-  /// Stores [Responsable] in [requestMap] and returns [DioAdapter] or [DioInterceptor]
-  /// the latter which is utilized for method chaining.
+  /// Map of <[requestSignature], [MockResponse]>.
+  final Map<String, MockResponse Function()> mockResponses = {};
+
+  /// Stores [MockResponse] in [mockResponses].
   void reply(
     int statusCode,
     dynamic data, {
@@ -26,29 +30,22 @@ class RequestHandler<T> {
     String? statusMessage,
     bool isRedirect = false,
   }) {
-    this.statusCode = statusCode;
-    final isJson =
-        headers[Headers.contentTypeHeader]?.contains(Headers.jsonContentType) ??
-            false;
+    final isJsonContentType = headers[Headers.contentTypeHeader]?.contains(
+          Headers.jsonContentType,
+        ) ??
+        false;
 
-    requestMap[this.statusCode] = () => AdapterResponse.from(
-          isJson ? jsonEncode(data) : data,
-          this.statusCode,
+    mockResponses[requestSignature] = () => MockResponseBody.from(
+          isJsonContentType ? jsonEncode(data) : data,
+          statusCode,
           headers: headers,
           statusMessage: statusMessage,
           isRedirect: isRedirect,
         );
   }
 
-  /// Stores the [DioError] inside the [requestMap]
-  /// and returns [DioAdapter] or [DioInterceptor],
-  /// the latter which is utilized for method chaining.
+  /// Stores the [DioError] inside the [mockResponses].
   void throws(int statusCode, DioError dioError) {
-    if (!(dioError is DioError) && !(dioError is AdapterError)) {
-      throw ThrowsException();
-    }
-
-    this.statusCode = statusCode;
-    requestMap[this.statusCode] = () => AdapterError.from(dioError);
+    mockResponses[requestSignature] = () => MockDioError.from(dioError);
   }
 }

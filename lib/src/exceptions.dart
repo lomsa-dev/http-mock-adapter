@@ -1,52 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/adapters/dio_adapter.dart';
-import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/interceptors/dio_interceptor.dart';
-import 'package:http_mock_adapter/src/interfaces.dart';
-
-/// [RequestHandlerException] is thrown when [RequestHandler] method
-/// is called with generic type parameter.
-/// Available types are: [DioInterceptor] and [DioAdapter]
-class RequestHandlerException implements Exception {
-  final dynamic message;
-
-  RequestHandlerException([
-    this.message =
-        'Request handler should have generic type DioAdapter or DioInterceptor',
-  ]);
-
-  @override
-  String toString() {
-    if (message == null) {
-      return 'Provide the message inside the exception';
-    }
-
-    return 'RequestHandlerException: $message';
-  }
-}
-
-/// This [Exception] is thrown when throws gets wrong type of argument
-/// in the place of the [DioError].
-class ThrowsException implements Exception {
-  final dynamic message;
-
-  ThrowsException([
-    this.message = 'Error Should be eithier `DioError` or `AdapterError`',
-  ]);
-
-  @override
-  String toString() {
-    if (message == null) {
-      return 'Provide the message inside the exception';
-    }
-
-    return 'throws()-Exception: $message';
-  }
-}
+import 'package:http_mock_adapter/src/response.dart';
 
 /// Wrapper of [Dio]'s [DioError] [Exception].
-class AdapterError extends DioError implements Responsable {
-  AdapterError({
+class MockDioError extends DioError implements MockResponse {
+  MockDioError({
     required RequestOptions requestOptions,
     Response? response,
     DioErrorType type = DioErrorType.other,
@@ -58,10 +17,23 @@ class AdapterError extends DioError implements Responsable {
           error: error,
         );
 
-  static AdapterError from(DioError dioError) => AdapterError(
+  static MockDioError from(DioError dioError) => MockDioError(
         requestOptions: dioError.requestOptions,
         response: dioError.response,
         type: dioError.type,
         error: dioError.error,
       );
+}
+
+/// [ClosedException] is thrown when [DioAdapter] or [DioInterceptor]
+/// get closed and and then accessed.
+class ClosedException implements Exception {
+  final dynamic message;
+
+  ClosedException([
+    this.message = 'Cannot establish connection!',
+  ]);
+
+  @override
+  String toString() => 'ClosedException: $message';
 }

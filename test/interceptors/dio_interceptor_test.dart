@@ -42,7 +42,7 @@ void main() {
           path,
           (request) => request.throws(
             500,
-            AdapterError(
+            MockDioError(
               type: type,
               requestOptions: RequestOptions(path: path),
               response: Response(
@@ -54,13 +54,13 @@ void main() {
           ),
         );
 
-        // Checking that exception type can match `AdapterError` type too.
+        // Checking that exception type can match `MockDioError` type too.
         expect(() async => await dio.get(path),
-            throwsA(TypeMatcher<AdapterError>()));
+            throwsA(const TypeMatcher<MockDioError>()));
 
         // Checking that exception type can match `DioError` type too.
-        expect(
-            () async => await dio.get(path), throwsA(TypeMatcher<DioError>()));
+        expect(() async => await dio.get(path),
+            throwsA(const TypeMatcher<DioError>()));
 
         // Checking the type and the message of the exception.
         expect(
@@ -73,6 +73,7 @@ void main() {
         dioInterceptor.onRoute(
           path,
           (request) => request.reply(statusCode, data),
+          request: const Request(),
         );
 
         await _testDioInterceptor(() => dio.get(path), data);

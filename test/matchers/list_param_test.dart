@@ -60,5 +60,17 @@ void main() {
         false,
       );
     });
+
+    test('converts to string as defined', () {
+      final listParam = ListParam<String>(
+        [],
+        ListFormat.pipes,
+      );
+
+      expect(
+        Matchers.listParam(listParam).toString(),
+        'ListParamMatcher { values: ${listParam.value.length}, format ${listParam.format} }',
+      );
+    });
   });
 }

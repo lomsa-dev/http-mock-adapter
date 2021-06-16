@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:dio/src/parameter.dart';
+// ignore: implementation_imports
+import 'package:dio/src/parameter.dart' show ListParam;
 import 'package:http_mock_adapter/src/matchers/any.dart';
 import 'package:http_mock_adapter/src/matchers/boolean.dart';
 import 'package:http_mock_adapter/src/matchers/decimal.dart';
@@ -16,7 +17,7 @@ export 'package:http_mock_adapter/src/matchers/matcher.dart';
 export 'package:http_mock_adapter/src/matchers/matchers.dart' show Matchers;
 
 /// [Matchers] is an interface for various [Matcher] types.
-class Matchers {
+abstract class Matchers {
   /// [any] matches any typed value.
   static const AnyMatcher any = AnyMatcher();
 
@@ -64,15 +65,16 @@ class Matchers {
   /// by comparing filename, contentType and length.
   ///
   /// Does NOT compare file contents.
-  static FormDataMatcher formData(FormData expected) =>
-      FormDataMatcher(expected: expected);
+  static FormDataMatcher formData(FormData expected) => FormDataMatcher(
+        expected: expected,
+      );
 
   /// [listParam] matches against the expected [ListParam]
   /// by comparing values and [ListFormat].
   static ListParamMatcher<T> listParam<T>(ListParam<T> expected) =>
-      ListParamMatcher(expected: expected);
-
-  const Matchers._();
+      ListParamMatcher(
+        expected: expected,
+      );
 }
 
 /// [StrictMatchers] is an interface for various strict [Matcher] types.

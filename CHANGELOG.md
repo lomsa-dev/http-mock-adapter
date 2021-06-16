@@ -12,6 +12,26 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.3.0] (2021-06-16)
+
+- **Added**
+  - Remaining tests for formal 100% coverage;
+  - Code coverage badge;
+  - New, official Dart linter (`lints`) and some custom rules;
+  - Constructors to `DioAdapter` and `DioInterceptor`;
+  - `ClosedException`, thrown when `DioAdapter` is closed yet used;
+  - Builder method for `Signature` extension.
+
+- **Removed**
+  - Unused package and code, such as `mockito` and/or `DioAdapterMockito`;
+  - Some portion of seemingly excessive documentation;
+  - Generally unnecessary pieces of code.
+
+- **Updated**
+  - Tests and lots of files due to refactoring;
+  - Packages;
+  - Names of types, methods and variables for better clarity.
+
 ## [v0.2.1] (2021-04-02)
 
 - **Removed**
@@ -138,6 +158,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License.
 
+[v0.3.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/70fb7802f0ad48e03abb16a7197b933b1306c332...f138e738dea358a386537adfb9df3e1c5dc79c0c
 [v0.2.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/f138e738dea358a386537adfb9df3e1c5dc79c0c...ec13a0f1ca3cb0fd56620832a79db5ab04ad8742
 [v0.2.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/24cafff5236f8cc7d52a05529751ac47abd895ff...f138e738dea358a386537adfb9df3e1c5dc79c0c
 [v0.1.6]: https://github.com/lomsa-dev/http-mock-adapter/compare/ff0b5b1c9d976e774002f3176fa0b6acd193c715...24cafff5236f8cc7d52a05529751ac47abd895ff

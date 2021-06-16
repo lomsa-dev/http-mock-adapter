@@ -15,7 +15,7 @@ class FormDataMatcher extends Matcher {
   @override
   bool matches(dynamic actual) =>
       actual is FormData &&
-      MapEquality<String, String>().equals(
+      const MapEquality<String, String>().equals(
         Map.fromEntries(expected.fields),
         Map.fromEntries(actual.fields),
       ) &&

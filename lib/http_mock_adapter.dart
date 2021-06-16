@@ -1,6 +1,6 @@
 export 'src/adapters/dio_adapter.dart';
-export 'src/adapters/dio_adapter_mockito.dart';
-export 'src/exceptions.dart' show AdapterError;
+export 'src/extensions/matches_request.dart';
+export 'src/exceptions.dart' show MockDioError;
 export 'src/interceptors/dio_interceptor.dart';
 export 'src/matchers/matchers.dart';
-export 'src/request.dart' show MatchesRequest, Request, RequestMethods;
+export 'src/request.dart' show Request, RequestMethods;

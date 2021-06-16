@@ -115,5 +115,14 @@ void main() {
         true,
       );
     });
+
+    test('converts to string as defined', () {
+      final formData = FormData();
+
+      expect(
+        Matchers.formData(formData).toString(),
+        'FormDataMatcher { fields: ${formData.fields.length}, files ${formData.files.length} }',
+      );
+    });
   });
 }

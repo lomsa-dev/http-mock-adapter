@@ -9,5 +9,5 @@ class StringMatcher extends Matcher {
   bool matches(dynamic actual) => actual is String;
 
   @override
-  String toString() => 'StringMatcher';
+  String toString() => 'StringMatcher {}';
 }

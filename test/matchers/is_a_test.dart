@@ -13,5 +13,12 @@ void main() {
       expect(Matchers.isA<FormData>().matches(FormData()), true);
       expect(Matchers.isA<FormData>().matches('foo'), false);
     });
+
+    test('converts to string as defined', () {
+      expect(
+        Matchers.isA<String>().toString(),
+        'IsAMatcher<$String> {}',
+      );
+    });
   });
 }
