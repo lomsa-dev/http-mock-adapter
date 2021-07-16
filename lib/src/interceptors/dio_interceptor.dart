@@ -33,7 +33,7 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   @override
   void onRoute(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     required Request request,
   }) {
     request = Request(
@@ -44,18 +44,9 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
       headers: request.headers ?? headers,
     );
 
-    final requestHandler = RequestHandler<DioInterceptor>(
-      requestSignature: request.signature,
-    );
-
-    requestHandlerCallback(requestHandler);
-
-    history.add(
-      RequestMatcher(
-        request,
-        requestHandler,
-      ),
-    );
+    final matcher = RequestMatcher(request);
+    requestHandlerCallback(matcher);
+    history.add(matcher);
   }
 
   /// Dio [Interceptor]`s [onRequest] configuration intended to catch and return

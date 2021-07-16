@@ -9,7 +9,7 @@ import 'package:http_mock_adapter/src/types.dart';
 mixin RequestHandling {
   void onRoute(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     required Request request,
   });
 
@@ -17,7 +17,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onGet(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -38,7 +38,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onHead(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -59,7 +59,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPost(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -80,7 +80,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPut(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -101,7 +101,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onDelete(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -122,7 +122,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPatch(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,

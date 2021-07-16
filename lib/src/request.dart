@@ -38,22 +38,12 @@ class Request {
       );
 }
 
-/// Matcher of [Request] and [mockResponse] based on route and [RequestHandler].
-class RequestMatcher {
+/// Matches a [Request] to a [MockResponse].
+class RequestMatcher extends RequestHandler {
   /// This is a request sent by the the client.
   final Request request;
 
-  /// This is a request handler that processes requests.
-  final RequestHandler requestHandler;
-
-  /// This is an artificial response body to the request.
-  MockResponse Function()? mockResponse;
-
-  RequestMatcher(
-    this.request,
-    this.requestHandler, {
-    this.mockResponse,
-  });
+  RequestMatcher(this.request);
 }
 
 /// HTTP methods.

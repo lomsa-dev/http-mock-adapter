@@ -39,7 +39,7 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   @override
   void onRoute(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     required Request request,
   }) {
     final requestData = request.data ?? data;
@@ -60,18 +60,9 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
       headers: requestHeaders,
     );
 
-    final requestHandler = RequestHandler<DioAdapter>(
-      requestSignature: request.signature,
-    );
-
-    requestHandlerCallback(requestHandler);
-
-    history.add(
-      RequestMatcher(
-        request,
-        requestHandler,
-      ),
-    );
+    final matcher = RequestMatcher(request);
+    requestHandlerCallback(matcher);
+    history.add(matcher);
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.

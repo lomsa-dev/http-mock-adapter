@@ -1,26 +1,36 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
-import 'package:http_mock_adapter/src/mixins/request_handling.dart';
 import 'package:http_mock_adapter/src/response.dart';
-import 'package:http_mock_adapter/src/utils.dart';
 
-/// The handler of requests sent by clients.
-class RequestHandler<T extends RequestHandling> {
-  /// Signature built from [buildRequestSignature].
-  final String requestSignature;
-
-  RequestHandler({
-    required this.requestSignature,
+/// Something that can respond to requests.
+abstract class MockServer {
+  void reply(
+    int statusCode,
+    dynamic data, {
+    Map<String, List<String>> headers = const {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
+    String? statusMessage,
+    bool isRedirect = false,
   });
 
-  /// Map of <[requestSignature], [MockResponse]>.
-  final Map<String, MockResponse Function()> mockResponses = {};
+  void throws(
+    int statusCode,
+    DioError dioError,
+  );
+}
 
-  /// Stores [MockResponse] in [mockResponses].
+/// The handler implements [MockServer] and
+/// constructs the configured [MockResponse].
+class RequestHandler implements MockServer {
+  /// This is the response.
+  late MockResponse Function() mockResponse;
+
+  /// Stores [MockResponse] in [mockResponse].
+  @override
   void reply(
     int statusCode,
     dynamic data, {
@@ -35,7 +45,7 @@ class RequestHandler<T extends RequestHandling> {
         ) ??
         false;
 
-    mockResponses[requestSignature] = () => MockResponseBody.from(
+    mockResponse = () => MockResponseBody.from(
           isJsonContentType ? jsonEncode(data) : data,
           statusCode,
           headers: headers,
@@ -44,8 +54,9 @@ class RequestHandler<T extends RequestHandling> {
         );
   }
 
-  /// Stores the [DioError] inside the [mockResponses].
+  /// Stores the [DioError] inside the [mockResponse].
+  @override
   void throws(int statusCode, DioError dioError) {
-    mockResponses[requestSignature] = () => MockDioError.from(dioError);
+    mockResponse = () => MockDioError.from(dioError);
   }
 }
