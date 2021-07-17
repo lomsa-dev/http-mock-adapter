@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:http_mock_adapter/src/constants.dart' as constants;
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
@@ -15,24 +14,20 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   /// State of [DioAdapter] that can be closed to prohibit functionality.
   bool _isClosed = false;
 
-  /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
-  RequestMethods method;
-
-  /// The payload.
-  dynamic data;
-
-  /// Query parameters to encompass additional parameters to the query.
-  Map<String, dynamic> queryParameters;
-
-  /// Headers to encompass content-types.
-  Map<String, dynamic> headers;
+  /// These should be the same [BaseOptions] that are configured for [Dio].
+  final BaseOptions baseOptions;
 
   DioAdapter({
-    this.method = constants.defaultRequestMethod,
-    this.data,
-    this.queryParameters = constants.defaultQueryParameters,
-    this.headers = constants.defaultHeaders,
+    required this.baseOptions,
   });
+
+  /// Simple helper function to create an adapter
+  /// and configure it correctly with an existing [Dio] instance.
+  factory DioAdapter.configure({required Dio dio}) {
+    final adapter = DioAdapter(baseOptions: dio.options);
+    dio.httpClientAdapter = adapter;
+    return adapter;
+  }
 
   /// Takes in [route], [request], sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [history].
@@ -42,10 +37,21 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
     MockServerCallback requestHandlerCallback, {
     required Request request,
   }) {
-    final requestData = request.data ?? data;
-    Map<String, dynamic> requestHeaders = {...request.headers ?? headers};
+    final requestData = request.data;
+    final requestMethod =
+        request.method ?? RequestMethods.forName(name: baseOptions.method);
 
-    if (requestData != null) {
+    Map<String, dynamic> requestHeaders = {...request.headers ?? {}};
+
+    if (requestMethod.isAllowedPayloadMethod ||
+        baseOptions.setRequestContentTypeWhenNoPayload) {
+      requestHeaders.putIfAbsent(
+        Headers.contentTypeHeader,
+        () => Headers.jsonContentType,
+      );
+    }
+
+    if (requestMethod.isAllowedPayloadMethod && requestData != null) {
       requestHeaders.putIfAbsent(
         Headers.contentLengthHeader,
         () => Matchers.integer,
@@ -54,9 +60,10 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
 
     request = Request(
       route: route,
-      method: request.method ?? method,
+      method:
+          request.method ?? RequestMethods.forName(name: baseOptions.method),
       data: requestData,
-      queryParameters: request.queryParameters ?? queryParameters,
+      queryParameters: request.queryParameters ?? baseOptions.queryParameters,
       headers: requestHeaders,
     );
 

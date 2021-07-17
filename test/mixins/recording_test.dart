@@ -11,9 +11,8 @@ void main() {
   const path = 'https://example.com';
 
   setUpAll(() {
-    dioAdapter = DioAdapter();
-
-    dio = Dio()..httpClientAdapter = dioAdapter;
+    dio = Dio();
+    dioAdapter = DioAdapter.configure(dio: dio);
   });
 
   group('History', () {

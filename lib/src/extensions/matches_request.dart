@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/extensions/to_upper_case_string.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
 import 'package:http_mock_adapter/src/request.dart';
 
@@ -26,7 +25,7 @@ extension MatchesRequest on RequestOptions {
     final headersMatched = matches(headers, requestHeaders);
 
     if (!routeMatched ||
-        method != request.method?.toUpperCaseString ||
+        method != request.method?.name ||
         !requestBodyMatched ||
         !queryParametersMatched ||
         !headersMatched) {

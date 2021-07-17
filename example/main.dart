@@ -18,9 +18,7 @@ void main() async {
 
     setUp(() {
       dio = Dio(BaseOptions(baseUrl: baseUrl));
-      dioAdapter = DioAdapter();
-
-      dio.httpClientAdapter = dioAdapter;
+      dioAdapter = DioAdapter.configure(dio: dio);
     });
 
     test('signs up user', () async {

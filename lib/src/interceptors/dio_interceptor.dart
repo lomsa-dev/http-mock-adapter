@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
-import 'package:http_mock_adapter/src/constants.dart' as constants;
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/request.dart';
@@ -9,24 +8,20 @@ import 'package:http_mock_adapter/src/types.dart';
 
 /// [DioInterceptor] is a class for mocking [Dio] requests with [Interceptor].
 class DioInterceptor extends Interceptor with Recording, RequestHandling {
-  /// An HTTP method such as [RequestMethods.get] or [RequestMethods.post].
-  RequestMethods method;
-
-  /// The payload.
-  dynamic data;
-
-  /// Query parameters to encompass additional parameters to the query.
-  Map<String, dynamic> queryParameters;
-
-  /// Headers to encompass content-types.
-  Map<String, dynamic> headers;
+  /// These should be the same [BaseOptions] that are configured for [Dio].
+  final BaseOptions baseOptions;
 
   DioInterceptor({
-    this.method = constants.defaultRequestMethod,
-    this.data,
-    this.queryParameters = constants.defaultQueryParameters,
-    this.headers = constants.defaultHeaders,
+    required this.baseOptions,
   });
+
+  /// Simple helper function to create an adapter
+  /// and configure it correctly with an existing [Dio] instance.
+  factory DioInterceptor.configure({required Dio dio}) {
+    final interceptor = DioInterceptor(baseOptions: dio.options);
+    dio.interceptors.add(interceptor);
+    return interceptor;
+  }
 
   /// Takes in route, request, sets corresponding [RequestHandler],
   /// adds an instance of [RequestMatcher] in [history].
@@ -36,12 +31,33 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
     MockServerCallback requestHandlerCallback, {
     required Request request,
   }) {
+    final requestData = request.data;
+    final requestMethod =
+        request.method ?? RequestMethods.forName(name: baseOptions.method);
+
+    Map<String, dynamic> requestHeaders = {...request.headers ?? {}};
+
+    if (requestMethod.isAllowedPayloadMethod ||
+        baseOptions.setRequestContentTypeWhenNoPayload) {
+      requestHeaders.putIfAbsent(
+        Headers.contentTypeHeader,
+        () => Headers.jsonContentType,
+      );
+    }
+
+    if (requestMethod.isAllowedPayloadMethod && requestData != null) {
+      requestHeaders.putIfAbsent(
+        Headers.contentLengthHeader,
+        () => Matchers.integer,
+      );
+    }
+
     request = Request(
       route: route,
-      method: request.method ?? method,
-      data: request.data ?? data,
-      queryParameters: request.queryParameters ?? queryParameters,
-      headers: request.headers ?? headers,
+      method: requestMethod,
+      data: requestData,
+      queryParameters: request.queryParameters ?? baseOptions.queryParameters,
+      headers: requestHeaders,
     );
 
     final matcher = RequestMatcher(request);

@@ -160,21 +160,14 @@ void main() {
 
         Response<dynamic> response;
         const statusCode = 200;
-        DioAdapter dioAdapter;
+        late DioAdapter dioAdapter;
 
         setUpAll(() {
           dio = Dio();
-
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
+          dioAdapter = DioAdapter.configure(dio: dio);
         });
 
         test('mocks requests via onPost() with matchers as intended', () async {
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
-
           dioAdapter.onPost(
             '/post-any-data',
             (request) => request.reply(statusCode, data),
@@ -219,10 +212,6 @@ void main() {
         });
 
         test('mocks date formatted POST request as intended', () async {
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
-
           const pattern = r'(0?[1-9]|[12][0-9]|3[01])\-(0?[1-9]|1[012])\-\d{4}';
 
           dioAdapter.onPost(

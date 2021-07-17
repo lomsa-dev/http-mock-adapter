@@ -16,10 +16,7 @@ void main() {
 
     setUpAll(() {
       dio = Dio();
-
-      dioInterceptor = DioInterceptor();
-
-      dio.interceptors.add(dioInterceptor);
+      dioInterceptor = DioInterceptor.configure(dio: dio);
     });
 
     Future<void> _testDioInterceptor<T>(
@@ -135,10 +132,6 @@ void main() {
     });
 
     test('mocks multiple requests sequentially by method chaining', () async {
-      final dio = Dio();
-
-      final dioInterceptor = DioInterceptor();
-
       dioInterceptor
         ..onGet(
           path,

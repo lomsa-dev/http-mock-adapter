@@ -18,8 +18,8 @@ void main() {
   const statusCode = 200;
 
   setUp(() {
-    dioAdapter = DioAdapter();
-    dio = Dio()..httpClientAdapter = dioAdapter;
+    dio = Dio();
+    dioAdapter = DioAdapter.configure(dio: dio);
   });
 
   group('DioAdapter', () {
@@ -39,18 +39,21 @@ void main() {
 
       expect(response.data, {});
 
-      dioAdapter
-        ..method = RequestMethods.post
-        ..data = {}
-        ..headers = {
+      dio = Dio(BaseOptions(
+        method: RequestMethods.post.name,
+        headers: {
           Headers.contentTypeHeader: Headers.jsonContentType,
           Headers.contentLengthHeader: Matchers.integer,
-        };
+        },
+      ));
+      dioAdapter = DioAdapter.configure(dio: dio);
 
       dioAdapter.onRoute(
         '/example',
         (request) => request.reply(200, {}),
-        request: const Request(),
+        request: const Request(
+          data: {},
+        ),
       );
 
       response = await dio.post(

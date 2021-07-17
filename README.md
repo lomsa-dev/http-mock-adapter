@@ -20,10 +20,8 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 void main() async {
-  final dio = Dio();
-  final dioAdapter = DioAdapter();
-
-  dio.httpClientAdapter = dioAdapter;
+  final dio = Dio(BaseOptions());
+  final dioAdapter = DioAdapter.configure(dio: dio);
 
   const path = 'https://example.com';
 
