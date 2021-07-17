@@ -228,6 +228,23 @@ void main() {
 
           expect({'message': 'Test!'}, response.data);
         });
+
+        test('fails on unsatisfied header expectation', () async {
+          dioAdapter.onGet(
+            path,
+            (request) => request.reply(statusCode, data),
+            headers: {
+              Headers.contentLengthHeader: Matchers.integer,
+            },
+          );
+
+          expect(
+              () => dio.get(path),
+              throwsA(predicate((e) =>
+                  e is DioError &&
+                  e.type == DioErrorType.other &&
+                  e.error is AssertionError)));
+        });
       });
     });
   });

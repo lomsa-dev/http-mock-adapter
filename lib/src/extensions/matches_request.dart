@@ -71,8 +71,8 @@ extension MatchesRequest on RequestOptions {
         return false;
       }
     } else if (actual is Map && expected is Map) {
-      for (final key in actual.keys.toList()) {
-        if (!expected.containsKey(key)) {
+      for (final key in expected.keys.toList()) {
+        if (!actual.containsKey(key)) {
           return false;
         } else if (expected[key] is Matcher) {
           // Check matcher for the configured request.
