@@ -35,10 +35,6 @@ mixin RequestHandling on Recording {
           bytes = utf8.encode(_data);
         }
         options.headers[Headers.contentLengthHeader] = bytes.length.toString();
-        options.headers.putIfAbsent(
-          Headers.contentTypeHeader,
-          () => Headers.jsonContentType,
-        );
       }
     }
   }

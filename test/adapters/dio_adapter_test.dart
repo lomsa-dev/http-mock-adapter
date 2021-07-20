@@ -64,6 +64,56 @@ void main() {
       expect(response.data, {});
     });
 
+    test('sets default headers for form-data', () async {
+      dioAdapter.onPut(
+        '/example',
+        (server) => server.reply(200, {}),
+        data: Matchers.formData(FormData.fromMap({
+          'foo': 'bar',
+        })),
+        headers: <String, Object?>{
+          Headers.contentTypeHeader:
+              Matchers.pattern('multipart/form-data; boundary=.*'),
+          Headers.contentLengthHeader: Matchers.integer,
+        },
+      );
+
+      response = await dio.put(
+        '/example',
+        data: FormData.fromMap({
+          'foo': 'bar',
+        }),
+      );
+
+      expect(response.data, {});
+    });
+
+    test('sets default headers without request encoder', () async {
+      dio = Dio(BaseOptions(requestEncoder: null));
+      dioAdapter = DioAdapter(dio: dio);
+
+      dioAdapter.onPut(
+        '/example',
+        (server) => server.reply(200, {}),
+        data: {
+          'foo': 'bar',
+        },
+        headers: <String, Object?>{
+          Headers.contentTypeHeader: Headers.jsonContentType,
+          Headers.contentLengthHeader: Matchers.integer,
+        },
+      );
+
+      response = await dio.put(
+        '/example',
+        data: {
+          'foo': 'bar',
+        },
+      );
+
+      expect(response.data, {});
+    });
+
     group('RequestRouted', () {
       test('Test that throws raises custom exception', () async {
         final dioError = DioError(
