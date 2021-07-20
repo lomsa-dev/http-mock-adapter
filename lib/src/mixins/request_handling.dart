@@ -50,7 +50,7 @@ mixin RequestHandling on Recording {
     final requestMethod =
         request.method ?? RequestMethods.forName(name: dio.options.method);
 
-    Map<String, dynamic> requestHeaders = {...request.headers ?? {}};
+    Map<String, dynamic> requestHeaders = {...?request.headers};
 
     if (requestMethod.isAllowedPayloadMethod ||
         dio.options.setRequestContentTypeWhenNoPayload) {

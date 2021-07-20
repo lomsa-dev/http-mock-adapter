@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
@@ -88,8 +90,10 @@ void main() {
       expect(response.data, {});
     });
 
-    test('sets default headers without request encoder', () async {
-      dio = Dio(BaseOptions(requestEncoder: null));
+    test('sets default headers with custom request encoder', () async {
+      dio = Dio(BaseOptions(
+        requestEncoder: (request, options) => utf8.encode(request),
+      ));
       dioAdapter = DioAdapter(dio: dio);
 
       dioAdapter.onPut(
