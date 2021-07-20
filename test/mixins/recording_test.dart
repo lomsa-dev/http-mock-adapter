@@ -12,7 +12,7 @@ void main() {
 
   setUpAll(() {
     dio = Dio();
-    dioAdapter = DioAdapter.configure(dio: dio);
+    dioAdapter = DioAdapter(dio: dio);
   });
 
   group('History', () {
@@ -27,7 +27,7 @@ void main() {
 
         dioAdapter.onGet(
           path,
-          (request) => request.reply(200, data),
+          (server) => server.reply(200, data),
         );
 
         response = await dio.get(path);

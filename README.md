@@ -21,13 +21,13 @@ import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 void main() async {
   final dio = Dio(BaseOptions());
-  final dioAdapter = DioAdapter.configure(dio: dio);
+  final dioAdapter = DioAdapter(dio: dio);
 
   const path = 'https://example.com';
 
   dioAdapter.onGet(
     path,
-    (request) => request.reply(200, {'message': 'Success!'}),
+    (server) => server.reply(200, {'message': 'Success!'}),
   );
 
   final response = await dio.get(path);

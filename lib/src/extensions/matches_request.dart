@@ -10,29 +10,15 @@ extension MatchesRequest on RequestOptions {
   bool matchesRequest(Request request) {
     final routeMatched = doesRouteMatch(path, request.route);
     final requestBodyMatched = matches(data, request.data);
+    final queryParametersMatched =
+        matches(queryParameters, request.queryParameters ?? {});
+    final headersMatched = matches(headers, request.headers ?? {});
 
-    final queryParametersMatched = matches(
-      queryParameters,
-      request.queryParameters,
-    );
-
-    // Dio adds headers to the request when none are specified.
-    final requestHeaders = request.headers ??
-        {
-          Headers.contentTypeHeader: Headers.jsonContentType,
-        };
-
-    final headersMatched = matches(headers, requestHeaders);
-
-    if (!routeMatched ||
-        method != request.method?.name ||
-        !requestBodyMatched ||
-        !queryParametersMatched ||
-        !headersMatched) {
-      return false;
-    }
-
-    return true;
+    return routeMatched &&
+        method == request.method?.name &&
+        requestBodyMatched &&
+        queryParametersMatched &&
+        headersMatched;
   }
 
   /// Check to see if route matches the mock specification

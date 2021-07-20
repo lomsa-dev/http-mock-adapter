@@ -16,7 +16,7 @@ void main() {
 
     setUpAll(() {
       dio = Dio();
-      dioInterceptor = DioInterceptor.configure(dio: dio);
+      dioInterceptor = DioInterceptor(dio: dio);
     });
 
     Future<void> _testDioInterceptor<T>(
@@ -37,7 +37,7 @@ void main() {
         // on onGet for the specific path.
         dioInterceptor.onGet(
           path,
-          (request) => request.throws(
+          (server) => server.throws(
             500,
             MockDioError(
               type: type,
@@ -69,7 +69,7 @@ void main() {
       test('mocks requests via onRoute() as intended', () async {
         dioInterceptor.onRoute(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
           request: const Request(),
         );
 
@@ -79,7 +79,7 @@ void main() {
       test('mocks requests via onGet() as intended', () async {
         dioInterceptor.onGet(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.get(path), data);
@@ -88,7 +88,7 @@ void main() {
       test('mocks requests via onHead() as intended', () async {
         dioInterceptor.onHead(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.head(path), data);
@@ -97,7 +97,7 @@ void main() {
       test('mocks requests via onPost() as intended', () async {
         dioInterceptor.onPost(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.post(path), data);
@@ -106,7 +106,7 @@ void main() {
       test('mocks requests via onPut() as intended', () async {
         dioInterceptor.onPut(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.put(path), data);
@@ -115,7 +115,7 @@ void main() {
       test('mocks requests via onDelete() as intended', () async {
         dioInterceptor.onDelete(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.delete(path), data);
@@ -124,7 +124,7 @@ void main() {
       test('mocks requests via onPatch() as intended', () async {
         dioInterceptor.onPatch(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         );
 
         await _testDioInterceptor(() => dio.patch(path), data);
@@ -132,18 +132,22 @@ void main() {
     });
 
     test('mocks multiple requests sequentially by method chaining', () async {
+      const sendData = 'foo';
+
       dioInterceptor
         ..onGet(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
         )
         ..onPost(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
+          data: sendData,
         )
         ..onPatch(
           path,
-          (request) => request.reply(statusCode, data),
+          (server) => server.reply(statusCode, data),
+          data: sendData,
         );
 
       dio.interceptors.add(dioInterceptor);
@@ -151,10 +155,10 @@ void main() {
       response = await dio.get(path);
       expect(response.data, data);
 
-      response = await dio.post(path);
+      response = await dio.post(path, data: sendData);
       expect(response.data, data);
 
-      response = await dio.patch(path);
+      response = await dio.patch(path, data: sendData);
       expect(response.data, data);
     });
   });

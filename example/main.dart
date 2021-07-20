@@ -18,7 +18,7 @@ void main() async {
 
     setUp(() {
       dio = Dio(BaseOptions(baseUrl: baseUrl));
-      dioAdapter = DioAdapter.configure(dio: dio);
+      dioAdapter = DioAdapter(dio: dio);
     });
 
     test('signs up user', () async {
@@ -26,7 +26,7 @@ void main() async {
 
       dioAdapter.onPost(
         route,
-        (request) => request.reply(201, null),
+        (server) => server.reply(201, null),
         data: userCredentials,
       );
 
@@ -58,7 +58,7 @@ void main() async {
       dioAdapter
         ..onPost(
           signInRoute,
-          (request) => request.throws(
+          (server) => server.throws(
             401,
             DioError(
               requestOptions: RequestOptions(
@@ -69,12 +69,12 @@ void main() async {
         )
         ..onPost(
           signInRoute,
-          (request) => request.reply(200, accessToken),
+          (server) => server.reply(200, accessToken),
           data: userCredentials,
         )
         ..onGet(
           accountRoute,
-          (request) => request.reply(200, userInformation),
+          (server) => server.reply(200, userInformation),
           headers: headers,
         );
 

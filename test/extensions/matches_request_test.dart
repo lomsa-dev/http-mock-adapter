@@ -164,13 +164,13 @@ void main() {
 
         setUpAll(() {
           dio = Dio();
-          dioAdapter = DioAdapter.configure(dio: dio);
+          dioAdapter = DioAdapter(dio: dio);
         });
 
         test('mocks requests via onPost() with matchers as intended', () async {
           dioAdapter.onPost(
             '/post-any-data',
-            (request) => request.reply(statusCode, data),
+            (server) => server.reply(statusCode, data),
             data: {
               'any': Matchers.any,
               'boolean': Matchers.boolean,
@@ -216,7 +216,7 @@ void main() {
 
           dioAdapter.onPost(
             path,
-            (request) => request.reply(statusCode, data),
+            (server) => server.reply(statusCode, data),
             data: {'date': Matchers.pattern(pattern)},
             headers: {
               Headers.contentTypeHeader: Matchers.pattern('application'),
@@ -232,7 +232,7 @@ void main() {
         test('fails on unsatisfied header expectation', () async {
           dioAdapter.onGet(
             path,
-            (request) => request.reply(statusCode, data),
+            (server) => server.reply(statusCode, data),
             headers: {
               Headers.contentLengthHeader: Matchers.integer,
             },
