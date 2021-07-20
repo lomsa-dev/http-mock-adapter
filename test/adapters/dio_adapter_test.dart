@@ -70,9 +70,9 @@ void main() {
       dioAdapter.onPut(
         '/example',
         (server) => server.reply(200, {}),
-        data: Matchers.formData(FormData.fromMap({
+        data: FormData.fromMap({
           'foo': 'bar',
-        })),
+        }),
         headers: <String, Object?>{
           Headers.contentTypeHeader:
               Matchers.pattern('multipart/form-data; boundary=.*'),

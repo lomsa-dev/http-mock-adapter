@@ -46,37 +46,22 @@ mixin RequestHandling on Recording {
     MockServerCallback requestHandlerCallback, {
     required Request request,
   }) {
-    final requestData = request.data;
-    final requestMethod =
-        request.method ?? RequestMethods.forName(name: dio.options.method);
+    var requestData = request.data;
 
-    Map<String, dynamic> requestHeaders = {...?request.headers};
-
-    if (requestMethod.isAllowedPayloadMethod ||
-        dio.options.setRequestContentTypeWhenNoPayload) {
-      requestHeaders.putIfAbsent(
-        Headers.contentTypeHeader,
-        () => Headers.jsonContentType,
-      );
+    // Automatically add form data matcher if it is not provided
+    if (requestData is FormData) {
+      requestData = Matchers.formData(requestData);
     }
 
-    if (requestMethod.isAllowedPayloadMethod && requestData != null) {
-      requestHeaders.putIfAbsent(
-        Headers.contentLengthHeader,
-        () => Matchers.integer,
-      );
-    }
-
-    request = Request(
+    final matcher = RequestMatcher(Request(
       route: route,
       method:
           request.method ?? RequestMethods.forName(name: dio.options.method),
       data: requestData,
       queryParameters: request.queryParameters ?? dio.options.queryParameters,
-      headers: requestHeaders,
-    );
+      headers: {...?request.headers},
+    ));
 
-    final matcher = RequestMatcher(request);
     requestHandlerCallback(matcher);
     history.add(matcher);
   }
