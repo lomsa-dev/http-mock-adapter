@@ -11,9 +11,8 @@ void main() {
   const path = 'https://example.com';
 
   setUpAll(() {
-    dioAdapter = DioAdapter();
-
-    dio = Dio()..httpClientAdapter = dioAdapter;
+    dio = Dio();
+    dioAdapter = DioAdapter(dio: dio);
   });
 
   group('History', () {
@@ -28,7 +27,7 @@ void main() {
 
         dioAdapter.onGet(
           path,
-          (request) => request.reply(200, data),
+          (server) => server.reply(200, data),
         );
 
         response = await dio.get(path);

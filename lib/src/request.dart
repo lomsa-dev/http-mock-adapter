@@ -1,4 +1,4 @@
-import 'package:http_mock_adapter/src/extensions/extensions.dart';
+import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/utils.dart';
@@ -30,7 +30,7 @@ class Request {
 
   /// [signature] is the [String] representation of the [Request]'s body.
   String get signature => buildRequestSignature(
-        method?.toUpperCaseString,
+        method?.name,
         route,
         data,
         queryParameters,
@@ -38,45 +38,52 @@ class Request {
       );
 }
 
-/// Matcher of [Request] and [mockResponse] based on route and [RequestHandler].
-class RequestMatcher {
+/// Matches a [Request] to a [MockResponse].
+class RequestMatcher extends RequestHandler {
   /// This is a request sent by the the client.
   final Request request;
 
-  /// This is a request handler that processes requests.
-  final RequestHandler requestHandler;
-
-  /// This is an artificial response body to the request.
-  MockResponse Function()? mockResponse;
-
-  RequestMatcher(
-    this.request,
-    this.requestHandler, {
-    this.mockResponse,
-  });
+  RequestMatcher(this.request);
 }
 
 /// HTTP methods.
-enum RequestMethods {
+class RequestMethods {
   /// The [get] method requests a representation of the specified resource.
   /// Requests using [get] should only retrieve data.
-  get,
+  static const RequestMethods get = RequestMethods._('GET');
 
   /// The [head] method asks for a response identical to that of a [get] request,
   /// but without the response body.
-  head,
+  static const RequestMethods head = RequestMethods._('HEAD');
 
   /// The [post] method is used to submit an entity to the specified resource,
   /// often causing a change in state or side effects on the server.
-  post,
+  static const RequestMethods post = RequestMethods._('POST');
 
   /// The [put] method replaces all current representations of the
   /// target resource with the request payload.
-  put,
+  static const RequestMethods put = RequestMethods._('PUT');
 
   /// The [delete] method deletes the specified resource.
-  delete,
+  static const RequestMethods delete = RequestMethods._('DELETE');
 
   /// The [patch] method is used to apply partial modifications to a resource.
-  patch,
+  static const RequestMethods patch = RequestMethods._('PATCH');
+
+  /// Taken from [BaseOptions]. The default methods that are considered
+  /// to have a payload. Only for these methods a default content-type header is
+  /// added, if no specified.
+  static const allowedPayloadMethods = [post, put, patch, delete];
+
+  static const _all = [get, head, post, put, patch, delete];
+
+  final String name;
+
+  bool get isAllowedPayloadMethod => allowedPayloadMethods.contains(this);
+
+  factory RequestMethods.forName({required String name}) {
+    return _all.firstWhere((m) => m.name == name);
+  }
+
+  const RequestMethods._(this.name);
 }

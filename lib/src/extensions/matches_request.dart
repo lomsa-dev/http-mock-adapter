@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:http_mock_adapter/src/extensions/to_upper_case_string.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
 import 'package:http_mock_adapter/src/request.dart';
 
@@ -11,29 +10,15 @@ extension MatchesRequest on RequestOptions {
   bool matchesRequest(Request request) {
     final routeMatched = doesRouteMatch(path, request.route);
     final requestBodyMatched = matches(data, request.data);
+    final queryParametersMatched =
+        matches(queryParameters, request.queryParameters ?? {});
+    final headersMatched = matches(headers, request.headers ?? {});
 
-    final queryParametersMatched = matches(
-      queryParameters,
-      request.queryParameters,
-    );
-
-    // Dio adds headers to the request when none are specified.
-    final requestHeaders = request.headers ??
-        {
-          Headers.contentTypeHeader: Headers.jsonContentType,
-        };
-
-    final headersMatched = matches(headers, requestHeaders);
-
-    if (!routeMatched ||
-        method != request.method?.toUpperCaseString ||
-        !requestBodyMatched ||
-        !queryParametersMatched ||
-        !headersMatched) {
-      return false;
-    }
-
-    return true;
+    return routeMatched &&
+        method == request.method?.name &&
+        requestBodyMatched &&
+        queryParametersMatched &&
+        headersMatched;
   }
 
   /// Check to see if route matches the mock specification
@@ -72,8 +57,8 @@ extension MatchesRequest on RequestOptions {
         return false;
       }
     } else if (actual is Map && expected is Map) {
-      for (final key in actual.keys.toList()) {
-        if (!expected.containsKey(key)) {
+      for (final key in expected.keys.toList()) {
+        if (!actual.containsKey(key)) {
           return false;
         } else if (expected[key] is Matcher) {
           // Check matcher for the configured request.

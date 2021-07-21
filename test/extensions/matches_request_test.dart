@@ -160,24 +160,17 @@ void main() {
 
         Response<dynamic> response;
         const statusCode = 200;
-        DioAdapter dioAdapter;
+        late DioAdapter dioAdapter;
 
         setUpAll(() {
           dio = Dio();
-
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
+          dioAdapter = DioAdapter(dio: dio);
         });
 
         test('mocks requests via onPost() with matchers as intended', () async {
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
-
           dioAdapter.onPost(
             '/post-any-data',
-            (request) => request.reply(statusCode, data),
+            (server) => server.reply(statusCode, data),
             data: {
               'any': Matchers.any,
               'boolean': Matchers.boolean,
@@ -219,15 +212,11 @@ void main() {
         });
 
         test('mocks date formatted POST request as intended', () async {
-          dioAdapter = DioAdapter();
-
-          dio.httpClientAdapter = dioAdapter;
-
           const pattern = r'(0?[1-9]|[12][0-9]|3[01])\-(0?[1-9]|1[012])\-\d{4}';
 
           dioAdapter.onPost(
             path,
-            (request) => request.reply(statusCode, data),
+            (server) => server.reply(statusCode, data),
             data: {'date': Matchers.pattern(pattern)},
             headers: {
               Headers.contentTypeHeader: Matchers.pattern('application'),
@@ -238,6 +227,23 @@ void main() {
           response = await dio.post(path, data: {'date': '04-01-2021'});
 
           expect({'message': 'Test!'}, response.data);
+        });
+
+        test('fails on unsatisfied header expectation', () async {
+          dioAdapter.onGet(
+            path,
+            (server) => server.reply(statusCode, data),
+            headers: {
+              Headers.contentLengthHeader: Matchers.integer,
+            },
+          );
+
+          expect(
+              () => dio.get(path),
+              throwsA(predicate((e) =>
+                  e is DioError &&
+                  e.type == DioErrorType.other &&
+                  e.error is AssertionError)));
         });
       });
     });

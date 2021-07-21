@@ -1,23 +1,91 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/handlers/request_handler.dart';
+import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/response.dart';
 import 'package:http_mock_adapter/src/types.dart';
 
 /// [RequestHandling] exposes developer-friendly methods which take in route,
 /// [Request], both of which ultimately get processed by [RequestHandler].
-mixin RequestHandling {
+mixin RequestHandling on Recording {
+  Dio get dio;
+
+  /// Configures default headers which are usually set by [DioMixin].
+  /// * content-type
+  /// * content-length
+  Future<void> setDefaultRequestHeaders(Dio dio, RequestOptions options) async {
+    final data = options.data;
+    if (data != null &&
+        RequestMethods.allowedPayloadMethods
+            .contains(RequestMethods.forName(name: options.method))) {
+      if (data is FormData) {
+        options.headers[Headers.contentTypeHeader] =
+            'multipart/form-data; boundary=${data.boundary}';
+        options.headers[Headers.contentLengthHeader] = data.length.toString();
+      } else {
+        final _data = await dio.transformer.transformRequest(options);
+        List<int> bytes;
+        if (options.requestEncoder != null) {
+          bytes = options.requestEncoder!(_data, options);
+        } else {
+          bytes = utf8.encode(_data);
+        }
+        options.headers[Headers.contentLengthHeader] = bytes.length.toString();
+      }
+    }
+  }
+
+  /// Takes in [route], [request], sets corresponding [RequestHandler],
+  /// adds an instance of [RequestMatcher] in [history].
   void onRoute(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     required Request request,
-  });
+  }) {
+    final requestData = request.data;
+    final requestMethod =
+        request.method ?? RequestMethods.forName(name: dio.options.method);
+
+    Map<String, dynamic> requestHeaders = {...?request.headers};
+
+    if (requestMethod.isAllowedPayloadMethod ||
+        dio.options.setRequestContentTypeWhenNoPayload) {
+      requestHeaders.putIfAbsent(
+        Headers.contentTypeHeader,
+        () => Headers.jsonContentType,
+      );
+    }
+
+    if (requestMethod.isAllowedPayloadMethod && requestData != null) {
+      requestHeaders.putIfAbsent(
+        Headers.contentLengthHeader,
+        () => Matchers.integer,
+      );
+    }
+
+    request = Request(
+      route: route,
+      method:
+          request.method ?? RequestMethods.forName(name: dio.options.method),
+      data: requestData,
+      queryParameters: request.queryParameters ?? dio.options.queryParameters,
+      headers: requestHeaders,
+    );
+
+    final matcher = RequestMatcher(request);
+    requestHandlerCallback(matcher);
+    history.add(matcher);
+  }
 
   /// Takes in a route, requests with [RequestMethods.get],
   /// and sets corresponding [RequestHandler].
   void onGet(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -38,7 +106,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onHead(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -59,7 +127,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPost(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -80,7 +148,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPut(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -101,7 +169,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onDelete(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -122,7 +190,7 @@ mixin RequestHandling {
   /// and sets corresponding [RequestHandler].
   void onPatch(
     Pattern route,
-    RequestHandlerCallback requestHandlerCallback, {
+    MockServerCallback requestHandlerCallback, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,

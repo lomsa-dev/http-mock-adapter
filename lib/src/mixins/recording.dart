@@ -22,11 +22,6 @@ mixin Recording {
           if (requestOptions.signature == requestMatcher.request.signature ||
               requestOptions.matchesRequest(requestMatcher.request)) {
             _invocationIndex = _requestMatchers.indexOf(requestMatcher);
-
-            final requestHandler = requestMatcher.requestHandler;
-
-            requestMatcher.mockResponse =
-                requestHandler.mockResponses[requestHandler.requestSignature];
           }
         }
 
@@ -37,7 +32,7 @@ mixin Recording {
           );
         }
 
-        return requestMatcher.mockResponse!();
+        return requestMatcher.mockResponse();
       };
 
   /// Keeps track of request and response history.
