@@ -76,7 +76,8 @@ void main() {
               'foo': 'bar',
             }),
             headers: <String, Object?>{
-              Headers.contentTypeHeader: Matchers.pattern('multipart/form-data; boundary=.*'),
+              Headers.contentTypeHeader:
+                  Matchers.pattern('multipart/form-data; boundary=.*'),
               Headers.contentLengthHeader: Matchers.integer,
             },
           );
@@ -143,7 +144,10 @@ void main() {
             () async => await dio.get(path),
             throwsA(
               predicate(
-                (DioError error) => error is DioError && error is MockDioError && error.message == dioError.error.toString(),
+                (DioError error) =>
+                    error is DioError &&
+                    error is MockDioError &&
+                    error.message == dioError.error.toString(),
               ),
             ),
           );
@@ -311,7 +315,8 @@ void main() {
           );
         });
 
-        test('mocks multiple requests by chaining methods as intended', () async {
+        test('mocks multiple requests by chaining methods as intended',
+            () async {
           tester
             ..onGet(
               '/route',
@@ -344,7 +349,8 @@ void main() {
           );
         });
 
-        test('returns a new response every time for the same request', () async {
+        test('returns a new response every time for the same request',
+            () async {
           tester.onGet(
             '/route',
             (server) => server.reply(200, {'message': 'Success'}),
