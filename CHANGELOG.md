@@ -12,6 +12,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.3.2] (2021-07-26)
+
+- **Added**
+  - Automatic wrapping of `FormData` in a fitting matcher.
+
+- **Fixed**
+  - Missing expectation in map not causing test failures.
+
+- **Removed**
+  - Header matcher.
+
+- **Updated**
+  - Tests for `DioAdapter` and `DioInterceptor` by combining them.
+
 ## [v0.3.1] (2021-06-16)
 
 - **Removed**
@@ -166,6 +180,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Added**
   - The MIT License.
 
+[v0.3.2]: https://github.com/lomsa-dev/http-mock-adapter/compare/e1da999215a72378356b1b4883d32807091bf239...ac4991fb2c9808be44bd8165941bf7d9101de5bf
 [v0.3.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/e1da999215a72378356b1b4883d32807091bf239...70fb7802f0ad48e03abb16a7197b933b1306c332
 [v0.3.0]: https://github.com/lomsa-dev/http-mock-adapter/compare/70fb7802f0ad48e03abb16a7197b933b1306c332...f138e738dea358a386537adfb9df3e1c5dc79c0c
 [v0.2.1]: https://github.com/lomsa-dev/http-mock-adapter/compare/f138e738dea358a386537adfb9df3e1c5dc79c0c...ec13a0f1ca3cb0fd56620832a79db5ab04ad8742
