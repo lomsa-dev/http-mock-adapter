@@ -32,7 +32,7 @@ mixin Recording {
           );
         }
 
-        return requestMatcher.mockResponse();
+        return requestMatcher.mockResponse(requestOptions);
       };
 
   /// Keeps track of request and response history.

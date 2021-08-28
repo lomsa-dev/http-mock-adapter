@@ -36,6 +36,15 @@ void main() {
         );
       });
 
+      test('data is MockDataCallback', () {
+        const actual = {
+          'a': 'a',
+          'b': 'b',
+        };
+
+        expect(options.matches(actual, (option)=>{}), true);
+      });
+
       group('map', () {
         test('exactly', () {
           const actual = {
