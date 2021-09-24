@@ -49,15 +49,10 @@ void main() {
     test('sets response data MockDataCallback ', () async {
       const statusCode = HttpStatus.ok;
       var data = {'data': 'OK'};
-      dynamic Function(RequestOptions options) inputData;
-      inputData = (options) {
-        return data;
-      };
 
-      requestHandler.reply(
-        statusCode,
-        inputData,
-      );
+      inputData(RequestOptions options) => data;
+
+      requestHandler.reply(statusCode, inputData);
 
       final statusHandler = requestHandler.mockResponse;
 
@@ -66,10 +61,8 @@ void main() {
       final mockResponseBody =
           statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      final resolvedData = await DefaultTransformer().transformResponse(
-        RequestOptions(path: ''),
-        mockResponseBody,
-      );
+      final resolvedData = await DefaultTransformer()
+          .transformResponse(RequestOptions(path: ''), mockResponseBody);
 
       expect(resolvedData, data);
     });

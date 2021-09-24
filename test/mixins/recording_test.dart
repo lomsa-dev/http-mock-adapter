@@ -44,10 +44,7 @@ void main() {
     });
 
     test('test MockDataCallback', () async {
-      var data = {
-        'id': 1,
-        'name': 'mock',
-      };
+      var data = {'id': 1, 'name': 'mock'};
       Response<dynamic> response;
 
       dioAdapter.onPost(

@@ -52,9 +52,7 @@ extension MatchesRequest on RequestOptions {
     }
 
     /// if data is MockDataCallback do not need to match;
-    if (expected is MockDataCallback) {
-      return true;
-    }
+    if (expected is MockDataCallback) return true;
     if (expected is Matcher) {
       /// Check the match here to bypass the fallthrough strict equality check
       /// at the end.
