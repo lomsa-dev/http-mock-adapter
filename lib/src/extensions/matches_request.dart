@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/matchers/matchers.dart';
 import 'package:http_mock_adapter/src/request.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// [MatchesRequest] enhances the [RequestOptions] by allowing different types
 /// of matchers to validate the data and headers of the request.
@@ -50,6 +51,8 @@ extension MatchesRequest on RequestOptions {
       return true;
     }
 
+    /// if data is MockDataCallback do not need to match;
+    if (expected is MockDataCallback) return true;
     if (expected is Matcher) {
       /// Check the match here to bypass the fallthrough strict equality check
       /// at the end.

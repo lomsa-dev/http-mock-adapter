@@ -12,3 +12,6 @@ typedef MockServerCallback = void Function(MockServer server);
 typedef MockResponseBodyCallback = MockResponse Function(
   RequestOptions options,
 );
+
+/// Type for expect data as function
+typedef MockDataCallback = dynamic Function(RequestOptions options);

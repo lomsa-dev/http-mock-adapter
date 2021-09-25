@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:http_mock_adapter/src/response.dart';
+import 'package:http_mock_adapter/src/types.dart';
 
 /// Something that can respond to requests.
 abstract class MockServer {
@@ -27,7 +28,7 @@ abstract class MockServer {
 /// constructs the configured [MockResponse].
 class RequestHandler implements MockServer {
   /// This is the response.
-  late MockResponse Function() mockResponse;
+  late MockResponse Function(RequestOptions options) mockResponse;
 
   /// Stores [MockResponse] in [mockResponse].
   @override
@@ -45,18 +46,24 @@ class RequestHandler implements MockServer {
         ) ??
         false;
 
-    mockResponse = () => MockResponseBody.from(
-          isJsonContentType ? jsonEncode(data) : data,
-          statusCode,
-          headers: headers,
-          statusMessage: statusMessage,
-          isRedirect: isRedirect,
-        );
+    mockResponse = (requestOptions) {
+      dynamic rawData = data;
+      if (data is MockDataCallback) {
+        rawData = data(requestOptions);
+      }
+      return MockResponseBody.from(
+        isJsonContentType ? jsonEncode(rawData) : rawData,
+        statusCode,
+        headers: headers,
+        statusMessage: statusMessage,
+        isRedirect: isRedirect,
+      );
+    };
   }
 
   /// Stores the [DioError] inside the [mockResponse].
   @override
   void throws(int statusCode, DioError dioError) {
-    mockResponse = () => MockDioError.from(dioError);
+    mockResponse = (requestOptions) => MockDioError.from(dioError);
   }
 }

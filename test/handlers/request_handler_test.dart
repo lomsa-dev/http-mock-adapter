@@ -27,7 +27,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler() as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await DefaultTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -43,6 +44,27 @@ void main() {
           ],
         },
       );
+    });
+
+    test('sets response data MockDataCallback ', () async {
+      const statusCode = HttpStatus.ok;
+      var data = {'data': 'OK'};
+
+      inputData(RequestOptions options) => data;
+
+      requestHandler.reply(statusCode, inputData);
+
+      final statusHandler = requestHandler.mockResponse;
+
+      expect(statusHandler, isNotNull);
+
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+
+      final resolvedData = await DefaultTransformer()
+          .transformResponse(RequestOptions(path: ''), mockResponseBody);
+
+      expect(resolvedData, data);
     });
 
     test(
@@ -66,7 +88,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler() as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await DefaultTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -95,7 +118,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockDioError = statusHandler() as MockDioError;
+      final mockDioError =
+          statusHandler(RequestOptions(path: '')) as MockDioError;
 
       expect(mockDioError.type, dioError.type);
     });
