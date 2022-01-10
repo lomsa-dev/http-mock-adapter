@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
@@ -7,9 +8,13 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   @override
   final Dio dio;
 
+  @override
+  final HttpRequestMatcher matcher;
+
   /// Constructs a [DioInterceptor] and configures the passed [Dio] instance.
   DioInterceptor({
     required this.dio,
+    this.matcher = const FullHttpRequestMatcher(),
   }) {
     dio.interceptors.add(this);
   }

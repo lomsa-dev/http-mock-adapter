@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
@@ -13,9 +14,13 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   @override
   final Dio dio;
 
+  @override
+  final HttpRequestMatcher matcher;
+
   /// Constructs a [DioAdapter] and configures the passed [Dio] instance.
   DioAdapter({
     required this.dio,
+    this.matcher = const FullHttpRequestMatcher(),
   }) {
     dio.httpClientAdapter = this;
   }

@@ -1,10 +1,12 @@
-import 'package:http_mock_adapter/src/extensions/matches_request.dart';
 import 'package:http_mock_adapter/src/extensions/signature.dart';
+import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/types.dart';
 
 /// An ability that lets a construct to record a [RequestMatcher] history.
 mixin Recording {
+  HttpRequestMatcher get matcher;
+
   /// The index of request invocations.
   int? _invocationIndex;
 
@@ -20,7 +22,7 @@ mixin Recording {
 
         for (var requestMatcher in _requestMatchers) {
           if (requestOptions.signature == requestMatcher.request.signature ||
-              requestOptions.matchesRequest(requestMatcher.request)) {
+              matcher.matches(requestOptions, requestMatcher.request)) {
             _invocationIndex = _requestMatchers.indexOf(requestMatcher);
           }
         }
