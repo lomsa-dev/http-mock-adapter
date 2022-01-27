@@ -5,11 +5,15 @@ import 'package:http_mock_adapter/src/response.dart';
 
 /// Wrapper of [Dio]'s [DioError] [Exception].
 class MockDioError extends DioError implements MockResponse {
+  @override
+  final Duration? delay;
+
   MockDioError({
     required RequestOptions requestOptions,
     Response? response,
     DioErrorType type = DioErrorType.other,
     dynamic error,
+    this.delay,
   }) : super(
           requestOptions: requestOptions,
           response: response,
@@ -17,11 +21,13 @@ class MockDioError extends DioError implements MockResponse {
           error: error,
         );
 
-  static MockDioError from(DioError dioError) => MockDioError(
+  static MockDioError from(DioError dioError, [Duration? delay]) =>
+      MockDioError(
         requestOptions: dioError.requestOptions,
         response: dioError.response,
         type: dioError.type,
         error: dioError.error,
+        delay: delay,
       );
 }
 

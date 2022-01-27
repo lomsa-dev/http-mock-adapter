@@ -16,6 +16,7 @@ abstract class MockServer {
     },
     String? statusMessage,
     bool isRedirect = false,
+    Duration? delay,
   });
 
   void throws(
@@ -40,6 +41,7 @@ class RequestHandler implements MockServer {
     },
     String? statusMessage,
     bool isRedirect = false,
+    Duration? delay,
   }) {
     final isJsonContentType = headers[Headers.contentTypeHeader]?.contains(
           Headers.jsonContentType,
@@ -57,13 +59,14 @@ class RequestHandler implements MockServer {
         headers: headers,
         statusMessage: statusMessage,
         isRedirect: isRedirect,
+        delay: delay,
       );
     };
   }
 
   /// Stores the [DioError] inside the [mockResponse].
   @override
-  void throws(int statusCode, DioError dioError) {
-    mockResponse = (requestOptions) => MockDioError.from(dioError);
+  void throws(int statusCode, DioError dioError, [Duration? delay]) {
+    mockResponse = (requestOptions) => MockDioError.from(dioError, delay);
   }
 }
