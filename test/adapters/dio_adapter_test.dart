@@ -1,4 +1,3 @@
-import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';

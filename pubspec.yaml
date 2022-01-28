@@ -16,5 +16,4 @@ dependencies:
 dev_dependencies:
   lints: ^1.0.1
   test: ^1.16.8
-  clock: ^1.1.0
   fake_async: ^1.2.0
