@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 /// This interface makes sure that we can save [DioError] and [ResponseBody]
 /// inside the same list.
 abstract class MockResponse {
-  /// Delays this response by the given duration
+  /// Delays this response by the given duration.
   Duration? get delay;
 }
 

@@ -50,10 +50,11 @@ class RequestHandler implements MockServer {
         false;
 
     mockResponse = (requestOptions) {
-      dynamic rawData = data;
+      var rawData = data;
       if (data is MockDataCallback) {
         rawData = data(requestOptions);
       }
+
       return MockResponseBody.from(
         isJsonContentType ? jsonEncode(rawData) : rawData,
         statusCode,

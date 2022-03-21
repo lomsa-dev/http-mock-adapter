@@ -37,15 +37,11 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
     await setDefaultRequestHeaders(dio, requestOptions);
     final response = mockResponse(requestOptions);
 
-    final delay = response.delay;
-    if (delay != null) {
-      await Future.delayed(delay);
-    }
+    // Waits for defined duration.
+    if (response.delay != null) await Future.delayed(response.delay!);
 
     // Throws DioError if response type is MockDioError.
-    if (isMockDioError(response)) {
-      throw response as DioError;
-    }
+    if (isMockDioError(response)) throw response as DioError;
 
     return response as MockResponseBody;
   }

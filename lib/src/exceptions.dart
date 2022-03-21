@@ -36,9 +36,7 @@ class MockDioError extends DioError implements MockResponse {
 class ClosedException implements Exception {
   final dynamic message;
 
-  ClosedException([
-    this.message = 'Cannot establish connection!',
-  ]);
+  const ClosedException([this.message = 'Cannot establish connection!']);
 
   @override
   String toString() => 'ClosedException: $message';
