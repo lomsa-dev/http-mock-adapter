@@ -16,12 +16,14 @@ abstract class MockServer {
     },
     String? statusMessage,
     bool isRedirect = false,
+    Duration? delay,
   });
 
   void throws(
     int statusCode,
-    DioError dioError,
-  );
+    DioError dioError, {
+    Duration? delay,
+  });
 }
 
 /// The handler implements [MockServer] and
@@ -40,6 +42,7 @@ class RequestHandler implements MockServer {
     },
     String? statusMessage,
     bool isRedirect = false,
+    Duration? delay,
   }) {
     final isJsonContentType = headers[Headers.contentTypeHeader]?.contains(
           Headers.jsonContentType,
@@ -47,23 +50,25 @@ class RequestHandler implements MockServer {
         false;
 
     mockResponse = (requestOptions) {
-      dynamic rawData = data;
+      var rawData = data;
       if (data is MockDataCallback) {
         rawData = data(requestOptions);
       }
+
       return MockResponseBody.from(
         isJsonContentType ? jsonEncode(rawData) : rawData,
         statusCode,
         headers: headers,
         statusMessage: statusMessage,
         isRedirect: isRedirect,
+        delay: delay,
       );
     };
   }
 
   /// Stores the [DioError] inside the [mockResponse].
   @override
-  void throws(int statusCode, DioError dioError) {
-    mockResponse = (requestOptions) => MockDioError.from(dioError);
+  void throws(int statusCode, DioError dioError, {Duration? delay}) {
+    mockResponse = (requestOptions) => MockDioError.from(dioError, delay);
   }
 }
