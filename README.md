@@ -27,7 +27,12 @@ void main() async {
 
   dioAdapter.onGet(
     path,
-    (server) => server.reply(200, {'message': 'Success!'}),
+    (server) => server.reply(
+      200,
+      {'message': 'Success!'},
+      // Reply would wait for one-sec before returning data.
+      delay: const Duration(seconds: 1),
+    ),
   );
 
   final response = await dio.get(path);
