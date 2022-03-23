@@ -12,6 +12,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [v0.3.3] (2022-03-23)
+
+- **Added**
+  - `delay` property to `MockServer` methods: (reply & throws)
+  - `HttpRequestMatcher` super class & its implementations `FullHttpRequestMatcher`, `UrlRequestMatcher`.
+  -  Utilities file for tests.
+
+- **Updated**
+  - Docs in `README.md` and `example/main.dart`.
+  - Tests for `DioAdapter`.
+
 ## [v0.3.2] (2021-07-26)
 
 - **Added**
