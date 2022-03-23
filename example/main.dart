@@ -18,7 +18,18 @@ void main() async {
 
     setUp(() {
       dio = Dio(BaseOptions(baseUrl: baseUrl));
-      dioAdapter = DioAdapter(dio: dio);
+      dioAdapter = DioAdapter(
+        dio: dio,
+
+        // [FullHttpRequestMatcher] is a default matcher class
+        // (which actually means you haven't to pass it manually) that matches entire URL.
+        //
+        // Use [UrlRequestMatcher] for matching request based on the path of the URL.
+        //
+        // Or create your own http-request matcher via extending your class from  [HttpRequestMatcher].
+        // See -> issue:[124] & pr:[125]
+        matcher: const FullHttpRequestMatcher(),
+      );
     });
 
     test('signs up user', () async {
