@@ -26,7 +26,14 @@ void main() async {
 
       dioAdapter.onPost(
         route,
-        (server) => server.reply(201, null),
+        (server) => server.reply(
+          201,
+          null,
+          // Adds one-sec delay to reply method.
+          // Basically, I'd wait for one second before returning reply data.
+          // See -> issue:[106] & pr:[126]
+          delay: const Duration(seconds: 1),
+        ),
         data: userCredentials,
       );
 
