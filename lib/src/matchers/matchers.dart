@@ -14,7 +14,6 @@ import 'package:http_mock_adapter/src/matchers/regexp.dart';
 import 'package:http_mock_adapter/src/matchers/string.dart';
 
 export 'package:http_mock_adapter/src/matchers/matcher.dart';
-export 'package:http_mock_adapter/src/matchers/matchers.dart' show Matchers;
 
 /// [Matchers] is an interface for various [Matcher] types.
 abstract class Matchers {
