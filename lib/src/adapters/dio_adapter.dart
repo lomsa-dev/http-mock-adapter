@@ -35,7 +35,7 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
   ) async {
     if (_isClosed) {
       throw ClosedException(
-        'Cannot esjtablish connection after [$runtimeType] got closed!',
+        'Cannot establish connection after [$runtimeType] got closed!',
       );
     }
 
