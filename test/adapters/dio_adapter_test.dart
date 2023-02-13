@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/exceptions.dart';
 import 'package:test/test.dart';
 
 import '../utils.dart';
@@ -26,9 +27,7 @@ void main() {
         () async => await dio.get('/route'),
         throwsA(
           predicate(
-            (DioError dioError) => dioError.message.startsWith(
-              'ClosedException',
-            ),
+            (DioError dioError) => dioError.error is ClosedException,
           ),
         ),
       );
@@ -52,7 +51,7 @@ void main() {
     test('delays error', () async {
       const delay = 5000;
       final dioError = DioError(
-        type: DioErrorType.response,
+        type: DioErrorType.badResponse,
         requestOptions: RequestOptions(path: 'path'),
       );
 

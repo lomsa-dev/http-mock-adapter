@@ -11,7 +11,7 @@ class MockDioError extends DioError implements MockResponse {
   MockDioError({
     required RequestOptions requestOptions,
     Response? response,
-    DioErrorType type = DioErrorType.other,
+    DioErrorType type = DioErrorType.unknown,
     dynamic error,
     this.delay,
   }) : super(

@@ -7,7 +7,7 @@ import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/response.dart';
 
 /// [HttpClientAdapter] extension with data mocking and recording functionality.
-class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
+class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
   /// State of [DioAdapter] that can be closed to prohibit functionality.
   bool _isClosed = false;
 
@@ -35,7 +35,7 @@ class DioAdapter extends HttpClientAdapter with Recording, RequestHandling {
   ) async {
     if (_isClosed) {
       throw ClosedException(
-        'Cannot establish connection after [$runtimeType] got closed!',
+        'Cannot esjtablish connection after [$runtimeType] got closed!',
       );
     }
 
