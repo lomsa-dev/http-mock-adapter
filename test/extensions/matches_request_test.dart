@@ -168,7 +168,7 @@ void main() {
         late DioAdapter dioAdapter;
 
         setUpAll(() {
-          dio = Dio();
+          dio = Dio(BaseOptions(contentType: Headers.jsonContentType));
           dioAdapter = DioAdapter(dio: dio);
         });
 
@@ -247,7 +247,7 @@ void main() {
               () => dio.get(path),
               throwsA(predicate((e) =>
                   e is DioError &&
-                  e.type == DioErrorType.other &&
+                  e.type == DioErrorType.unknown &&
                   e.error is AssertionError)));
         });
       });

@@ -65,11 +65,7 @@ void main() {
       expect(
         () async => await dio.get('/undefined'),
         throwsA(
-          predicate(
-            (DioError dioError) => dioError.message.startsWith(
-              'Assertion failed',
-            ),
-          ),
+          predicate((DioError dioError) => dioError.error is AssertionError),
         ),
       );
     });
