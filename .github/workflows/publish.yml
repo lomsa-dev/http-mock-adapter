@@ -9,13 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: google/dart:latest
+      image: dart:latest
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: pub get
+        run: dart pub get
       - name: Run tests
-        run: pub run test
+        run: dart pub run test
       - name: Setup credentials
         run: |
           mkdir -p ~/.pub-cache 
@@ -29,4 +29,4 @@ jobs:
           }
           EOF
       - name: Publish package
-        run: pub publish -f
+        run: dart pub publish -f
