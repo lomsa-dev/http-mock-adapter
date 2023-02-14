@@ -2,8 +2,8 @@ name: Publish Package
 
 on:
   push:
-    tags:
-      - "v.*"
+    branches:
+      - "release/**"
 
 jobs:
   build:
@@ -12,8 +12,6 @@ jobs:
       image: google/dart:latest
     steps:
       - uses: actions/checkout@v3
-      - name: curl
-        uses: wei/curl@v1
       - name: Install dependencies
         run: pub get
       - name: Run tests
