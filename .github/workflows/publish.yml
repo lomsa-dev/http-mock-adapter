@@ -1,34 +1,24 @@
-name: Publish Package
+name: Publish to pub.dev
 
 on:
   push:
-    branches: main
+    tags:
+    - 'v[0-9]+.[0-9]+.[0-9]+*' # tag pattern on pub.dev: 'v'
 
+# Publish using custom workflow
 jobs:
-  build:
+  publish:
+    permissions:
+      id-token: write # This is required for authentication using OIDC
     runs-on: ubuntu-latest
-    container:
-      image:  google/dart:latest
     steps:
-    - uses: actions/checkout@v1
-    - name: curl
-      uses: wei/curl@v1
-    - name: Install dependencies
-      run: pub get
-    - name: Run tests
-      run: pub run test
-    - name: Setup credentials
-      run: | 
-        mkdir -p ~/.pub-cache 
-        cat <<EOF > ~/.pub-cache/credentials.json
-        {
-          "accessToken":"${{ secrets.PUB_DEV_PUBLISH_ACCESS_TOKEN }}",
-          "refreshToken":"${{ secrets.PUB_DEV_PUBLISH_REFRESH_TOKEN }}",
-          "tokenEndpoint":"https://accounts.google.com/o/oauth2/token",
-          "scopes": [ "openid", "https://www.googleapis.com/auth/userinfo.email" ],
-          "expiration": ${{ secrets.PUB_DEV_PUBLISH_EXPIRATION }}
-        }
-        EOF
-    - name: Publish package
-      run: pub publish -f
-
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+      - name: Install dependencies
+        run: dart pub get
+      - name: Run tests
+        run: dart pub run test
+      # Here you can insert custom steps you need
+      # - run: dart tool/generate-code.dart
+      - name: Publish
+        run: dart pub publish --force

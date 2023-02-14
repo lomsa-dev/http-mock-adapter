@@ -2,8 +2,8 @@
 
 [![Package Version](https://img.shields.io/pub/v/http_mock_adapter?color=teal)](https://pub.dev/packages/http_mock_adapter "Published package version")
 [![Style: Lints](https://img.shields.io/badge/style-lints-teal.svg)](https://github.com/dart-lang/lints "Package linter helper")
-[![Dart CI](https://github.com/lomsa-dev/http-mock-adapter/workflows/Dart%20CI/badge.svg?branch=develop)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Dart+CI%22 "Dart CI workflow")
-[![Publish Package](https://github.com/lomsa-dev/http-mock-adapter/workflows/Publish%20Package/badge.svg?branch=main)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Publish+Package%22 "Publish Package workflow")
+[![Dart CI](https://github.com/lomsa-dev/http-mock-adapter/workflows/Dart%20CI/badge.svg?branch=main)](https://github.com/lomsa-dev/http-mock-adapter/actions?query=workflow%3A%22Dart+CI%22 "Dart CI workflow")
+[![Publish Package](https://github.com/lomsa-dev/http-mock-adapter/workflows/Publish%20to%20pub.dev/badge.svg)](https://github.com/lomsa-dev/http-mock-adapter/actions/workflows/publish.yml "Publish Package workflow")
 [![LICENSE](https://img.shields.io/badge/License-MIT-red.svg)](https://github.com/lomsa-dev/http-mock-adapter#License "Project's LICENSE section")
 [![codecov](https://codecov.io/gh/lomsa-dev/http-mock-adapter/branch/main/graph/badge.svg?token=7H1HPCGFJ6)](https://codecov.io/gh/lomsa-dev/http-mock-adapter)
 
@@ -73,7 +73,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:
-  http_mock_adapter: ^0.3.3
+  http_mock_adapter: ^0.4.0
 ```
 
 #### Install it
