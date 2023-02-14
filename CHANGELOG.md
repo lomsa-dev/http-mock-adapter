@@ -11,6 +11,17 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.4.0] (2023-02-14)
+
+- **Updated**
+  - Dio dependency to `5.0.0`
+  - Github Workflow (release on tag)
+  - Codecov token
+  - Collection to 1.17.1
+
+- **Removed**
+  - Recursive export of matchers.dart
+  - Unnecessary ListParam
 
 ## [v0.3.3] (2022-03-23)
 

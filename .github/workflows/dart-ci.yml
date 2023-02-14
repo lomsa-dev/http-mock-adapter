@@ -3,9 +3,7 @@ name: Dart CI
 # This workflow is triggered on pull requests and pushes to the repository.
 on:
   pull_request:
-    branches: [develop, main]
-  push:
-    branches: [develop, main]
+    branches: [main]
 
 jobs:
   ci:
