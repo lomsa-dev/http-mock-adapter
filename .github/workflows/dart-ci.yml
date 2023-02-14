@@ -4,6 +4,8 @@ name: Dart CI
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 
 jobs:
   ci:
@@ -15,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@v1
@@ -34,11 +36,15 @@ jobs:
       - name: Analyze project source
         run: dart analyze
 
-      - name: Test the package
-        run: dart pub global activate coverage && dart test --coverage=coverage && format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+      - name: Install coverage tools
+        run: dart pub global activate coverage
+
+      - name: Test with coverage
+        run: dart pub global run coverage:test_with_coverage
 
       - name: Code Coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/lcov.info
+          fail_ci_if_error: true
