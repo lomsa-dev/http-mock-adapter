@@ -11,6 +11,11 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.4.2] (2023-02-15)
+
+- **Updated**
+  - Downgrade dependency constraints to match minimum `dio` requirements
+
 ## [v0.4.1] (2023-02-15)
 
 - **Updated**
@@ -207,4 +212,3 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 - **Added**
   - The MIT License.
-  
