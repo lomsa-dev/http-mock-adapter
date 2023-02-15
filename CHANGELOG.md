@@ -11,6 +11,12 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.4.1] (2023-02-15)
+
+- **Updated**
+  - Downgrade collection to 1.15.0 due to incompability (issue [#141](https://github.com/lomsa-dev/http-mock-adapter/issues/141))
+  - Update package homepage
+
 ## [v0.4.0] (2023-02-14)
 
 - **Updated**
