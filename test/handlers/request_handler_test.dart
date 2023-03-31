@@ -1,4 +1,6 @@
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
@@ -12,6 +14,27 @@ void main() {
 
     setUp(() {
       requestHandler = RequestHandler();
+    });
+    test('sets response data for a status with Uint8List', () async {
+      const statusCode = HttpStatus.ok;
+      final inputData = Uint8List.fromList([1, 2, 3, 4, 5]);
+
+      requestHandler.reply(
+        statusCode,
+        inputData,
+      );
+
+      final statusHandler = requestHandler.mockResponse;
+
+      expect(statusHandler, isNotNull);
+
+      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final resolvedData = await BackgroundTransformer().transformResponse(
+        RequestOptions(path: '', responseType: ResponseType.bytes),
+        mockResponseBody,
+      );
+
+      expect(resolvedData, inputData);
     });
 
     test('sets response data for a status with JSON by default', () async {
@@ -27,8 +50,7 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await BackgroundTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -58,18 +80,15 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      final resolvedData = await BackgroundTransformer()
-          .transformResponse(RequestOptions(path: ''), mockResponseBody);
+      final resolvedData =
+          await BackgroundTransformer().transformResponse(RequestOptions(path: ''), mockResponseBody);
 
       expect(resolvedData, data);
     });
 
-    test(
-        'sets response data for a status without JSON if content type header is set',
-        () async {
+    test('sets response data for a status without JSON if content type header is set', () async {
       const statusCode = HttpStatus.created;
       const inputData = 'Plain text response';
       const headers = {
@@ -88,8 +107,7 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await BackgroundTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -118,8 +136,7 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockDioError =
-          statusHandler(RequestOptions(path: '')) as MockDioError;
+      final mockDioError = statusHandler(RequestOptions(path: '')) as MockDioError;
 
       expect(mockDioError.type, dioError.type);
     });

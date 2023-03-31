@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
@@ -50,6 +51,16 @@ class RequestHandler implements MockServer {
         false;
 
     mockResponse = (requestOptions) {
+      if (data is Uint8List) {
+        return MockResponseBody.fromBytes(
+          data,
+          statusCode,
+          headers: headers,
+          statusMessage: statusMessage,
+          isRedirect: isRedirect,
+          delay: delay,
+        );
+      }
       var rawData = data;
       if (data is MockDataCallback) {
         rawData = data(requestOptions);
