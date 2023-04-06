@@ -28,7 +28,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
       final resolvedData = await BackgroundTransformer().transformResponse(
         RequestOptions(path: '', responseType: ResponseType.bytes),
         mockResponseBody,
@@ -50,7 +51,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await BackgroundTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -80,15 +82,18 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      final resolvedData =
-          await BackgroundTransformer().transformResponse(RequestOptions(path: ''), mockResponseBody);
+      final resolvedData = await BackgroundTransformer()
+          .transformResponse(RequestOptions(path: ''), mockResponseBody);
 
       expect(resolvedData, data);
     });
 
-    test('sets response data for a status without JSON if content type header is set', () async {
+    test(
+        'sets response data for a status without JSON if content type header is set',
+        () async {
       const statusCode = HttpStatus.created;
       const inputData = 'Plain text response';
       const headers = {
@@ -107,7 +112,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockResponseBody = statusHandler(RequestOptions(path: '')) as MockResponseBody;
+      final mockResponseBody =
+          statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
       final resolvedData = await BackgroundTransformer().transformResponse(
         RequestOptions(path: ''),
@@ -136,7 +142,8 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockDioError = statusHandler(RequestOptions(path: '')) as MockDioError;
+      final mockDioError =
+          statusHandler(RequestOptions(path: '')) as MockDioError;
 
       expect(mockDioError.type, dioError.type);
     });
