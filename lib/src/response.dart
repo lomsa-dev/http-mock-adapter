@@ -54,4 +54,21 @@ class MockResponseBody extends ResponseBody implements MockResponse {
         isRedirect: isRedirect,
         delay: delay,
       );
+
+  static MockResponseBody fromBytes(
+    Uint8List bytes,
+    int statusCode, {
+    required Map<String, List<String>> headers,
+    String? statusMessage,
+    required bool isRedirect,
+    Duration? delay,
+  }) =>
+      MockResponseBody(
+        Stream.value(bytes),
+        statusCode,
+        headers: headers,
+        statusMessage: statusMessage,
+        isRedirect: isRedirect,
+        delay: delay,
+      );
 }
