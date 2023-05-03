@@ -11,6 +11,14 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.4.4] (2023-05-03)
+- **Updated**
+  - Fix: remove unused import dart:ffi 
+## [v0.4.3] (2023-05-01)
+- **Add**
+  - Response like Protocol Buffer will have byte response body. Add support for mock response of byte data.
+  - unit tests for RequestHandler class. #146
+
 ## [v0.4.2] (2023-02-15)
 
 - **Updated**
