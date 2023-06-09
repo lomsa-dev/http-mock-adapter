@@ -123,13 +123,13 @@ void main() {
       expect(mockResponseBody.headers, headers);
     });
 
-    test('sets DioError for a status code', () async {
+    test('sets DioException for a status code', () async {
       const statusCode = HttpStatus.badRequest;
-      final dioError = DioError(
+      final dioError = DioException(
         requestOptions: RequestOptions(
           path: 'path',
         ),
-        type: DioErrorType.badResponse,
+        type: DioExceptionType.badResponse,
       );
 
       requestHandler.throws(
@@ -141,10 +141,10 @@ void main() {
 
       expect(statusHandler, isNotNull);
 
-      final mockDioError =
-          statusHandler(RequestOptions(path: '')) as MockDioError;
+      final mockDioException =
+          statusHandler(RequestOptions(path: '')) as MockDioException;
 
-      expect(mockDioError.type, dioError.type);
+      expect(mockDioException.type, dioError.type);
     });
   });
 }

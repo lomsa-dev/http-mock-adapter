@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [ 2.15.0, stable ]
+        sdk: [ 2.18.3, stable ]
 
     steps:
       - name: Checkout the repository

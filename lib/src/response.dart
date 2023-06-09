@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
-/// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioError].
-/// This interface makes sure that we can save [DioError] and [ResponseBody]
+/// Top level interface for [Dio]'s [ResponseBody] and also [Dio]'s [DioException].
+/// This interface makes sure that we can save [DioException] and [ResponseBody]
 /// inside the same list.
 abstract class MockResponse {
   /// Delays this response by the given duration.

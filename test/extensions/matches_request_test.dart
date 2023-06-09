@@ -246,8 +246,8 @@ void main() {
           expect(
               () => dio.get(path),
               throwsA(predicate((e) =>
-                  e is DioError &&
-                  e.type == DioErrorType.unknown &&
+                  e is DioException &&
+                  e.type == DioExceptionType.unknown &&
                   e.error is AssertionError)));
         });
       });

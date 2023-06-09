@@ -65,7 +65,8 @@ void main() {
       expect(
         () async => await dio.get('/undefined'),
         throwsA(
-          predicate((DioError dioError) => dioError.error is AssertionError),
+          predicate(
+              (DioException dioError) => dioError.error is AssertionError),
         ),
       );
     });

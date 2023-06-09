@@ -78,7 +78,7 @@ void main() async {
           signInRoute,
           (server) => server.throws(
             401,
-            DioError(
+            DioException(
               requestOptions: RequestOptions(
                 path: signInRoute,
               ),
@@ -99,7 +99,7 @@ void main() async {
       // Throws without user credentials.
       expect(
         () async => await dio.post(signInRoute),
-        throwsA(isA<DioError>()),
+        throwsA(isA<DioException>()),
       );
 
       // Returns an access token if user credentials are provided.
