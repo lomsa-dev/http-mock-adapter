@@ -14,7 +14,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.5.0] (2023-05-03)
 - **Updated**
   - Bump up sdk and dependency versions:
-    - sdk: >=2.18.3 <=3.1.0
+    - sdk: >=3.0.0
     - collection: ^1.18.0
     - dio: ^5.3.2
 
