@@ -118,4 +118,10 @@ http-mock-adapter is licensed under the permissive MIT License ([LICENSE](https:
 
 ## Contribution
 
+<a href="https://github.com/lomsa-dev/http-mock-adapter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lomsa-dev/http-mock-adapter" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file.
