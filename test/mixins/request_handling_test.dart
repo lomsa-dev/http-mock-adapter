@@ -122,14 +122,14 @@ void main() {
         });
 
         test('throws raises custom exception', () async {
-          final dioError = DioError(
+          final dioError = DioException(
             error: {'message': 'error'},
             requestOptions: RequestOptions(path: path),
             response: Response(
               statusCode: 500,
               requestOptions: RequestOptions(path: path),
             ),
-            type: DioErrorType.badResponse,
+            type: DioExceptionType.badResponse,
           );
 
           tester.onGet(
@@ -137,12 +137,13 @@ void main() {
             (server) => server.throws(500, dioError),
           );
 
-          expect(() async => await dio.get(path), throwsA(isA<MockDioError>()));
-          expect(() async => await dio.get(path), throwsA(isA<DioError>()));
+          expect(() async => await dio.get(path),
+              throwsA(isA<MockDioException>()));
+          expect(() async => await dio.get(path), throwsA(isA<DioException>()));
           expect(
             () async => await dio.get(path),
             throwsA(
-              predicate((DioError error) => error is MockDioError),
+              predicate((DioException error) => error is MockDioException),
             ),
           );
         });

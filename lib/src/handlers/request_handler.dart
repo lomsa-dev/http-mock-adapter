@@ -22,7 +22,7 @@ abstract class MockServer {
 
   void throws(
     int statusCode,
-    DioError dioError, {
+    DioException dioError, {
     Duration? delay,
   });
 }
@@ -77,9 +77,9 @@ class RequestHandler implements MockServer {
     };
   }
 
-  /// Stores the [DioError] inside the [mockResponse].
+  /// Stores the [DioException] inside the [mockResponse].
   @override
-  void throws(int statusCode, DioError dioError, {Duration? delay}) {
-    mockResponse = (requestOptions) => MockDioError.from(dioError, delay);
+  void throws(int statusCode, DioException dioError, {Duration? delay}) {
+    mockResponse = (requestOptions) => MockDioException.from(dioError, delay);
   }
 }

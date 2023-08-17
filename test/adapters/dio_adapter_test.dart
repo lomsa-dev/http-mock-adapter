@@ -26,7 +26,7 @@ void main() {
       expect(
         () async => await dio.get('/route'),
         throwsA(predicate(
-            (DioError dioError) => dioError.error is ClosedException)),
+            (DioException dioError) => dioError.error is ClosedException)),
       );
     });
 
@@ -47,8 +47,8 @@ void main() {
 
     test('delays error', () async {
       const delay = 5000;
-      final dioError = DioError(
-        type: DioErrorType.badResponse,
+      final dioError = DioException(
+        type: DioExceptionType.badResponse,
         requestOptions: RequestOptions(path: 'path'),
       );
 
@@ -65,7 +65,7 @@ void main() {
         () async {
           try {
             await dio.get('/route');
-          } on DioError catch (_) {
+          } on DioException catch (_) {
             // Ignore expected error.
           }
         },

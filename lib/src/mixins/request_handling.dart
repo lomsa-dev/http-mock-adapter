@@ -191,6 +191,6 @@ mixin RequestHandling on Recording {
         ),
       );
 
-  bool isMockDioError(MockResponse mockResponse) =>
-      mockResponse is MockDioError;
+  bool isMockDioException(MockResponse mockResponse) =>
+      mockResponse is MockDioException;
 }
