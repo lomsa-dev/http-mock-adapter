@@ -73,7 +73,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:
-  http_mock_adapter: ^0.4.4
+  http_mock_adapter: ^0.5.0
 ```
 
 #### Install it
@@ -117,5 +117,11 @@ See the [AUTHORS](https://github.com/lomsa-dev/http-mock-adapter/blob/main/AUTHO
 http-mock-adapter is licensed under the permissive MIT License ([LICENSE](https://github.com/lomsa-dev/http-mock-adapter/blob/main/LICENSE "Copy of the MIT license")).
 
 ## Contribution
+
+<a href="https://github.com/lomsa-dev/http-mock-adapter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lomsa-dev/http-mock-adapter" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 For information regarding contributions, please refer to [CONTRIBUTING.md](https://github.com/lomsa-dev/http-mock-adapter/blob/main/CONTRIBUTING.md "Project's CONTRIBUTING.md file") file.

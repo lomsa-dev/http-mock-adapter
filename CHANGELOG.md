@@ -11,6 +11,13 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [v0.5.0] (2023-05-03)
+- **Updated**
+  - Bump up sdk and dependency versions:
+    - sdk: >=3.0.0
+    - collection: ^1.18.0
+    - dio: ^5.3.2
+
 ## [v0.4.4] (2023-05-03)
 - **Updated**
   - Fix: remove unused import dart:ffi 
