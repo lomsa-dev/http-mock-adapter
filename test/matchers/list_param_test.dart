@@ -6,20 +6,20 @@ void main() {
   group('ListParamMatcher', () {
     test('matches empty value correctly', () {
       expect(
-        Matchers.listParam(ListParam<String>(
+        Matchers.listParam(const ListParam<String>(
           [],
           ListFormat.pipes,
-        )).matches(ListParam<String>(
+        )).matches(const ListParam<String>(
           [],
           ListFormat.pipes,
         )),
         true,
       );
       expect(
-        Matchers.listParam(ListParam<String>(
+        Matchers.listParam(const ListParam<String>(
           [],
           ListFormat.pipes,
-        )).matches(ListParam<String>(
+        )).matches(const ListParam<String>(
           [],
           ListFormat.csv,
         )),
@@ -29,30 +29,30 @@ void main() {
 
     test('matches value correctly', () {
       expect(
-        Matchers.listParam(ListParam<String>(
+        Matchers.listParam(const ListParam<String>(
           ['foo', 'bar'],
           ListFormat.pipes,
-        )).matches(ListParam<String>(
+        )).matches(const ListParam<String>(
           ['foo', 'bar'],
           ListFormat.pipes,
         )),
         true,
       );
       expect(
-        Matchers.listParam(ListParam<String>(
+        Matchers.listParam(const ListParam<String>(
           ['foo', 'bar'],
           ListFormat.pipes,
-        )).matches(ListParam<String>(
+        )).matches(const ListParam<String>(
           ['foo', 'baz'],
           ListFormat.pipes,
         )),
         false,
       );
       expect(
-        Matchers.listParam(ListParam<String>(
+        Matchers.listParam(const ListParam<String>(
           ['foo', 'bar'],
           ListFormat.pipes,
-        )).matches(ListParam<int>(
+        )).matches(const ListParam<int>(
           [1, 2],
           ListFormat.pipes,
         )),
@@ -61,7 +61,7 @@ void main() {
     });
 
     test('converts to string as defined', () {
-      final listParam = ListParam<String>(
+      const listParam = ListParam<String>(
         [],
         ListFormat.pipes,
       );
