@@ -6,7 +6,7 @@ repository: https://github.com/lomsa-dev/http-mock-adapter
 issue_tracker: https://github.com/lomsa-dev/http-mock-adapter/issues
 
 environment:
-  sdk: '>=3.1.0'
+  sdk: '^3.0.0'
 
 dependencies:
   collection: ^1.18.0
