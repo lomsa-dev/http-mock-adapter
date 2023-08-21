@@ -24,7 +24,7 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   @override
   void onRequest(requestOptions, requestInterceptorHandler) async {
     await setDefaultRequestHeaders(dio, requestOptions);
-    final response = mockResponse(requestOptions);
+    final response = await mockResponse(requestOptions);
 
     // Reject the response if type is MockDioException.
     if (isMockDioException(response)) {

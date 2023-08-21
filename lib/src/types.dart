@@ -9,9 +9,13 @@ typedef MockServerCallback = void Function(MockServer server);
 
 /// Type for [Recording]'s [ResponseBody], which takes [RequestOptions] as a parameter
 /// and compares its signature to saved [Request]'s signature and chooses right response.
-typedef MockResponseBodyCallback = MockResponse Function(
+typedef MockResponseBodyCallback = Future<MockResponse> Function(
   RequestOptions options,
 );
 
 /// Type for expect data as function
 typedef MockDataCallback = dynamic Function(RequestOptions options);
+
+/// Type for async expect data as function
+typedef MockDataCallbackAsync = Future<dynamic> Function(
+    RequestOptions options);
