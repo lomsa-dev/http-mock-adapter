@@ -14,137 +14,186 @@ void main() {
     setUp(() {
       requestHandler = RequestHandler();
     });
-    test('sets response data for a status with Uint8List', () async {
-      const statusCode = HttpStatus.ok;
-      final inputData = Uint8List.fromList([1, 2, 3, 4, 5]);
 
-      requestHandler.reply(
-        statusCode,
-        inputData,
-      );
+    group('reply', () {
+      test('sets response data for a status with Uint8List', () async {
+        const statusCode = HttpStatus.ok;
+        final inputData = Uint8List.fromList([1, 2, 3, 4, 5]);
 
-      final statusHandler = requestHandler.mockResponse;
+        requestHandler.reply(
+          statusCode,
+          inputData,
+        );
 
-      expect(statusHandler, isNotNull);
+        final statusHandler = requestHandler.mockResponse;
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
-      final resolvedData = await BackgroundTransformer().transformResponse(
-        RequestOptions(path: '', responseType: ResponseType.bytes),
-        mockResponseBody,
-      );
+        expect(statusHandler, isNotNull);
 
-      expect(resolvedData, inputData);
-    });
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
+        final resolvedData = await BackgroundTransformer().transformResponse(
+          RequestOptions(path: '', responseType: ResponseType.bytes),
+          mockResponseBody,
+        );
 
-    test('sets response data for a status with JSON by default', () async {
-      const statusCode = HttpStatus.ok;
-      const inputData = {'data': 'OK'};
+        expect(resolvedData, inputData);
+      });
 
-      requestHandler.reply(
-        statusCode,
-        inputData,
-      );
+      test('sets response data for a status with JSON by default', () async {
+        const statusCode = HttpStatus.ok;
+        const inputData = {'data': 'OK'};
 
-      final statusHandler = requestHandler.mockResponse;
+        requestHandler.reply(
+          statusCode,
+          inputData,
+        );
 
-      expect(statusHandler, isNotNull);
+        final statusHandler = requestHandler.mockResponse;
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+        expect(statusHandler, isNotNull);
 
-      final resolvedData = await BackgroundTransformer().transformResponse(
-        RequestOptions(path: ''),
-        mockResponseBody,
-      );
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      expect(resolvedData, inputData);
-      expect(
-        mockResponseBody.headers,
-        {
+        final resolvedData = await BackgroundTransformer().transformResponse(
+          RequestOptions(path: ''),
+          mockResponseBody,
+        );
+
+        expect(resolvedData, inputData);
+        expect(
+          mockResponseBody.headers,
+          {
+            Headers.contentTypeHeader: [
+              Headers.jsonContentType,
+            ],
+          },
+        );
+      });
+
+      test('sets response data MockDataCallback ', () async {
+        const statusCode = HttpStatus.ok;
+        var data = {'data': 'OK'};
+
+        inputData(RequestOptions options) => data;
+
+        requestHandler.reply(statusCode, inputData);
+
+        final statusHandler = requestHandler.mockResponse;
+
+        expect(statusHandler, isNotNull);
+
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
+
+        final resolvedData = await BackgroundTransformer()
+            .transformResponse(RequestOptions(path: ''), mockResponseBody);
+
+        expect(resolvedData, data);
+      });
+
+      test(
+          'sets response data for a status without JSON if content type header is set',
+          () async {
+        const statusCode = HttpStatus.created;
+        const inputData = 'Plain text response';
+        const headers = {
           Headers.contentTypeHeader: [
-            Headers.jsonContentType,
+            Headers.textPlainContentType,
           ],
-        },
-      );
+        };
+
+        requestHandler.reply(
+          statusCode,
+          inputData,
+          headers: headers,
+        );
+
+        final statusHandler = requestHandler.mockResponse;
+
+        expect(statusHandler, isNotNull);
+
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
+
+        final resolvedData = await BackgroundTransformer().transformResponse(
+          RequestOptions(path: ''),
+          mockResponseBody,
+        );
+
+        expect(resolvedData, inputData);
+        expect(mockResponseBody.headers, headers);
+      });
     });
 
-    test('sets response data MockDataCallback ', () async {
-      const statusCode = HttpStatus.ok;
-      var data = {'data': 'OK'};
+    group('replyCallback', () {
+      test('sets response data MockDataCallback ', () async {
+        const statusCode = HttpStatus.ok;
+        var data = {'data': 'OK'};
 
-      inputData(RequestOptions options) => data;
+        inputData(RequestOptions options) => data;
 
-      requestHandler.reply(statusCode, inputData);
+        requestHandler.replyCallback(statusCode, inputData);
 
-      final statusHandler = requestHandler.mockResponse;
+        final statusHandler = requestHandler.mockResponse;
 
-      expect(statusHandler, isNotNull);
+        expect(statusHandler, isNotNull);
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      final resolvedData = await BackgroundTransformer()
-          .transformResponse(RequestOptions(path: ''), mockResponseBody);
+        final resolvedData = await BackgroundTransformer()
+            .transformResponse(RequestOptions(path: ''), mockResponseBody);
 
-      expect(resolvedData, data);
+        expect(resolvedData, data);
+      });
     });
+    group('replyCallbackAsync', () {
+      test('sets response data MockDataCallbackAsync ', () async {
+        const statusCode = HttpStatus.ok;
+        var data = {'data': 'OK'};
 
-    test(
-        'sets response data for a status without JSON if content type header is set',
-        () async {
-      const statusCode = HttpStatus.created;
-      const inputData = 'Plain text response';
-      const headers = {
-        Headers.contentTypeHeader: [
-          Headers.textPlainContentType,
-        ],
-      };
+        inputData(RequestOptions options) => Future.value(data);
 
-      requestHandler.reply(
-        statusCode,
-        inputData,
-        headers: headers,
-      );
+        requestHandler.replyCallbackAsync(statusCode, inputData);
 
-      final statusHandler = requestHandler.mockResponse;
+        final statusHandler = requestHandler.mockResponse;
 
-      expect(statusHandler, isNotNull);
+        expect(statusHandler, isNotNull);
 
-      final mockResponseBody =
-          statusHandler(RequestOptions(path: '')) as MockResponseBody;
+        final mockResponseBody =
+            await statusHandler(RequestOptions(path: '')) as MockResponseBody;
 
-      final resolvedData = await BackgroundTransformer().transformResponse(
-        RequestOptions(path: ''),
-        mockResponseBody,
-      );
+        final resolvedData = await BackgroundTransformer()
+            .transformResponse(RequestOptions(path: ''), mockResponseBody);
 
-      expect(resolvedData, inputData);
-      expect(mockResponseBody.headers, headers);
+        expect(resolvedData, data);
+      });
     });
+    group('throws', () {
+      test('sets DioException for a status code', () async {
+        const statusCode = HttpStatus.badRequest;
+        final dioError = DioException(
+          requestOptions: RequestOptions(
+            path: 'path',
+          ),
+          type: DioExceptionType.badResponse,
+        );
 
-    test('sets DioException for a status code', () async {
-      const statusCode = HttpStatus.badRequest;
-      final dioError = DioException(
-        requestOptions: RequestOptions(
-          path: 'path',
-        ),
-        type: DioExceptionType.badResponse,
-      );
+        requestHandler.throws(
+          statusCode,
+          dioError,
+        );
 
-      requestHandler.throws(
-        statusCode,
-        dioError,
-      );
+        final statusHandler = requestHandler.mockResponse;
 
-      final statusHandler = requestHandler.mockResponse;
+        expect(statusHandler, isNotNull);
 
-      expect(statusHandler, isNotNull);
+        final mockDioException =
+            await statusHandler(RequestOptions(path: '')) as MockDioException;
 
-      final mockDioException =
-          statusHandler(RequestOptions(path: '')) as MockDioException;
-
-      expect(mockDioException.type, dioError.type);
+        expect(mockDioException.type, dioError.type);
+      });
     });
   });
 }
