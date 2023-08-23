@@ -268,7 +268,7 @@ void main() {
             'does not match requests via onPost() when expected body is subset of actual body',
             () async {
           dioAdapter.onPost(
-            '/post-any-data',
+            '/too-many-fields',
             (server) => server.reply(200, 'OK'),
             data: {
               'expected': {
@@ -285,7 +285,7 @@ void main() {
             'unexepected': 'value'
           };
           expect(
-            () => dio.post('/post-any-data', data: data),
+            () => dio.post('/too-many-fields', data: data),
             throwsA(
               predicate((e) =>
                   e is DioException &&
@@ -298,7 +298,7 @@ void main() {
             'does not match requests via onPost() when actual body is subset of expected body',
             () async {
           dioAdapter.onPost(
-            '/post-any-data',
+            '/not-enough-fields',
             (server) => server.reply(200, 'OK'),
             data: {
               'expected': {
@@ -315,7 +315,7 @@ void main() {
             },
           };
           expect(
-            () => dio.post('/post-any-data', data: data),
+            () => dio.post('/not-enough-fields', data: data),
             throwsA(
               predicate((e) =>
                   e is DioException &&
@@ -328,7 +328,7 @@ void main() {
             'does match requests via onPost() when expected body is equal to actual body',
             () async {
           dioAdapter.onPost(
-            '/post-any-data',
+            '/post-exact-data',
             (server) => server.reply(200, 'OK'),
             data: {
               'expected': {
@@ -339,7 +339,7 @@ void main() {
             },
           );
 
-          var response = await dio.post('/post-any-data', data: {
+          var response = await dio.post('/post-exact-data', data: {
             'expected': {
               'nestedExpected': 'value',
               'nestedUnexpected': 'value',
