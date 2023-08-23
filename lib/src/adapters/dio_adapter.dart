@@ -40,7 +40,7 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
     }
 
     await setDefaultRequestHeaders(dio, requestOptions);
-    final response = mockResponse(requestOptions);
+    final response = await mockResponse(requestOptions);
 
     // Waits for defined duration.
     if (response.delay != null) await Future.delayed(response.delay!);
