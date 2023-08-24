@@ -11,10 +11,18 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   @override
   final HttpRequestMatcher matcher;
 
+  @override
+  final bool printLogs;
+
+  @override
+  final bool failOnMissingMock;
+
   /// Constructs a [DioInterceptor] and configures the passed [Dio] instance.
   DioInterceptor({
     required this.dio,
     this.matcher = const FullHttpRequestMatcher(),
+    this.printLogs = false,
+    this.failOnMissingMock = false,
   }) {
     dio.interceptors.add(this);
   }
@@ -25,6 +33,11 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   void onRequest(requestOptions, requestInterceptorHandler) async {
     await setDefaultRequestHeaders(dio, requestOptions);
     final response = await mockResponse(requestOptions);
+
+    if (response == null) {
+      requestInterceptorHandler.next(requestOptions);
+      return;
+    }
 
     // Reject the response if type is MockDioException.
     if (isMockDioException(response)) {

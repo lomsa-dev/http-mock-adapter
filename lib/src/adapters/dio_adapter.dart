@@ -17,10 +17,17 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
   @override
   final HttpRequestMatcher matcher;
 
+  @override
+  final bool printLogs;
+
+  @override
+  final bool failOnMissingMock = true;
+
   /// Constructs a [DioAdapter] and configures the passed [Dio] instance.
   DioAdapter({
     required this.dio,
     this.matcher = const FullHttpRequestMatcher(),
+    this.printLogs = false,
   }) {
     dio.httpClientAdapter = this;
   }
@@ -40,7 +47,7 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
     }
 
     await setDefaultRequestHeaders(dio, requestOptions);
-    final response = await mockResponse(requestOptions);
+    final response = await mockResponse(requestOptions) as MockResponse;
 
     // Waits for defined duration.
     if (response.delay != null) await Future.delayed(response.delay!);

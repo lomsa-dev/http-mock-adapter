@@ -9,7 +9,7 @@ typedef MockServerCallback = void Function(MockServer server);
 
 /// Type for [Recording]'s [ResponseBody], which takes [RequestOptions] as a parameter
 /// and compares its signature to saved [Request]'s signature and chooses right response.
-typedef MockResponseBodyCallback = Future<MockResponse> Function(
+typedef MockResponseBodyCallback = Future<MockResponse?> Function(
   RequestOptions options,
 );
 

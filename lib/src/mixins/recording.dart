@@ -5,6 +5,10 @@ import 'package:http_mock_adapter/src/types.dart';
 
 /// An ability that lets a construct to record a [RequestMatcher] history.
 mixin Recording {
+  bool get printLogs;
+
+  bool get failOnMissingMock;
+
   HttpRequestMatcher get matcher;
 
   /// The index of request invocations.
@@ -29,8 +33,22 @@ mixin Recording {
 
         // Fail when a mocked route is not found for the request.
         if (_invocationIndex == null || _invocationIndex! < 0) {
-          throw AssertionError(
-            'Could not find mocked route matching request for ${requestOptions.signature}',
+          if (failOnMissingMock) {
+            throw AssertionError(
+              'Could not find mocked route matching request for ${requestOptions.signature}',
+            );
+          }
+          if (printLogs) {
+            print(
+              'Not matched request: ${requestOptions.method} ${requestOptions.uri}',
+            );
+          }
+          return Future.value(null);
+        }
+
+        if (printLogs) {
+          print(
+            'Matched request: ${requestOptions.method} ${requestOptions.uri}',
           );
         }
 
