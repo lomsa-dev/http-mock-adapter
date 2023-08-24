@@ -22,7 +22,7 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
     required this.dio,
     this.matcher = const FullHttpRequestMatcher(),
     this.printLogs = false,
-    this.failOnMissingMock = false,
+    this.failOnMissingMock = true,
   }) {
     dio.interceptors.add(this);
   }
