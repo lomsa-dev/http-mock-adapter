@@ -2,9 +2,11 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/src/exceptions.dart';
+import 'package:http_mock_adapter/src/logger/logger.dart';
 import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/response.dart';
+import 'package:logger/logger.dart';
 
 /// [HttpClientAdapter] extension with data mocking and recording functionality.
 class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
@@ -18,6 +20,8 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
   final HttpRequestMatcher matcher;
 
   @override
+  late Logger logger;
+
   final bool printLogs;
 
   @override
@@ -30,6 +34,7 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
     this.printLogs = false,
   }) {
     dio.httpClientAdapter = this;
+    logger = getLogger(printLogs);
   }
 
   /// [DioAdapter]`s [fetch] configuration intended to work with mock data.

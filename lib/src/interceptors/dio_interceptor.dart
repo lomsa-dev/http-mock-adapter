@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:http_mock_adapter/src/logger/logger.dart';
 import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/mixins/mixins.dart';
 import 'package:http_mock_adapter/src/response.dart';
+import 'package:logger/logger.dart';
 
 /// [DioInterceptor] is a class for mocking [Dio] requests with [Interceptor].
 class DioInterceptor extends Interceptor with Recording, RequestHandling {
@@ -12,6 +14,8 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
   final HttpRequestMatcher matcher;
 
   @override
+  late Logger logger;
+
   final bool printLogs;
 
   @override
@@ -25,6 +29,7 @@ class DioInterceptor extends Interceptor with Recording, RequestHandling {
     this.failOnMissingMock = true,
   }) {
     dio.interceptors.add(this);
+    logger = getLogger(printLogs);
   }
 
   /// Dio [Interceptor]`s [onRequest] configuration intended to catch and return

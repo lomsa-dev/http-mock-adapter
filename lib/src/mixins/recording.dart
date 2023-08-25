@@ -2,10 +2,11 @@ import 'package:http_mock_adapter/src/extensions/signature.dart';
 import 'package:http_mock_adapter/src/matchers/http_matcher.dart';
 import 'package:http_mock_adapter/src/request.dart';
 import 'package:http_mock_adapter/src/types.dart';
+import 'package:logger/logger.dart';
 
 /// An ability that lets a construct to record a [RequestMatcher] history.
 mixin Recording {
-  bool get printLogs;
+  Logger get logger;
 
   bool get failOnMissingMock;
 
@@ -38,19 +39,15 @@ mixin Recording {
               'Could not find mocked route matching request for ${requestOptions.signature}',
             );
           }
-          if (printLogs) {
-            print(
-              'Not matched request: ${requestOptions.method} ${requestOptions.uri}',
-            );
-          }
+
+          logger.d(
+              'Not matched request: ${requestOptions.method} ${requestOptions.uri}');
+
           return Future.value(null);
         }
 
-        if (printLogs) {
-          print(
-            'Matched request: ${requestOptions.method} ${requestOptions.uri}',
-          );
-        }
+        logger.d(
+            'Matched request: ${requestOptions.method} ${requestOptions.uri}');
 
         return requestMatcher.mockResponse(requestOptions);
       };
