@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-getLogger(bool printLogs) {
+Logger getLogger(bool printLogs) {
   return Logger(
     level: printLogs ? Level.debug : Level.off,
     printer: PrettyPrinter(
