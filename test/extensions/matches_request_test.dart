@@ -21,7 +21,7 @@ void main() {
         queryParameters: <String, dynamic>{},
       );
 
-      expect(options.matchesRequest(request), true);
+      expect(options.matchesRequest(request, false), true);
     });
 
     group('matches', () {
@@ -249,6 +249,105 @@ void main() {
                   e is DioException &&
                   e.type == DioExceptionType.unknown &&
                   e.error is AssertionError)));
+        });
+      });
+
+      group('Exact body matches', () {
+        late Dio dio;
+        late DioAdapter dioAdapter;
+
+        setUpAll(() {
+          dio = Dio(BaseOptions(contentType: Headers.jsonContentType));
+          dioAdapter = DioAdapter(
+            dio: dio,
+            matcher: const FullHttpRequestMatcher(needsExactBody: true),
+          );
+        });
+
+        test(
+            'does not match requests via onPost() when expected body is subset of actual body',
+            () async {
+          dioAdapter.onPost(
+            '/too-many-fields',
+            (server) => server.reply(200, 'OK'),
+            data: {
+              'expected': {
+                'nestedExpected': 'value',
+              },
+            },
+          );
+
+          final data = {
+            'expected': {
+              'nestedExpected': 'value',
+              'nestedUnexpected': 'value',
+            },
+            'unexepected': 'value'
+          };
+          expect(
+            () => dio.post('/too-many-fields', data: data),
+            throwsA(
+              predicate((e) =>
+                  e is DioException &&
+                  e.type == DioExceptionType.unknown &&
+                  e.error is AssertionError),
+            ),
+          );
+        });
+        test(
+            'does not match requests via onPost() when actual body is subset of expected body',
+            () async {
+          dioAdapter.onPost(
+            '/not-enough-fields',
+            (server) => server.reply(200, 'OK'),
+            data: {
+              'expected': {
+                'nestedExpected': 'value',
+                'nestedUnexpected': 'value',
+              },
+              'unexepected': 'value'
+            },
+          );
+
+          final data = {
+            'expected': {
+              'nestedExpected': 'value',
+            },
+          };
+          expect(
+            () => dio.post('/not-enough-fields', data: data),
+            throwsA(
+              predicate((e) =>
+                  e is DioException &&
+                  e.type == DioExceptionType.unknown &&
+                  e.error is AssertionError),
+            ),
+          );
+        });
+        test(
+            'does match requests via onPost() when expected body is equal to actual body',
+            () async {
+          dioAdapter.onPost(
+            '/post-exact-data',
+            (server) => server.reply(200, 'OK'),
+            data: {
+              'expected': {
+                'nestedExpected': 'value',
+                'nestedUnexpected': 'value',
+              },
+              'unexepected': 'value'
+            },
+          );
+
+          var response = await dio.post('/post-exact-data', data: {
+            'expected': {
+              'nestedExpected': 'value',
+              'nestedUnexpected': 'value',
+            },
+            'unexepected': 'value'
+          });
+
+          expect(response.data, 'OK');
         });
       });
     });

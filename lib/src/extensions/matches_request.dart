@@ -8,9 +8,10 @@ import 'package:http_mock_adapter/src/types.dart';
 extension MatchesRequest on RequestOptions {
   /// Check values against matchers.
   /// [request] is the configured [Request] which would contain the matchers if used.
-  bool matchesRequest(Request request) {
+  bool matchesRequest(Request request, bool needsExactBody) {
     final routeMatched = doesRouteMatch(path, request.route);
-    final requestBodyMatched = matches(data, request.data);
+    final requestBodyMatched =
+        matches(data, request.data, exactMaps: needsExactBody);
     final queryParametersMatched =
         matches(queryParameters, request.queryParameters ?? {});
     final headersMatched = matches(headers, request.headers ?? {});
@@ -46,7 +47,7 @@ extension MatchesRequest on RequestOptions {
   }
 
   /// Check the map keys and values determined by the definition.
-  bool matches(dynamic actual, dynamic expected) {
+  bool matches(dynamic actual, dynamic expected, {bool exactMaps = false}) {
     if (actual == null && expected == null) {
       return true;
     }
@@ -60,6 +61,11 @@ extension MatchesRequest on RequestOptions {
         return false;
       }
     } else if (actual is Map && expected is Map) {
+      // If exactMap is true, ensure that actual and expected have the same length.
+      if (exactMaps && actual.length != expected.length) {
+        return false;
+      }
+
       for (final key in expected.keys.toList()) {
         if (!actual.containsKey(key)) {
           return false;
@@ -71,7 +77,7 @@ extension MatchesRequest on RequestOptions {
         } else if (expected[key] != actual[key]) {
           // Exact match unless map.
           if (expected[key] is Map && actual[key] is Map) {
-            if (!matches(actual[key], expected[key])) {
+            if (!matches(actual[key], expected[key], exactMaps: exactMaps)) {
               // Allow maps to use matchers.
               return false;
             }
@@ -81,6 +87,11 @@ extension MatchesRequest on RequestOptions {
             return false;
           }
         }
+      }
+
+      // If exactMap is true, check that there are no keys in actual that are not in expected.
+      if (exactMaps && actual.keys.any((key) => !expected.containsKey(key))) {
+        return false;
       }
     } else if (actual is List && expected is List) {
       for (var index in Iterable.generate(actual.length)) {

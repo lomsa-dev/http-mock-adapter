@@ -26,11 +26,12 @@ abstract class HttpRequestMatcher {
 /// class.
 ///
 class FullHttpRequestMatcher extends HttpRequestMatcher {
-  const FullHttpRequestMatcher();
+  final bool needsExactBody;
+  const FullHttpRequestMatcher({this.needsExactBody = false});
 
   @override
   bool matches(RequestOptions ongoingRequest, Request matcher) {
-    return ongoingRequest.matchesRequest(matcher);
+    return ongoingRequest.matchesRequest(matcher, needsExactBody);
   }
 }
 
