@@ -25,8 +25,10 @@ void main() {
 
       expect(
         () async => await dio.get('/route'),
-        throwsA(predicate(
-            (DioException dioError) => dioError.error is ClosedException)),
+        throwsA(predicate((DioException dioError) =>
+            dioError.error is ClosedException &&
+            dioError.error.toString() ==
+                'ClosedException: Cannot establish connection after [DioAdapter] got closed!')),
       );
     });
 

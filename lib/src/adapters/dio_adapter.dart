@@ -46,6 +46,7 @@ class DioAdapter with Recording, RequestHandling implements HttpClientAdapter {
     Future? cancelFuture,
   ) async {
     if (_isClosed) {
+      logger.e('Cannot establish connection after [$runtimeType] got closed!');
       throw ClosedException(
         'Cannot establish connection after [$runtimeType] got closed!',
       );
