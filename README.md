@@ -20,6 +20,14 @@ import 'package:dio/dio.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
 
 void main() async {
+  //// Exact body check 
+  // final dio = Dio(BaseOptions(contentType: Headers.jsonContentType));
+  // dioAdapter = DioAdapter(
+  //  dio: dio,
+  //  matcher: const FullHttpRequestMatcher(needsExactBody: true),
+  // );
+
+  // Basic setup
   final dio = Dio(BaseOptions());
   final dioAdapter = DioAdapter(dio: dio);
 
@@ -73,7 +81,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dev_dependencies:
-  http_mock_adapter: ^0.5.0
+  http_mock_adapter: ^0.6.0
 ```
 
 #### Install it

@@ -10,8 +10,19 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
----
+## [v0.6.0] (2023-08-30)
+
+- **Add**
+  - [#136](https://github.com/lomsa-dev/http-mock-adapter/issues/136): Next interceptor handler on DioInterceptor for missing mocks
+  - [#149](https://github.com/lomsa-dev/http-mock-adapter/issues/149): Exact body check option for FullHttpRequestMatcher
+  - [#153](https://github.com/lomsa-dev/http-mock-adapter/issues/153) [#156](https://github.com/lomsa-dev/http-mock-adapter/issues/156): (async)callback
+- **Fixed**
+  - [#160](https://github.com/lomsa-dev/http-mock-adapter/issues/160): Downgrade collection to 1.17.1 due to incompability;
+
+Special thanks to [sebastianbuechler](https://github.com/sebastianbuechler) for 
+
 ## [v0.5.0] (2023-05-03)
+
 - **Updated**
   - Bump up sdk and dependency versions:
     - sdk: >=3.0.0
@@ -19,9 +30,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
     - dio: ^5.3.2
 
 ## [v0.4.4] (2023-05-03)
+
 - **Updated**
-  - Fix: remove unused import dart:ffi 
+  - Fix: remove unused import dart:ffi
+
 ## [v0.4.3] (2023-05-01)
+
 - **Add**
   - Response like Protocol Buffer will have byte response body. Add support for mock response of byte data.
   - unit tests for RequestHandler class. #146
@@ -40,6 +54,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.4.0] (2023-02-14)
 
 - **Updated**
+
   - Dio dependency to `5.0.0`
   - Github Workflow (release on tag)
   - Codecov token
@@ -52,9 +67,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.3.3] (2022-03-23)
 
 - **Added**
+
   - `delay` property to `MockServer` methods: (reply & throws)
   - `HttpRequestMatcher` super class & its implementations `FullHttpRequestMatcher`, `UrlRequestMatcher`.
-  -  Utilities file for tests.
+  - Utilities file for tests.
 
 - **Updated**
   - Docs in `README.md` and `example/main.dart`.
@@ -63,12 +79,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.3.2] (2021-07-26)
 
 - **Added**
+
   - Automatic wrapping of `FormData` in a fitting matcher.
 
 - **Fixed**
+
   - Missing expectation in map not causing test failures.
 
 - **Removed**
+
   - Header matcher.
 
 - **Updated**
@@ -77,6 +96,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.3.1] (2021-06-16)
 
 - **Removed**
+
   - Unused import and code regarding `io_adapter` that reduced the overall score of the package.
 
 - **Updated**
@@ -85,6 +105,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.3.0] (2021-06-16)
 
 - **Added**
+
   - Remaining tests for formal 100% coverage;
   - Code coverage badge;
   - New, official Dart linter (`lints`) and some custom rules;
@@ -93,6 +114,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
   - Builder method for `Signature` extension.
 
 - **Removed**
+
   - Unused package and code, such as `mockito` and/or `DioAdapterMockito`;
   - Some portion of seemingly excessive documentation;
   - Generally unnecessary pieces of code.
@@ -105,6 +127,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.2.1] (2021-04-02)
 
 - **Removed**
+
   - Unused and artificially deprecated code.
 
 - **Updated**
@@ -119,15 +142,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.1.6] (2021-03-30)
 
 - **Added**
+
   - Ability to match routes based on pattern;
   - Tests;
   - Straightforward way to reset history;
   - Query parameters to `RequestRouted`'s methods.
 
 - **Fixed**
+
   - `Response` problems regarding closed streams.
 
 - **Removed**
+
   - Singleton instances of `DioAdapter` and `DioInterceptor`;
 
 - **Updated**
@@ -141,12 +167,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.1.5] (2021-01-07)
 
 - **Added**
+
   - `Matchers` class that contains various types of request data matchers for dynamic signature matching;
   - `Dart CI` workflow;
   - `git` tags for untagged releases/publications;
   - Specific imports by utilizing `Dart`'s `show` keyword.
 
 - **Removed**
+
   - Unnecessary `node_modules/` directory with its content;
   - Unnecessary `workflows/` directory with its content in `.github/ISSUE_TEMPLATE/` directory;
   - Unnecessary `package-lock.json` file;
@@ -169,9 +197,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.1.4] (2020-12-28)
 
 - **Added**
+
   - `throws` method to test `Dio` exceptions.
 
 - **Fixed**
+
   - `Signature` related bug.
 
 - **Updated**
@@ -197,6 +227,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.1.1] (2020-11-23)
 
 - **Added**
+
   - Author metadata;
   - Automatic publishing on <https://pub.dev> through `GitHub Actions`.
 
@@ -209,6 +240,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [v0.1.0] (2020-11-20)
 
 - **Added**
+
   - `History` mixin to keep track of request history;
   - HTTP methods;
   - `RequestRouted` - exposes developer-friendly methods which take in routes;
