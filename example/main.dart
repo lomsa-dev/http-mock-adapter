@@ -17,6 +17,13 @@ void main() async {
     };
 
     setUp(() {
+      //// Exact body check
+      // dio = Dio(BaseOptions(contentType: Headers.jsonContentType));
+      // dioAdapter = DioAdapter(
+      //  dio: dio,
+      //  matcher: const FullHttpRequestMatcher(needsExactBody: true),
+      // );
+
       dio = Dio(BaseOptions(baseUrl: baseUrl));
       dioAdapter = DioAdapter(
         dio: dio,
