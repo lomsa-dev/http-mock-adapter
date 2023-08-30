@@ -19,7 +19,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Fixed**
   - [#160](https://github.com/lomsa-dev/http-mock-adapter/issues/160): Downgrade collection to 1.17.1 due to incompability;
 
-Special thanks to [sebastianbuechler](https://github.com/sebastianbuechler) for 
+Special thanks to [sebastianbuechler](https://github.com/sebastianbuechler)
 
 ## [v0.5.0] (2023-05-03)
 
