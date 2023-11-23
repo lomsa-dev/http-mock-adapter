@@ -29,7 +29,7 @@ mixin RequestHandling on Recording {
         final data = await dio.transformer.transformRequest(options);
         List<int> bytes;
         if (options.requestEncoder != null) {
-          bytes = options.requestEncoder!(data, options);
+          bytes = await options.requestEncoder!(data, options);
         } else {
           bytes = utf8.encode(data);
         }
