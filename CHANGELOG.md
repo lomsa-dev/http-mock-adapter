@@ -10,6 +10,11 @@ Subsequently, the date entry follows **YYYY-MM-DD** format in accordance with th
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.6.1] (2023-05-03)
+
+- **Fixed**
+  - Fix: Library not compatible with flutter 3.16.0 - incorrect type definition
+
 ## [v0.6.0] (2023-08-30)
 
 - **Add**
